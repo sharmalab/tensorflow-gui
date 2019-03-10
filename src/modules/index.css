@@ -7,6 +7,7 @@
 body,
 #main-content {
     height: 100vh;
+    width: 100%;
 }
 
 #main-content {

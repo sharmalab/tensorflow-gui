@@ -45,9 +45,9 @@
     width: 15%;
     height: calc(100vh - 70px);
     background: #eeeeee;
-    z-index: 1;
+    /* z-index: 1; */
     float: left;
-    margin-right: 12px;
+    /* margin-right: 12px; */
     overflow-y: scroll;
 }
 
@@ -80,29 +80,32 @@
 #draw-main{
     width:100%;
     height: 100vh;
-    background: #eeeeee;
-    position: fixed;
-    z-index: -1;
 }
+
+#draw-canvas{
+    background: #555555;
+    height: 100%;
+    overflow: hidden;
+}
+
 #draw-sidebar-right{
     min-width: 170px;
     max-width: 250px;
     width: 15%;
     height: calc(100vh - 70px);
     background: #eeeeee;
-    z-index: 1;
+    /* z-index: 4; */
     float: right;
     overflow-y: scroll;
 }
 
-#draw-sidebar-right > nav > ul > li{
-    padding: 10px;
+#draw-sidebar-right > nav > form > .form-group{
+    padding: 2px;
     /* font-size: 16px; */
-    border-top: 1.2px solid #888888;
+    border-top: 0.8px solid #888888;
     font-weight: bolder;
     background: transparent;
     color: #555555;
-    font-weight: bolder;
 }
 
 
