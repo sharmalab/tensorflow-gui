@@ -1,0 +1,105 @@
+<header id="draw-header">
+    <div id="left-draw-header">
+        <div id="draw-details">
+            <p class="h6 p-0 m-0">First Project</p>
+            <p class="p-0 m-0">project details</p>
+        </div>
+    </div>
+
+    <div id="right-draw-header">
+        <button type="button" class="btn btn-light p-2">Next</button>
+    </div>
+    <p class="draw-title">Tensorflow GUI</p>
+</header>
+<div class="draw-content">
+    <div id="draw-sidebar-left">
+        <p class="h5 text-success">Layers</p>
+        <nav class="navbar navbar-inverse">
+            <ul class="navbar-nav">
+                <li>
+                    Input Layer
+                </li>
+                <li>Conv1D</li>
+                <li>Conv2D</li>
+                <li>Conv3D</li>
+                <li>
+                    RNN
+                </li>
+                <li>
+                    LSTM
+                </li>
+                <li>
+                    GRU
+                </li>
+                <li>
+                    ConvLSTM2D
+                </li>
+                <li>
+                    CuDNNLSTM
+                </li>
+                <li>MaxPool1D</li>
+                <li>MaxPool2D</li>
+                <li>MaxPool3D</li>
+                <li>Dropout</li>
+                <li>AveragePooling1D</li>
+                <li>AveragePooling2D</li>
+                <li>AveragePooling3D</li>
+                <li>TimeDistributed</li>
+                <li>Bidirectional</li>
+                <li>ReLU</li>
+                <li>Reshape</li>
+                <li>Softmax</li>
+                <li>RepeatVector</li>
+                <li>Dense</li>
+                <li>Add</li>
+                <li>Substract</li>
+                <li>Concatenation</li>
+                <li></li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <div id="draw-main"></div>
+
+
+    <div id="draw-sidebar-right">
+        <p class="h5 text-success text-center">Arguments</p>
+        <nav class="navbar navbar-inverse">
+            <h6 id="selectedlayer">Conv1D Layer</h6>
+            <form>
+                <div class="form-group">
+                    <label for="input1">Filter Size:</label>
+                    <input type="number" class="form-control" id="input1" placeholder="3" required>
+                </div>
+                <div class="form-group">
+                    <label for="input2">Kernel Size:</label>
+                    <input type="text" class="form-control" id="input2" placeholder="(5,5)" required>
+                </div>
+                <div class="form-group">
+                    <label for="input3">Strides:</label>
+                    <input type="number" class="form-control" id="input3" placeholder="(3,3)" required>
+                </div>
+                <div class="form-group">
+                    <label for="input4">Padding:</label>
+                    <select class="form-control" id="input4">
+                        <option>valid</option>
+                        <option>causal</option>
+                        <option>same</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="input5">Data Format:</label>
+                    <select class="form-control" id="input5">
+                        <option>channels_last</option>
+                        <option>channels_first</option>
+                    </select>
+                </div>
+            </form>
+        </nav>
+    </div>
+</div>
+
+<script>
+    require("./draw/draw.js");
+</script>

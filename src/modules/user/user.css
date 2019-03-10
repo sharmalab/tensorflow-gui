@@ -1,0 +1,106 @@
+#user-header {
+    padding: 20px;
+    background: #333333;
+    color: white;
+    height: 140px;
+    /* width: 100%; */
+    position: relative;
+    /* display: inline-block; */
+}
+
+#left-user-header {
+    height: 100%;
+    float: left;
+}
+
+
+#right-user-header {
+    float: right;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+.card{
+    margin: 10px;
+    max-width: 300px;
+}
+
+#user-details {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+#user-profile-pic {
+    margin-right: 20px;
+    width: 120px;
+    height: 120px;
+    float: left;
+}
+
+#user-projects{
+    margin-top: 8px;
+    padding: 12px;
+}
+
+#user-projects-card-list{
+    margin-left: 20px;
+}
+
+#user-projects h3{
+    padding-bottom: 10px;
+    border-bottom: 2px solid #999999;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .btn-responsive {
+        /* padding:2px 4px; */
+        font-size:95%;
+        line-height: 1;
+    }
+}
+  
+  @media (min-width: 769px) and (max-width: 992px) {
+    .btn-responsive {
+        /* padding:4px 9px; */
+        font-size:95%;
+        line-height: 1.2;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .h5-text-responsive {
+        /* padding:2px 4px; */
+        font-size:1.1rem;
+    }
+}
+  
+@media (min-width: 769px) and (max-width: 992px) {
+    .h5-text-responsive {
+        /* padding:4px 9px; */
+        font-size:1.1rem;
+        /* line-height: 1.2; */
+    }
+}
+
+@media (max-width: 768px) {
+    .h4-text-responsive {
+        /* padding:2px 4px; */
+        font-size:1.3rem;
+    }
+}
+  
+@media (min-width: 769px) and (max-width: 992px) {
+    .h4-text-responsive {
+        /* padding:4px 9px; */
+        font-size:1.3rem;
+        /* line-height: 1.2; */
+    }
+}

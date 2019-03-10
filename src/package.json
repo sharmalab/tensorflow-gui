@@ -1,0 +1,28 @@
+{
+  "name": "tensorflow-gui",
+  "version": "1.0.0",
+  "description": "gui for tensorflow",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikasgola/tensorflow-gui.git"
+  },
+  "author": "Vikas Gola",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/vikasgola/tensorflow-gui/issues"
+  },
+  "homepage": "https://github.com/vikasgola/tensorflow-gui#readme",
+  "devDependencies": {
+    "electron": "^4.0.8",
+    "electron-reload": "^1.4.0"
+  },
+  "dependencies": {
+    "gojs": "^2.0.4",
+    "jquery": "^3.3.1",
+    "mysql": "^2.16.0"
+  }
+}

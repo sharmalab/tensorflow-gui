@@ -1,0 +1,89 @@
+<div id="login" class="container" >
+    <div class="card mx-auto">
+        <article class="card-body">
+            <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
+            <hr>
+            <form>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                        </div>
+                        <input name="" class="form-control" placeholder="Email Id" type="email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                        </div>
+                        <input class="form-control" placeholder="******" type="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"> Login </button>
+                </div>
+                <div class="form-group text-center">
+                    <a href="#">Forgot password?</a>
+                </div>
+                <div class="form-group text-center">
+                    Don't have an account? <a id="signup-link" href="#">Sign Up</a>
+                </div>
+            </form>
+        </article>
+    </div>
+</div>
+
+
+<div id="signup" class="container" style="display:none">
+    <div class="card mx-auto">
+        <article class="card-body">
+            <h4 class="card-title text-center mb-4 mt-1">Sign Up</h4>
+            <hr>
+            <form>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-user"></i> </span>
+                        </div>
+                        <input name="" class="form-control" placeholder="Full Name" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-at"></i> </span>
+                        </div>
+                        <input name="" class="form-control" placeholder="Email Id" type="email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-lock"></i> </span>
+                        </div>
+                        <input class="form-control" placeholder="Password" type="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-lock"></i> </span>
+                        </div>
+                        <input class="form-control" placeholder="Retype Password" type="password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"> Sign Up </button>
+                </div>
+                <div class="form-group text-center">
+                    Have an account? <a id="login-link" href="#">Log In</a>
+                </div>
+            </form>
+        </article>
+    </div>
+</div>
+
+<script>
+    require("./login/login.js")
+</script>

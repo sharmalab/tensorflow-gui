@@ -1,0 +1,16 @@
+* {
+    padding: 0%;
+    margin: 0%;
+}
+
+
+body,
+#main-content {
+    height: 100vh;
+}
+
+#main-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+

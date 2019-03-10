@@ -1,0 +1,144 @@
+#draw-header {
+    padding: 15px;
+    background: rgba(40, 40, 40, 1.0);
+    color: white;
+    height: 70px;
+    position: relative;
+}
+
+.draw-title{
+    text-align: center;
+    position: absolute;
+    top: 20px;
+    font-size: 22px;
+    font-weight: bolder;
+    width: 100%;
+}
+
+#left-draw-header {
+    height: 100%;
+    display: inline-block;
+    /* float: left; */
+}
+
+#draw-details {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+#right-draw-header {
+    float: right;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+
+#draw-sidebar-left{
+    max-width: 250px;
+    min-width: 170px;
+    width: 15%;
+    height: calc(100vh - 70px);
+    background: #eeeeee;
+    z-index: 1;
+    float: left;
+    margin-right: 12px;
+    overflow-y: scroll;
+}
+
+#draw-sidebar-left > nav > ul > li{
+    padding: 10px;
+    font-size: 16px;
+    border-top: 1.2px solid #888888;
+    font-weight: bolder;
+    background: transparent;
+    color: #555555;
+    font-weight: bolder;
+}
+
+#draw-sidebar-left  > p{
+    padding: 8px;
+    padding-bottom: 0px;
+    margin-left: 20px;
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+
+#draw-sidebar-left li:hover{
+    color: #eeeeee;
+    background: #555555;
+    cursor: grab;
+}
+
+
+#draw-main{
+    width:100%;
+    height: 100vh;
+    background: #eeeeee;
+    position: fixed;
+    z-index: -1;
+}
+#draw-sidebar-right{
+    min-width: 170px;
+    max-width: 250px;
+    width: 15%;
+    height: calc(100vh - 70px);
+    background: #eeeeee;
+    z-index: 1;
+    float: right;
+    overflow-y: scroll;
+}
+
+#draw-sidebar-right > nav > ul > li{
+    padding: 10px;
+    /* font-size: 16px; */
+    border-top: 1.2px solid #888888;
+    font-weight: bolder;
+    background: transparent;
+    color: #555555;
+    font-weight: bolder;
+}
+
+
+#draw-sidebar-right  > p{
+    padding: 8px;
+    padding-bottom: 0px;
+    /* margin-right: 20px; */
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+#selectedlayer{
+    text-align: center;
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #777777;
+}
+
+
+#draw-content{
+    height: 100vh;
+}
+#main-content{
+    overflow-y: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px #888888; 
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px #888888; 
+}
