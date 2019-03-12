@@ -1,33 +1,49 @@
 var Konva = require('../../lib/konva');
 const print = console.log;
 
+$('#draw-sidebar-left li').draggable({
+    cursor: 'move',
+    // helper: "clone",
+    helper: function(){ 
+        $('#main-content').append('<div id="clone" style="text-decoration:none;" class="bg-dark text-white p-2">' + $(this).html() + '</div>');
+        return $("#clone");
+    },
+    appendTo: 'body',
+    textDecoration: "none",
+    start: function (e, ui) {
+        ui.helper.addClass({
+            textDecoration: "none"
+        });
+    }
+});
+
 var stage = new Konva.Stage({
     container: 'draw-canvas',
-    width: window.innerWidth - $("#draw-sidebar-right").width() - 1.5 * $("#draw-sidebar-left").width(),
-    height: window.innerHeight,
+    width: 2 * window.innerWidth,
+    height: 2 * window.innerHeight,
 });
 
 // add canvas element
 var layer = new Konva.Layer();
 stage.add(layer);
 
-var rect = new Konva.Rect({
-    x: stage.width()/2 - 80,
-    y: 0,
-    stroke: '#555',
-    strokeWidth: 5,
-    fill: '#eee',
-    width: 300,
-    height: 700,
-    shadowColor: 'black',
-    shadowBlur: 10,
-    shadowOffset: [10, 10],
-    shadowOpacity: 0.2,
-    cornerRadius: 10,
-    draggable: true
-});
+// var rect = new Konva.Rect({
+//     x: stage.width()/2 - 80,
+//     y: 0,
+//     stroke: '#555',
+//     strokeWidth: 5,
+//     fill: '#eee',
+//     width: 300,
+//     height: 700,
+//     shadowColor: 'black',
+//     shadowBlur: 10,
+//     shadowOffset: [10, 10],
+//     shadowOpacity: 0.2,
+//     cornerRadius: 10,
+//     draggable: true
+// });
 
-layer.add(rect);
+// layer.add(rect);
 
 
 function createLabel(x, y, text, layertoadd) {
@@ -61,23 +77,24 @@ function createLabel(x, y, text, layertoadd) {
     });
 
     layertoadd.add(label);
+    layertoadd.draw();
     return label;
 }
 
 
-input = createLabel(stage.width() / 2, 20, "Input", layer)
-conv1 = createLabel(stage.width() / 2, 70, "Conv2D-1", layer)
-conv2 = createLabel(stage.width() / 2, 120, "Conv2D-2", layer)
-maxpooling1 = createLabel(stage.width() / 2, 170, "MaxPooling2D-1", layer)
-conv3 = createLabel(stage.width() / 2, 220, "Conv2D-3", layer)
-conv4 = createLabel(stage.width() / 2, 270, "Conv2D-4", layer)
-maxpooling2 = createLabel(stage.width() / 2, 320, "MaxPooling2D-2", layer)
-flatten1 = createLabel(stage.width() / 2, 370, "Flatten-1", layer)
-dropout1 = createLabel(stage.width() / 2, 420, "Dropout-1", layer)
-dense1 = createLabel(stage.width() / 2, 470, "Dense-1", layer)
-dropout2 = createLabel(stage.width() / 2, 520, "Dropout-2", layer)
-dense2 = createLabel(stage.width() / 2, 570, "Dense-2", layer)
-output = createLabel(stage.width() / 2, 620, "Output", layer)
+// input = createLabel(stage.width() / 2, 20, "Input", layer)
+// conv1 = createLabel(stage.width() / 2, 70, "Conv2D-1", layer)
+// conv2 = createLabel(stage.width() / 2, 120, "Conv2D-2", layer)
+// maxpooling1 = createLabel(stage.width() / 2, 170, "MaxPooling2D-1", layer)
+// conv3 = createLabel(stage.width() / 2, 220, "Conv2D-3", layer)
+// conv4 = createLabel(stage.width() / 2, 270, "Conv2D-4", layer)
+// maxpooling2 = createLabel(stage.width() / 2, 320, "MaxPooling2D-2", layer)
+// flatten1 = createLabel(stage.width() / 2, 370, "Flatten-1", layer)
+// dropout1 = createLabel(stage.width() / 2, 420, "Dropout-1", layer)
+// dense1 = createLabel(stage.width() / 2, 470, "Dense-1", layer)
+// dropout2 = createLabel(stage.width() / 2, 520, "Dropout-2", layer)
+// dense2 = createLabel(stage.width() / 2, 570, "Dense-2", layer)
+// output = createLabel(stage.width() / 2, 620, "Output", layer)
 
 
 function addArrow(shape1, shape2, layertoadd) {
@@ -90,12 +107,12 @@ function addArrow(shape1, shape2, layertoadd) {
         strokeWidth: 4
     });
 
-    shape1.on("dragmove", ()=>{
+    shape1.on("dragmove", () => {
         let p = [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape2.getX() + (shape2.width() / 2), shape2.getY()];
         arrow.setPoints(p);
         layertoadd.draw();
     });
-    shape2.on("dragmove", ()=>{
+    shape2.on("dragmove", () => {
         let p = [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape2.getX() + (shape2.width() / 2), shape2.getY()];
         arrow.setPoints(p);
         layertoadd.draw();
@@ -105,18 +122,39 @@ function addArrow(shape1, shape2, layertoadd) {
     return arrow;
 }
 
-addArrow(input, conv1, layer);
-addArrow(conv1, conv2, layer);
-addArrow(conv2, maxpooling1, layer);
-addArrow(maxpooling1, conv3, layer);
-addArrow(conv3, conv4, layer);
-addArrow(conv4, maxpooling2, layer);
-addArrow(maxpooling2, flatten1, layer);
-addArrow(flatten1, dropout1, layer);
-addArrow(dropout1, dense1, layer);
-addArrow(dense1, dropout2, layer);
-addArrow(dropout2, dense2, layer);
-addArrow(dense2, output, layer);
+// addArrow(input, conv1, layer);
+// addArrow(conv1, conv2, layer);
+// addArrow(conv2, maxpooling1, layer);
+// addArrow(maxpooling1, conv3, layer);
+// addArrow(conv3, conv4, layer);
+// addArrow(conv4, maxpooling2, layer);
+// addArrow(maxpooling2, flatten1, layer);
+// addArrow(flatten1, dropout1, layer);
+// addArrow(dropout1, dense1, layer);
+// addArrow(dense1, dropout2, layer);
+// addArrow(dropout2, dense2, layer);
+// addArrow(dense2, output, layer);
+
+
+
+
+
+$("#draw-main").droppable({
+    drop: function (event, ui) {
+        print(ui.helper, event)
+        output = createLabel(event.clientX - $("#draw-sidebar-left").width() - window.pageXOffset, event.clientY - $("#draw-header").height() - window.pageYOffset, ui.helper.text().trim(), layer)
+
+        // var itemid = $(event.originalEvent.toElement).attr("itemid");
+        // $('.box-item').each(function () {
+        //     if ($(this).attr("itemid") === itemid) {
+        //         $(this).appendTo("#container1");
+        //     }
+        // });
+    }
+});
+
+
+
 
 
 layer.draw();
