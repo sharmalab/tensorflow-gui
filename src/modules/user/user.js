@@ -28,3 +28,7 @@ $("#user-create-project-button").click(() => {
 $("#first-project-gui").click(() => {
     loadPage("draw/draw.html")
 })
+
+$("#first-project-code-editor").click(() => {
+    loadPage("codeeditor/codeeditor.html")
+})

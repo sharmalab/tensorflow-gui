@@ -1,9 +1,12 @@
 var Konva = require('../../lib/konva');
 const print = console.log;
+const { tfGraph, tfNode } = require('../../lib/graph');
 
 let isSelected = false;
 let temparrow;
 let firstblock;
+
+let graph = new tfGraph();
 
 $('#draw-sidebar-left li').draggable({
     cursor: 'move',
@@ -58,6 +61,7 @@ function createLabel(x, y, text, layertoadd) {
     }));
 
     label.on("click", (event) => {
+        print(graph);
 
         switch (event.evt.which) {
             case 1:
@@ -107,6 +111,11 @@ function createLabel(x, y, text, layertoadd) {
     });
 
     layertoadd.add(label);
+    if(text == "Input Layer"){
+        graph.addInput(new tfNode(label, 0, text));
+    }else{
+        graph.addNode(new tfNode(label, 1, text));
+    }
     layertoadd.draw();
     return label;
 }
@@ -151,6 +160,8 @@ function addArrow(shape1, shape2, layertoadd) {
             arrow.setPoints(p);
             layertoadd.draw();
         });
+
+        graph.addEdge(shape1, shape2);
     }
 
     layertoadd.add(arrow)
@@ -178,6 +189,7 @@ $(document).keyup(function (e) {
             temparrow = undefined;
             firstblock = undefined;
             isSelected = false;
+            layer.draw();
         }
     } else if (e.key === "Delete") {
         if (isSelected && !temparrow) {
@@ -186,6 +198,7 @@ $(document).keyup(function (e) {
                 firstblock = undefined;
             }
             isSelected = false;
+            layer.draw();
         }
     }
 });
