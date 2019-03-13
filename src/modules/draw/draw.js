@@ -1,10 +1,13 @@
 var Konva = require('../../lib/konva');
 const print = console.log;
 
+let isSelected = false;
+let temparrow;
+let firstblock;
+
 $('#draw-sidebar-left li').draggable({
     cursor: 'move',
-    // helper: "clone",
-    helper: function(){ 
+    helper: function () {
         $('#main-content').append('<div id="clone" style="text-decoration:none;" class="bg-dark text-white p-2">' + $(this).html() + '</div>');
         return $("#clone");
     },
@@ -27,35 +30,21 @@ var stage = new Konva.Stage({
 var layer = new Konva.Layer();
 stage.add(layer);
 
-// var rect = new Konva.Rect({
-//     x: stage.width()/2 - 80,
-//     y: 0,
-//     stroke: '#555',
-//     strokeWidth: 5,
-//     fill: '#eee',
-//     width: 300,
-//     height: 700,
-//     shadowColor: 'black',
-//     shadowBlur: 10,
-//     shadowOffset: [10, 10],
-//     shadowOpacity: 0.2,
-//     cornerRadius: 10,
-//     draggable: true
-// });
-
-// layer.add(rect);
-
 
 function createLabel(x, y, text, layertoadd) {
     let label = new Konva.Label({
         x: x,
         y: y,
-        opacity: 0.75,
-        draggable: true
+        draggable: true,
+        transformsEnabled: 'position'
     });
 
     label.add(new Konva.Tag({
-        fill: '#cccccc'
+        cornerRadius: 6,
+        lineJoin: 'round',
+        fill: '#eee',
+        stroke: '#333',
+        shadowColor: '#111',
     }));
 
     label.add(new Konva.Text({
@@ -65,9 +54,50 @@ function createLabel(x, y, text, layertoadd) {
         padding: 5,
         fill: 'black',
         width: 150,
-        height: 30,
         align: 'center'
     }));
+
+    label.on("click", (event) => {
+
+        switch (event.evt.which) {
+            case 1:
+                if (!temparrow) {
+                    if (firstblock) {
+                        firstblock.getTag().stroke("#111");
+                        firstblock = undefined;
+                    }
+                    label.getTag().stroke("#4f4");
+                    firstblock = label;
+                    isSelected = true;
+                }
+                break;
+            case 2:
+                alert('Middle Mouse button pressed.');
+                break;
+            case 3:
+                if (!isSelected || label == firstblock) {
+                    label.getTag().stroke("#4f4");
+                    temparrow = addArrow(label, null, layertoadd);
+                    firstblock = label;
+                    temparrow.moveToBottom()
+                    isSelected = true;
+                } else if (temparrow && isSelected) {
+                    temparrow.remove();
+                    firstblock.getTag().stroke("#111");
+                    if (firstblock != label)
+                        addArrow(firstblock, label, layertoadd).moveToBottom();
+                    firstblock = undefined;
+                    temparrow = undefined;
+                    isSelected = false;
+                }
+                break;
+            default:
+                alert('You have a strange Mouse!');
+        }
+
+        layertoadd.draw();
+
+    });
 
     label.on('mouseover', function () {
         document.body.style.cursor = 'pointer';
@@ -82,78 +112,83 @@ function createLabel(x, y, text, layertoadd) {
 }
 
 
-// input = createLabel(stage.width() / 2, 20, "Input", layer)
-// conv1 = createLabel(stage.width() / 2, 70, "Conv2D-1", layer)
-// conv2 = createLabel(stage.width() / 2, 120, "Conv2D-2", layer)
-// maxpooling1 = createLabel(stage.width() / 2, 170, "MaxPooling2D-1", layer)
-// conv3 = createLabel(stage.width() / 2, 220, "Conv2D-3", layer)
-// conv4 = createLabel(stage.width() / 2, 270, "Conv2D-4", layer)
-// maxpooling2 = createLabel(stage.width() / 2, 320, "MaxPooling2D-2", layer)
-// flatten1 = createLabel(stage.width() / 2, 370, "Flatten-1", layer)
-// dropout1 = createLabel(stage.width() / 2, 420, "Dropout-1", layer)
-// dense1 = createLabel(stage.width() / 2, 470, "Dense-1", layer)
-// dropout2 = createLabel(stage.width() / 2, 520, "Dropout-2", layer)
-// dense2 = createLabel(stage.width() / 2, 570, "Dense-2", layer)
-// output = createLabel(stage.width() / 2, 620, "Output", layer)
-
-
 function addArrow(shape1, shape2, layertoadd) {
-    var arrow = new Konva.Arrow({
-        points: [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape2.getX() + (shape2.width() / 2), shape2.getY()],
-        pointerLength: 10,
-        pointerWidth: 8,
-        fill: 'black',
-        stroke: 'black',
-        strokeWidth: 4
-    });
+    var arrow;
+    if (shape2 == null) {
+        arrow = new Konva.Arrow({
+            points: [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape1.getX() + shape1.width(), shape1.getY() + shape1.height()],
+            pointerLength: 6,
+            pointerWidth: 4,
+            fill: 'black',
+            stroke: 'black',
+            strokeWidth: 2
+        });
 
-    shape1.on("dragmove", () => {
-        let p = [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape2.getX() + (shape2.width() / 2), shape2.getY()];
-        arrow.setPoints(p);
-        layertoadd.draw();
-    });
-    shape2.on("dragmove", () => {
-        let p = [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape2.getX() + (shape2.width() / 2), shape2.getY()];
-        arrow.setPoints(p);
-        layertoadd.draw();
-    });
+        $("#draw-canvas").mousemove(function (event) {
+            var relativeXPosition = (event.pageX - this.offsetLeft); //offset -> method allows you to retrieve the current position of an element 'relative' to the document
+            var relativeYPosition = (event.pageY - this.offsetTop);
+            let p = [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), relativeXPosition, relativeYPosition];
+            arrow.setPoints(p);
+            layertoadd.draw();
+        });
+
+    } else {
+        arrow = new Konva.Arrow({
+            points: [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape2.getX() + (shape2.width() / 2), shape2.getY()],
+            pointerLength: 6,
+            pointerWidth: 4,
+            fill: 'black',
+            stroke: 'black',
+            strokeWidth: 2
+        });
+        shape1.on("dragmove", () => {
+            let p = [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape2.getX() + (shape2.width() / 2), shape2.getY()];
+            arrow.setPoints(p);
+            layertoadd.draw();
+        });
+        shape2.on("dragmove", () => {
+            let p = [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape2.getX() + (shape2.width() / 2), shape2.getY()];
+            arrow.setPoints(p);
+            layertoadd.draw();
+        });
+    }
 
     layertoadd.add(arrow)
+    layertoadd.draw();
     return arrow;
 }
 
-// addArrow(input, conv1, layer);
-// addArrow(conv1, conv2, layer);
-// addArrow(conv2, maxpooling1, layer);
-// addArrow(maxpooling1, conv3, layer);
-// addArrow(conv3, conv4, layer);
-// addArrow(conv4, maxpooling2, layer);
-// addArrow(maxpooling2, flatten1, layer);
-// addArrow(flatten1, dropout1, layer);
-// addArrow(dropout1, dense1, layer);
-// addArrow(dense1, dropout2, layer);
-// addArrow(dropout2, dense2, layer);
-// addArrow(dense2, output, layer);
 
 
 
-
-
-$("#draw-main").droppable({
+$("#draw-canvas").droppable({
     drop: function (event, ui) {
-        print(ui.helper, event)
-        output = createLabel(event.clientX - $("#draw-sidebar-left").width() - window.pageXOffset, event.clientY - $("#draw-header").height() - window.pageYOffset, ui.helper.text().trim(), layer)
-
-        // var itemid = $(event.originalEvent.toElement).attr("itemid");
-        // $('.box-item').each(function () {
-        //     if ($(this).attr("itemid") === itemid) {
-        //         $(this).appendTo("#container1");
-        //     }
-        // });
+        var relativeXPosition = (event.pageX - this.offsetLeft); //offset -> method allows you to retrieve the current position of an element 'relative' to the document
+        var relativeYPosition = (event.pageY - this.offsetTop);
+        output = createLabel(relativeXPosition, relativeYPosition, ui.helper.text().trim(), layer)
     }
 });
 
-
+$(document).keyup(function (e) {
+    if (e.key === "Escape") {
+        if (isSelected) {
+            firstblock.getTag().stroke("#111");
+            if (temparrow)
+                temparrow.remove()
+            temparrow = undefined;
+            firstblock = undefined;
+            isSelected = false;
+        }
+    } else if (e.key === "Delete") {
+        if (isSelected && !temparrow) {
+            if (firstblock) {
+                firstblock.remove()
+                firstblock = undefined;
+            }
+            isSelected = false;
+        }
+    }
+});
 
 
 

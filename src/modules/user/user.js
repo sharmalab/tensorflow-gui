@@ -25,6 +25,6 @@ $("#user-create-project-button").click(() => {
 })
 
 
-$("#first-project").click(() => {
+$("#first-project-gui").click(() => {
     loadPage("draw/draw.html")
 })

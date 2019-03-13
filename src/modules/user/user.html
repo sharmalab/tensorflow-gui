@@ -22,7 +22,16 @@
                     <div class="card-body">
                         <h5 class="card-title">First Project</h5>
                         <p class="card-text">This is my first project.</p>
-                        <a id="first-project" class="btn btn-primary text-white">Open Project</a>
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                Open Project
+                            </button>
+                            <div class="dropdown-menu">
+                                <a id="first-project-gui" class="dropdown-item" href="#">With GUI</a>
+                                <div class="dropdown-divider"></div>
+                                <a id="first-project-code-editor" class="dropdown-item" href="#">With Code Editor</a>
+                            </div>
+                          </div>
                     </div>
                 </div>
             </div>
