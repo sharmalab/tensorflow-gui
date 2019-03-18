@@ -4,5 +4,5 @@ function loadPage(page_path) {
 }
 
 $(document).ready(() => {
-    loadPage("training/training.html")
+    loadPage("draw/draw.html")
 });

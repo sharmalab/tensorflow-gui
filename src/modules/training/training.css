@@ -36,6 +36,19 @@
     z-index: 1;
 }
 
+#training-main canvas{
+    /* border: 2px solid #888888; */
+    margin-bottom: 20px;
+    display: block;
+}
+
+#training-main{
+    padding: 20px;
+    height: calc(100% - 70px);
+    overflow-y: auto;
+}
+
+
 ::-webkit-scrollbar {
     width: 12px;
 }
