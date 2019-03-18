@@ -6,7 +6,7 @@
     position: relative;
 }
 
-.draw-title{
+.draw-title {
     text-align: center;
     position: absolute;
     top: 20px;
@@ -30,28 +30,24 @@
 }
 
 #right-draw-header {
-    float: right;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
+    display: inline;
+    position: fixed;
+    right: 10px;
+    z-index: 1;
 }
 
-
-#draw-sidebar-left{
+#draw-sidebar-left {
     max-width: 250px;
     min-width: 170px;
     width: 15%;
     height: calc(100vh - 70px);
     background: #eeeeee;
-    /* z-index: 1; */
     float: left;
     /* margin-right: 12px; */
     overflow-y: scroll;
 }
 
-#draw-sidebar-left > nav > ul > li{
+#draw-sidebar-left nav ul li {
     padding: 10px;
     font-size: 16px;
     border-top: 1.2px solid #888888;
@@ -61,7 +57,7 @@
     font-weight: bolder;
 }
 
-#draw-sidebar-left  > p{
+#draw-sidebar-left>div>p {
     padding: 8px;
     padding-bottom: 0px;
     margin-left: 20px;
@@ -70,36 +66,35 @@
 }
 
 
-#draw-sidebar-left li:hover{
+#draw-sidebar-left li:hover {
     color: #eeeeee;
     background: #555555;
     cursor: grab;
 }
 
 
-#draw-main{
-    width:100%;
+#draw-main {
+    width: 100%;
     height: 100vh;
 }
 
-#draw-canvas{
+#draw-canvas {
     background: #ffffff;
     height: 100%;
     overflow: hidden;
 }
 
-#draw-sidebar-right{
+#draw-sidebar-right {
     min-width: 170px;
     max-width: 250px;
     width: 15%;
     height: calc(100vh - 70px);
     background: #eeeeee;
-    /* z-index: 4; */
     float: right;
     overflow-y: scroll;
 }
 
-#draw-sidebar-right > nav > form > .form-group{
+#draw-sidebar-right>nav>form>.form-group {
     padding: 2px;
     /* font-size: 16px; */
     border-top: 0.8px solid #888888;
@@ -109,7 +104,7 @@
 }
 
 
-#draw-sidebar-right  > p{
+#draw-sidebar-right>p {
     padding: 8px;
     padding-bottom: 0px;
     /* margin-right: 20px; */
@@ -117,7 +112,7 @@
     font-weight: bolder;
 }
 
-#selectedlayer{
+#selectedlayer {
     text-align: center;
     width: 100%;
     padding: 4px;
@@ -125,10 +120,11 @@
 }
 
 
-#draw-content{
+#draw-content {
     height: 100vh;
 }
-#main-content{
+
+#main-content {
     overflow-y: hidden;
 }
 
@@ -137,11 +133,22 @@
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px #888888; 
+    -webkit-box-shadow: inset 0 0 6px #888888;
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px #888888; 
+    -webkit-box-shadow: inset 0 0 6px #888888;
+}
+
+.CodeMirror {
+    font-family: Arial, monospace;
+    font-size: 16px;
+}
+
+
+#draw-main ul li a{
+    color: black;
+    font-weight: bolder;
 }

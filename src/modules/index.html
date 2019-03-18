@@ -17,24 +17,30 @@
     <link rel="stylesheet" href="user/user.css">
     <link rel="stylesheet" href="draw/draw.css">
     <link rel="stylesheet" href="codeeditor/codeeditor.css">
+    <link rel="stylesheet" href="training/training.css">
     <link rel="stylesheet" href="../lib/codemirror.css">
     <link rel="stylesheet" href="../lib/material.css">
 </head>
 
 <body>
+
+    <div id="loading" style="color:black">
+        <p>Loading. Please Wait...</p>
+        <img src="../raw/loading.gif" alt="">
+    </div>
     <div id="main-content"></div>
 
     <script>
         window.$ = window.jQuery = require('jquery');
         const mysql = require('mysql');
         require('jquery-ui-dist/jquery-ui');
-        /* let db_config = {
-            host: 'localhost',
-            user: 'hms',
-            password: 'openhms',
-            database: 'HospitalMS'
-        };
-        pool = mysql.createPool(db_config); */
+
+        $('#loading').hide();
+        $(document).ajaxStart(function () {
+            $('#loading').show();
+        }).ajaxStop(function () {
+            $('#loading').hide();
+        });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>

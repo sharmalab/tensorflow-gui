@@ -6,58 +6,76 @@
         </div>
     </div>
 
-    <div id="right-draw-header">
-        <button type="button" class="btn btn-light p-2">Next</button>
-    </div>
     <p class="draw-title">Tensorflow GUI</p>
+
+    <div id="right-draw-header">
+        <div class="dropdown">
+            <div class="btn dropdown-toggle" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+            </div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                <button class="dropdown-item" id="startTraining" type="button">Train</button>
+                <button class="dropdown-item" type="button">Save</button>
+                <button class="dropdown-item" type="button">Exit</button>
+            </div>
+        </div>
+    </div>
 </header>
+
 <div class="draw-content">
     <div id="draw-sidebar-left">
-        <p class="h5 text-success">Layers</p>
-        <nav class="navbar navbar-inverse">
-            <ul class="navbar-nav">
-                <li>    
-                    Input Layer
-                </li>
-                <li>    
-                    Output Layer
-                </li>
-                <li>Conv1D</li>
-                <li>Conv2D</li>
-                <li>Conv3D</li>
-                <li>
-                    RNN
-                </li>
-                <li>
-                    LSTM
-                </li>
-                <li>
-                    GRU
-                </li>
-                <li>
-                    ConvLSTM2D
-                </li>
-                <li>CuDNNLSTM</li>
-                <li>MaxPool1D</li>
-                <li>MaxPool2D</li>
-                <li>MaxPool3D</li>
-                <li>Dropout</li>
-                <li>AveragePooling1D</li>
-                <li>AveragePooling2D</li>
-                <li>AveragePooling3D</li>
-                <li>TimeDistributed</li>
-                <li>Bidirectional</li>
-                <li>ReLU</li>
-                <li>Reshape</li>
-                <li>Softmax</li>
-                <li>RepeatVector</li>
-                <li>Dense</li>
-                <li>Add</li>
-                <li>Substract</li>
-                <li>Concatenation</li>
-                <li></li>
-            </ul>
-        </nav>
+
+        <!-- <div >
+            <p class="h5 text-success">Models</p>
+            <nav class="navbar navbar-inverse">
+                <ul class="navbar-nav">
+                    <li>VGG</li>
+                    <li>Mask R-CNN</li>
+                    <li>MobileNet</li>
+                    <li>YOLOv1</li>
+                    <li>YOLOv2</li>
+                    <li></li>
+                </ul>
+            </nav>
+        </div> -->
+
+        <div>
+
+            <p class="h5 text-success">Layers</p>
+            <nav class="navbar navbar-inverse">
+                <ul class="navbar-nav">
+                    <li>Input Layer</li>
+                    <li>Output Layer</li>
+                    <li>Conv1D</li>
+                    <li>Conv2D</li>
+                    <li>Conv3D</li>
+                    <li>RNN</li>
+                    <li>LSTM</li>
+                    <li>GRU</li>
+                    <li>ConvLSTM2D</li>
+                    <li>CuDNNLSTM</li>
+                    <li>MaxPool1D</li>
+                    <li>MaxPool2D</li>
+                    <li>MaxPool3D</li>
+                    <li>Dropout</li>
+                    <li>AveragePooling1D</li>
+                    <li>AveragePooling2D</li>
+                    <li>AveragePooling3D</li>
+                    <li>TimeDistributed</li>
+                    <li>Bidirectional</li>
+                    <li>ReLU</li>
+                    <li>Reshape</li>
+                    <li>Softmax</li>
+                    <li>RepeatVector</li>
+                    <li>Dense</li>
+                    <li>Add</li>
+                    <li>Substract</li>
+                    <li>Concatenation</li>
+                    <li></li>
+                </ul>
+            </nav>
+        </div>
+
     </div>
 
     <div id="draw-sidebar-right">
@@ -98,11 +116,26 @@
 
 
     <div id="draw-main">
-        <div id="draw-canvas"></div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs bg-light justify-content-center" role="tablist" style="visibility: visible;">
+            <li class="nav-item">
+                <a class="nav-link active show" data-toggle="tab" href="#draw-canvas" role="tab" aria-selected="true">Model</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#code-editor" role="tab" aria-selected="false">Code Editor</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div id="draw-canvas" class="tab-pane active show"></div>
+            <div id="code-editor" class="hide"></div>
+        </div>
     </div>
 
 </div>
 
 <script>
+    delete require.cache[require.resolve('./draw/draw.js')]
     require("./draw/draw.js");
 </script>

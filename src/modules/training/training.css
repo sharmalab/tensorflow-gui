@@ -1,0 +1,51 @@
+#training-header {
+    padding: 15px;
+    background: rgba(40, 40, 40, 1.0);
+    color: white;
+    height: 70px;
+    position: relative;
+}
+
+.training-title {
+    text-align: center;
+    position: absolute;
+    top: 20px;
+    font-size: 22px;
+    font-weight: bolder;
+    width: 100%;
+}
+
+#left-training-header {
+    height: 100%;
+    display: inline-block;
+    /* float: left; */
+}
+
+#training-details {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+#right-training-header {
+    display: inline;
+    position: fixed;
+    right: 10px;
+    z-index: 1;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px #888888;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px #888888;
+}

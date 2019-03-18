@@ -1,0 +1,28 @@
+<header id="training-header">
+    <div id="left-training-header">
+        <div id="training-details">
+            <p class="h6 p-0 m-0">First Project</p>
+            <p class="p-0 m-0">project details</p>
+        </div>
+    </div>
+
+    <p class="training-title">Tensorflow GUI</p>
+
+    <div id="right-training-header">
+        <div class="dropdown">
+            <div class="btn dropdown-toggle" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+            </div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                <button class="dropdown-item" id="backPage" type="button">Back</button>
+                <button class="dropdown-item" type="button">Exit</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<script>
+    delete require.cache[require.resolve('./training/training.js')]
+    require("./training/training.js");
+</script>

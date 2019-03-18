@@ -3,6 +3,6 @@ function loadPage(page_path) {
     $("#main-content").load(page_path);
 }
 
-$(document).ready(() => {
-    loadPage("training/training.html")
+$("#backPage").click(function () {
+    loadPage("draw/draw.html")
 });

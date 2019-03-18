@@ -8,7 +8,8 @@
     </div>
 
     <div id="right-user-header">
-        <button type="button" id="user-create-project-button" class="btn btn-light p-2 btn-responsive">Create new Project</button>
+        <button type="button" id="user-create-project-button" class="btn btn-light p-2 btn-responsive">Create new
+            Project</button>
     </div>
 </header>
 
@@ -31,7 +32,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a id="first-project-code-editor" class="dropdown-item" href="#">With Code Editor</a>
                             </div>
-                          </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,5 +41,6 @@
 </div>
 
 <script>
+    delete require.cache[require.resolve('./user/user.js')]
     require("./user/user.js")
 </script>
