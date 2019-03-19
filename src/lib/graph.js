@@ -1,41 +1,47 @@
-
-class tfNode{
-    constructor(node, id, type){
+class tfNode {
+    constructor(label, id, type = "middle") {
         this.type = type;
         this.id = id;
-        this.node = node
-        this.nextNode;
-        this.visited = false;
+        this.label = label;
+        this.outEdges = [];
     }
 
-    setNextNode(input){
-        this.nextNode = input;
+    addOutEdge(edge) {
+        this.outEdges.push(edge);
     }
 }
 
-class tfGraph{
-    constructor(){
+class tfEdge {
+    constructor(node1, node2, arrow, id) {
+        this.id = id;
+        // this.fromNode = node1;
+        this.toNode = node2;
+        this.arrow = arrow;
+        if (node2) {
+            this.fromNode.addOutEdge(this)
+        }
+    }
+}
+
+class tfGraph {
+    constructor() {
         this.numberOfEdges = 0;
         this.numberOfNodes = 0;
         this.inputs = [];
         this.outputs = [];
-        this.nodes = {}
     }
 
-    addNode(input){
-        this.nodes.push(input);
-        this.numberOfNodes++;
-    }
-
-    addInput(input){
+    addInput(input) {
         this.inputs.push(input);
-        this.addNode(input);
     }
 
-    addEdge(input1, input2){
-        input1.setNextNode(input2)
-        this.numberOfEdges++;
+    addOutput(output) {
+        this.outputs.push(output);
     }
 }
 
-module.exports = {tfGraph, tfNode};
+module.exports = {
+    tfGraph,
+    tfNode,
+    tfEdge
+};

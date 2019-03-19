@@ -1,8 +1,8 @@
 var Konva = require('../../lib/konva');
 const print = console.log;
 const {
-    tfGraph,
-    tfNode
+    tfNode,
+    tfEdge
 } = require('../../lib/graph');
 const CodeMirror = require("../../lib/codemirror.js");
 require("../../lib/matchbrackets.js");
@@ -35,9 +35,7 @@ var codemirror = CodeMirror(document.getElementById("code-editor"), {
 let isSelected = false;
 let temparrow;
 let firstblock;
-
-// let graph = new tfGraph();
-
+let graph = global.graph;
 
 $('#draw-sidebar-left #draw-layers li').draggable({
     cursor: 'move',
@@ -90,24 +88,35 @@ function createLabel(x, y, text, layertoadd) {
         width: 150,
         align: 'center'
     }));
+    graph.numberOfNodes++;
+
+    let node;
+    if (text == "Input Layer") {
+        node = new tfNode(label, graph.numberOfNodes, "input")
+        graph.addInput(node);
+    } else if (text == "Output Layer") {
+        node = new tfNode(label, graph.numberOfNodes, "output")
+        graph.addOutput(node);
+    } else {
+        node = new tfNode(label, graph.numberOfNodes, "middle")
+    }
 
     label.on("click", (event) => {
-        // print(graph);
 
         switch (event.evt.which) {
             case 1:
                 if (temparrow == undefined) {
-                    if (isSelected && firstblock == label) {
-                        firstblock.getTag().stroke("#111");
+                    if (isSelected && firstblock == node) {
+                        firstblock.label.getTag().stroke("#111");
                         isSelected = false;
                         firstblock = undefined;
                     } else {
                         if (firstblock) {
-                            firstblock.getTag().stroke("#111");
+                            firstblock.label.getTag().stroke("#111");
                             firstblock = undefined;
                         }
-                        label.getTag().stroke("#4f4");
-                        firstblock = label;
+                        node.label.getTag().stroke("#4f4");
+                        firstblock = node;
                         isSelected = true;
                     }
                 } else {
@@ -118,23 +127,23 @@ function createLabel(x, y, text, layertoadd) {
                 alert('Middle Mouse button pressed.');
                 break;
             case 3:
-                if (isSelected && label == firstblock && temparrow) {
-                    firstblock.getTag().stroke("#111");
-                    temparrow.remove();
+                if (isSelected && node == firstblock && temparrow) {
+                    firstblock.label.getTag().stroke("#111");
+                    temparrow.arrow.remove();
                     isSelected = false;
                     firstblock = undefined;
                     temparrow = undefined;
                 } else if ((!isSelected && !temparrow) || (isSelected && !temparrow)) {
-                    label.getTag().stroke("#4f4");
-                    temparrow = addArrow(label, null, layertoadd);
-                    firstblock = label;
-                    temparrow.moveToBottom()
+                    node.label.getTag().stroke("#4f4");
+                    temparrow = addArrow(node, null, layertoadd);
+                    firstblock = node;
+                    temparrow.arrow.moveToBottom()
                     isSelected = true;
                 } else if (temparrow && isSelected) {
-                    temparrow.remove();
-                    firstblock.getTag().stroke("#111");
-                    if (firstblock != label)
-                        addArrow(firstblock, label, layertoadd).moveToBottom();
+                    temparrow.arrow.remove();
+                    firstblock.label.getTag().stroke("#111");
+                    if (firstblock != node)
+                        addArrow(firstblock, node, layertoadd).arrow.moveToBottom();
                     firstblock = undefined;
                     temparrow = undefined;
                     isSelected = false;
@@ -162,19 +171,17 @@ function createLabel(x, y, text, layertoadd) {
     });
 
     layertoadd.add(label);
-    // if (text == "Input Layer") {
-    //     graph.addInput(new tfNode(label, 0, text));
-    // } else {
-    //     graph.addNode(new tfNode(label, 1, text));
-    // }
     layertoadd.draw();
-    return label;
+    return node;
 }
 
 
-function addArrow(shape1, shape2, layertoadd) {
+function addArrow(node1, node2, layertoadd) {
     var arrow;
-    if (shape2 == null) {
+    let shape1 = node1.label;
+    let shape2;
+    let edge;
+    if (node2 == null) {
         arrow = new Konva.Arrow({
             points: [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape1.getX() + shape1.width(), shape1.getY() + shape1.height()],
             pointerLength: 6,
@@ -193,6 +200,7 @@ function addArrow(shape1, shape2, layertoadd) {
         });
 
     } else {
+        shape2 = node2.label;
         arrow = new Konva.Arrow({
             points: [shape1.getX() + (shape1.width() / 2), shape1.getY() + shape1.height(), shape2.getX() + (shape2.width() / 2), shape2.getY()],
             pointerLength: 6,
@@ -211,13 +219,14 @@ function addArrow(shape1, shape2, layertoadd) {
             arrow.setPoints(p);
             layertoadd.draw();
         });
-
-        // graph.addEdge(shape1, shape2);
+        graph.numberOfEdges++;
     }
+
+    edge = new tfEdge(node1, node2, arrow, graph.numberOfEdges)
 
     layertoadd.add(arrow)
     layertoadd.draw();
-    return arrow;
+    return edge;
 }
 
 
@@ -235,9 +244,9 @@ $("#draw-canvas").droppable({
 $(document).keyup(function (e) {
     if (e.key === "Escape") {
         if (isSelected) {
-            firstblock.getTag().stroke("#111");
+            firstblock.label.getTag().stroke("#111");
             if (temparrow)
-                temparrow.remove()
+                temparrow.arrow.remove()
             temparrow = undefined;
             firstblock = undefined;
             isSelected = false;
@@ -246,7 +255,7 @@ $(document).keyup(function (e) {
     } else if (e.key === "Delete") {
         if (isSelected && !temparrow) {
             if (firstblock) {
-                firstblock.remove()
+                firstblock.label.remove()
                 firstblock = undefined;
             }
             isSelected = false;
@@ -284,14 +293,14 @@ stage.on('wheel', e => {
     stage.batchDraw();
 });
 
-$("#code-editor-link").click(function(){
+$("#code-editor-link").click(function () {
     $("#draw-layers").hide();
     $("#draw-functions").show();
     $("#draw-sidebar-right").hide();
 });
 
 
-$("#draw-canvas-link").click(function(){
+$("#draw-canvas-link").click(function () {
     $("#draw-layers").show();
     $("#draw-functions").hide();
 });
@@ -303,14 +312,15 @@ function loadPage(page_path) {
 }
 
 $("#startTraining").click(function () {
+    print(graph);
     if (firstblock)
-        firstblock.getTag().stroke("#111");
+        firstblock.label.getTag().stroke("#111");
     if (temparrow)
-        temparrow.remove();
+        temparrow.arrow.remove();
     isSelected = false;
     firstblock = undefined;
     temparrow = undefined;
 
-    global.editorText = codemirror.getValue()+"\n";
+    global.editorText = codemirror.getValue() + "\n";
     loadPage("training/training.html");
 });
