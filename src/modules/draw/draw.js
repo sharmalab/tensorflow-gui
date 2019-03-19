@@ -7,22 +7,12 @@ const {
 const CodeMirror = require("../../lib/codemirror.js");
 require("../../lib/matchbrackets.js");
 require("../../lib/python.js");
+const global = require("../../lib/global.js")
 
 $("#draw-sidebar-right").hide();
-
+$("#draw-functions").hide();
 
 // ======================================= dataset =======================================
-
-let initEditor =
-    `# importing libraries
-import tensorflow as tf
-import tf.keras.layers
-
-
-# main code goes here
-if __name__=="__main__":
-    pass
-`
 
 
 var codemirror = CodeMirror(document.getElementById("code-editor"), {
@@ -36,7 +26,7 @@ var codemirror = CodeMirror(document.getElementById("code-editor"), {
     smartIndent: true,
     styleActiveLine: true,
     matchBrackets: true,
-    value: initEditor
+    value: global.editorText
 });
 
 
@@ -49,7 +39,7 @@ let firstblock;
 // let graph = new tfGraph();
 
 
-$('#draw-sidebar-left li').draggable({
+$('#draw-sidebar-left #draw-layers li').draggable({
     cursor: 'move',
     helper: function () {
         $('#main-content').append('<div id="clone" style="text-decoration:none;" class="bg-dark text-white p-2">' + $(this).html() + '</div>');
@@ -294,6 +284,17 @@ stage.on('wheel', e => {
     stage.batchDraw();
 });
 
+$("#code-editor-link").click(function(){
+    $("#draw-layers").hide();
+    $("#draw-functions").show();
+    $("#draw-sidebar-right").hide();
+});
+
+
+$("#draw-canvas-link").click(function(){
+    $("#draw-layers").show();
+    $("#draw-functions").hide();
+});
 
 // menu handling button click
 function loadPage(page_path) {
@@ -309,5 +310,7 @@ $("#startTraining").click(function () {
     isSelected = false;
     firstblock = undefined;
     temparrow = undefined;
+
+    global.editorText = codemirror.getValue()+"\n";
     loadPage("training/training.html");
 });

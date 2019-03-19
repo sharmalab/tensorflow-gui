@@ -66,12 +66,18 @@
 }
 
 
-#draw-sidebar-left li:hover {
+#draw-sidebar-left #draw-layers li:hover {
     color: #eeeeee;
     background: #555555;
     cursor: grab;
 }
 
+
+#draw-sidebar-left #draw-functions li:hover {
+    color: #eeeeee;
+    background: #555555;
+    cursor: pointer;
+}
 
 #draw-main {
     width: 100%;

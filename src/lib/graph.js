@@ -1,5 +1,4 @@
 
-
 class tfNode{
     constructor(node, id, type){
         this.type = type;

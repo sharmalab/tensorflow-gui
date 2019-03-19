@@ -1,13 +1,13 @@
 const Chart = require('chart.js');
+const global = require("../../lib/global.js");
+const childprocess = require('child_process');
+const print = console.log;
+var fs = require('fs');
 
 function loadPage(page_path) {
     $("#main-content").html('');
     $("#main-content").load(page_path);
 }
-
-$("#backPage").click(function () {
-    loadPage("draw/draw.html")
-});
 
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
@@ -17,6 +17,64 @@ function getRandomColor() {
     }
     return color;
 }
+
+$("#backPage").click(function () {
+    loadPage("draw/draw.html")
+});
+
+
+function runPython() {
+    let codepath = './testing/code.py';
+    try {
+        fs.writeFileSync(codepath, global.modelText + global.editorText, 'utf-8');
+    } catch (e) {
+        console.log('Failed to save the file !');
+    }
+
+    var env = Object.create(process.env);
+    var pythonprocess = childprocess.spawn('python3', [codepath], {
+        env: env
+    });
+
+
+    pythonprocess.stdout.on('data', function (data) {
+        console.log(data.toString('utf8'));
+    });
+
+    pythonprocess.stderr.on('data', function (data) {
+        console.log('stderr: ' + data);
+        $("#training-error").html(`<p class="text-danger">${data}</p>`);
+        $("#training-error").append("<br><button id='backButton' class='btn btn-primary'>Go Back</button>");
+
+        $("#backButton").click(function () {
+            loadPage("draw/draw.html")
+        });
+        //Here is where the error output goes
+    });
+
+    pythonprocess.on('close', (code) => {
+        if (code == 1) {
+            $("#training-graphs").hide();
+            $("#training-error").show();
+        } else {
+            $("#training-graphs").show();
+            $("#training-error").hide();
+        }
+        console.log(`child process exited with code ${code}`);
+    });
+}
+
+$(document).ready(function () {
+    runPython();
+    $("#training-error").hide();
+    points = {
+        x: [10, 20, 30, 40, 50],
+        y: [10, 20, 16, 13, 89]
+    };
+
+    drawChart("losschart", points, "Loss on Training Data", "Loss");
+    drawChart("accuracychart", points, "Accuracy on Training Data", "Accuracy");
+});
 
 // function read(){
 //     jQuery.get('now.txt',function(data){document.write(data);});
@@ -45,12 +103,3 @@ function drawChart(id, points, title, label) {
         }
     });
 }
-
-
-points = {
-    x: [10, 20, 30, 40, 50],
-    y: [10, 20, 16, 13, 89]
-};
-
-drawChart("losschart", points, "Loss on Training Data", "Loss");
-drawChart("accuracychart", points, "Accuracy on Training Data", "Accuracy");

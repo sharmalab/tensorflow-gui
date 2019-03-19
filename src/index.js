@@ -7,9 +7,9 @@ const {
 let print = console.log;
 
 // Enable live reload
-require('electron-reload')(__dirname, {
-    electron: require(`${__dirname}/node_modules/electron`)
-});
+// require('electron-reload')(__dirname, {
+//     electron: require(`${__dirname}/node_modules/electron`)
+// });
 
 
 // ============================= global variabals =============================
