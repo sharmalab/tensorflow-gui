@@ -59,8 +59,8 @@
             <p class="h5 text-success">Layers</p>
             <nav class="navbar navbar-inverse">
                 <ul class="navbar-nav">
-                    <li>Input Layer</li>
-                    <li>Output Layer</li>
+                    <li>Input</li>
+                    <li>Output</li>
                     <li>Conv1D</li>
                     <li>Conv2D</li>
                     <li>Conv3D</li>
@@ -99,14 +99,14 @@
             <h6 id="selectedlayer">Conv1D Layer</h6>
             <form>
                 <div class="form-group">
-                    <label for="input1">Filter Size:</label>
-                    <input type="number" class="form-control" id="input1" placeholder="3" required>
+                    <label for="input1">Units:</label>
+                    <input type="number" class="form-control" id="input1" placeholder="64" required>
                 </div>
                 <div class="form-group">
-                    <label for="input2">Kernel Size:</label>
-                    <input type="text" class="form-control" id="input2" placeholder="(5,5)" required>
+                    <label for="input2">Activation:</label>
+                    <input type="text" class="form-control" id="input2" placeholder="linear" required>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="input3">Strides:</label>
                     <input type="number" class="form-control" id="input3" placeholder="(3,3)" required>
                 </div>
@@ -124,7 +124,7 @@
                         <option>channels_last</option>
                         <option>channels_first</option>
                     </select>
-                </div>
+                </div> -->
             </form>
         </nav>
     </div>

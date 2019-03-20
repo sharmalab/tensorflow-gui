@@ -29,6 +29,6 @@ $("#first-project-gui").click(() => {
     loadPage("draw/draw.html")
 })
 
-$("#first-project-code-editor").click(() => {
-    loadPage("codeeditor/codeeditor.html")
-})
+// $("#first-project-code-editor").click(() => {
+//     loadPage("codeeditor/codeeditor.html")
+// })

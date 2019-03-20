@@ -4,5 +4,5 @@ function loadPage(page_path) {
 }
 
 $(document).ready(() => {
-    loadPage("draw/draw.html")
+    loadPage("user/user.html")
 });
