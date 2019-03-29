@@ -7,6 +7,7 @@ const {
 const CodeMirror = require("../../lib/codemirror.js");
 require("../../lib/matchbrackets.js");
 require("../../lib/python.js");
+
 const global = require("../../lib/global.js")
 
 $("#draw-sidebar-right").hide();
@@ -30,16 +31,15 @@ var codemirror = CodeMirror(document.getElementById("code-editor"), {
 });
 
 
-
 // ======================================= canvas draws =======================================
 let isSelected = false;
 let temparrow;
 let firstblock;
 let graph = global.graph;
 graph.modelStage = new Konva.Stage({
-    container: 'draw-canvas',
-    width: 2 * window.innerWidth,
-    height: 2 * window.innerHeight,
+	container: 'draw-canvas',
+	width: 2 * window.innerWidth,
+	height: 2 * window.innerHeight,
 });
 let stage = graph.modelStage;
 
@@ -89,7 +89,7 @@ function createLabel(x, y, text, layertoadd) {
 	graph.numberOfNodes++;
 
 	let node;
-	if (text == "Input") {
+	if (text == "InputLayer") {
 		node = new tfNode(label, graph.numberOfNodes, "input")
 		graph.addInput(node);
 	} else if (text == "Output") {
@@ -152,6 +152,25 @@ function createLabel(x, y, text, layertoadd) {
 		}
 
 		if (isSelected) {
+			$("#right-sidebar-form").text('');
+			let layerParameters;
+			if(firstblock.parameters == null){
+				layerParameters = global.layerParameters[label.getText().text()];
+				firstblock.parameters = layerParameters;
+			}else{
+				layerParameters = firstblock.parameters;
+			}
+
+			// print(layerParameters, firstblock.parameters);
+			for(const [key, value] of Object.entries(layerParameters)) {
+				$("#right-sidebar-form").append(`
+					<div class="form-group">
+						<label for="${key}">${key}:</label>
+						<input class="form-control" id="${key}" value="${value}" required>
+					</div>
+				`);
+			}
+
 			$("#draw-sidebar-right").show();
 			$("#selectedlayer").text(label.getText().text());
 		} else {
@@ -254,9 +273,9 @@ $(document).keyup(function (e) {
 		if (isSelected && !temparrow) {
 			if (firstblock) {
 				firstblock.label.remove()
-				for(let i in firstblock.outEdges)
+				for (let i in firstblock.outEdges)
 					firstblock.outEdges[i].arrow.remove()
-				for(let i in firstblock.inEdges)
+				for (let i in firstblock.inEdges)
 					firstblock.inEdges[i].arrow.remove()
 				firstblock = undefined;
 			}
@@ -307,6 +326,17 @@ $("#draw-canvas-link").click(function () {
 	$("#draw-functions").hide();
 });
 
+$('#right-sidebar-form').on('keyup change paste', 'input, select, textarea', function(){
+	if(isSelected && firstblock){
+		let fields = {}
+		$("#right-sidebar-form").find(":input").each(function() {
+			fields[this.id] = $(this).val();
+		});
+		firstblock.parameters = fields;
+	}
+	// print(firstblock.parameters);
+});
+
 // menu handling button click
 function loadPage(page_path) {
 	$("#main-content").html('');
@@ -314,11 +344,12 @@ function loadPage(page_path) {
 }
 
 $("#startTraining").click(function () {
+	global.modelText = "\n";
 	global.modelText += "def Network():";
 	global.modelText += graph.traverse();
 	global.modelText += `
     optimizer = tf.keras.optimizers.Adam(lr=0.0001)
-    model.compile(optimizer = optimizer, loss='mean_squared_error' ,metrics=['mae', 'accuracy'])
+    model.compile(optimizer = optimizer, loss='categorical_crossentropy' ,metrics=['mae','accuracy'])
     return model\n`;
 
 	global.modelText +=
@@ -326,12 +357,10 @@ $("#startTraining").click(function () {
 def train():
     model = Network()
     # model.summary()
-    model.fit(x = getTrainingDataX(), y = getTrainingDataY(), epochs=10, batch_size=10, callbacks=[LossAcc()], verbose=0)
+    model.fit(x = getTrainingDataX(), y = getTrainingDataY(), epochs=10, batch_size=128, callbacks=[LossAcc()], verbose=0)
 
 train()
     `
-
-
 	if (firstblock)
 		firstblock.label.getTag().stroke("#111");
 	if (temparrow)

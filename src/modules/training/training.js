@@ -30,7 +30,7 @@ $("#backPage").click(function () {
 function runPython() {
     let codepath = './testing/code.py';
     try {
-        fs.writeFileSync(codepath, global.editorText + global.modelText, 'utf-8');
+        fs.writeFileSync(codepath, global.editorText + global.extraText + global.modelText, 'utf-8');
     } catch (e) {
         console.log('Failed to save the file !');
     }
@@ -122,7 +122,7 @@ $(document).ready(function () {
     };
 
     lossChart = drawChart("losschart", points, "Loss", "Loss");
-    maeChart = drawChart("maechart", points, "Mean Absolute Error", "Mean Absolute Error");
+    // maeChart = drawChart("maechart", points, "Mean Absolute Error", "Mean Absolute Error");
     accuracyChart = drawChart("accuracychart", points, "Accuracy", "Accuracy");
 
     $("#training-status").text("Creating Model.");

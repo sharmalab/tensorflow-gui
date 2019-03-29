@@ -7,7 +7,7 @@ class tfNode {
         this.label = label;
         this.outEdges = [];
         this.inEdges = [];
-        this.parameters = {}
+        this.parameters = null
     }
 
     addOutEdge(edge) {
@@ -57,22 +57,21 @@ class tfGraph {
         let lasttemp, layerName, lastLayerName;
         while (temp) {
             layerName = temp.label.getText().text()
+            let tempparameters = "";
+
             if (layerName == "Output") {
                 lastLayerName = lasttemp.label.getText().text();
-                if ("Dense" == lastLayerName)
-                    modelCode += `    Dense${++layer["Dense"]} = Dense(1)(${lastLayerName+(layer[lastLayerName] - 1)})`;
-                else
-                    modelCode += `    Dense${++layer["Dense"]} = Dense(1)(${lastLayerName+layer[lastLayerName]})`;
-
-                modelCode += "\n";
-                modelCode += `    model = Model(inputs=Input${layer["Input"]}, outputs=${lastLayerName+layer[lastLayerName]})`;
-            } else if (layerName == "Input") {
+                modelCode += `    model = Model(inputs=InputLayer_${layer["InputLayer"]}, outputs=${lastLayerName+"_"+layer[lastLayerName]})`;
+            } else if (layerName == "InputLayer") {
                 if (layerName in layer)
                     layer[layerName]++;
                 else
                     layer[layerName] = 1;
 
-                modelCode += `    ${layerName+layer[layerName]} = ${layerName}(shape=(2,))`
+                for (const [key, value] of Object.entries(temp.parameters)) {
+                    tempparameters += `${key} = ${value},`
+                }
+                modelCode += `    ${layerName+"_"+layer[layerName]} = Input(${tempparameters})`
             } else {
                 lastLayerName = lasttemp.label.getText().text();
                 if (layerName in layer) {
@@ -81,10 +80,14 @@ class tfGraph {
                     layer[layerName] = 1;
                 }
 
+                for (const [key, value] of Object.entries(temp.parameters)) {
+                    tempparameters += `${key} = ${value},`
+                }
+
                 if (layerName == lastLayerName)
-                    modelCode += `    ${layerName+layer[layerName]} = ${layerName}(4, activation="linear")(${lastLayerName+(layer[lastLayerName] - 1)})`
+                    modelCode += `    ${layerName+"_"+layer[layerName]} = ${layerName}(${tempparameters})(${lastLayerName+"_"+(layer[lastLayerName] - 1)})`
                 else
-                    modelCode += `    ${layerName+layer[layerName]} = ${layerName}(4, activation="linear")(${lastLayerName+layer[lastLayerName]})`
+                    modelCode += `    ${layerName+"_"+layer[layerName]} = ${layerName}(${tempparameters})(${lastLayerName+"_"+layer[lastLayerName]})`
             }
 
             lasttemp = temp;

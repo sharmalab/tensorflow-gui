@@ -41,25 +41,25 @@
 
 
         <div id="draw-functions">
-                <p class="h5 text-success">Python Functions</p>
-                <nav class="navbar navbar-inverse">
-                    <ul class="navbar-nav">
-                        <li>Load Images Files</li>
-                        <li>Load CSV Files</li>
-                        <li>Load Audio Files</li>
-                        <li>Data Augmentation Images</li>
-                        <li>Data Augmentation Texts</li>
-                        <li>Randomization</li>
-                        <li></li>
-                    </ul>
-                </nav>
-            </div>
+            <p class="h5 text-success">Python Functions</p>
+            <nav class="navbar navbar-inverse">
+                <ul class="navbar-nav">
+                    <li>Load Images Files</li>
+                    <li>Load CSV Files</li>
+                    <li>Load Audio Files</li>
+                    <li>Data Augmentation Images</li>
+                    <li>Data Augmentation Texts</li>
+                    <li>Randomization</li>
+                    <li></li>
+                </ul>
+            </nav>
+        </div>
 
         <div id="draw-layers">
             <p class="h5 text-success">Layers</p>
             <nav class="navbar navbar-inverse">
                 <ul class="navbar-nav">
-                    <li>Input</li>
+                    <li>InputLayer</li>
                     <li>Output</li>
                     <li>Conv1D</li>
                     <li>Conv2D</li>
@@ -83,6 +83,8 @@
                     <li>Softmax</li>
                     <li>RepeatVector</li>
                     <li>Dense</li>
+                    <li>Activation</li>
+                    <li>Flatten</li>
                     <li>Add</li>
                     <li>Substract</li>
                     <li>Concatenation</li>
@@ -96,8 +98,8 @@
     <div id="draw-sidebar-right">
         <p class="h5 text-success text-center">Arguments</p>
         <nav class="navbar navbar-inverse">
-            <h6 id="selectedlayer">Conv1D Layer</h6>
-            <form>
+            <h6 id="selectedlayer">No Layer</h6>
+            <form id="right-sidebar-form">
                 <div class="form-group">
                     <label for="input1">Units:</label>
                     <input type="number" class="form-control" id="input1" placeholder="64" required>
@@ -106,7 +108,11 @@
                     <label for="input2">Activation:</label>
                     <input type="text" class="form-control" id="input2" placeholder="linear" required>
                 </div>
-                <!-- <div class="form-group">
+            </form>
+        </nav>
+    </div>
+
+    <!-- <div class="form-group">
                     <label for="input3">Strides:</label>
                     <input type="number" class="form-control" id="input3" placeholder="(3,3)" required>
                 </div>
@@ -125,19 +131,17 @@
                         <option>channels_first</option>
                     </select>
                 </div> -->
-            </form>
-        </nav>
-    </div>
-
 
     <div id="draw-main">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs bg-light justify-content-center" role="tablist" style="visibility: visible;">
             <li class="nav-item" id="draw-canvas-link">
-                <a class="nav-link active show" data-toggle="tab" href="#draw-canvas" role="tab" aria-selected="true">Model</a>
+                <a class="nav-link active show" data-toggle="tab" href="#draw-canvas" role="tab"
+                    aria-selected="true">Model</a>
             </li>
             <li class="nav-item" id="code-editor-link">
-                <a class="nav-link" data-toggle="tab" href="#code-editor" role="tab" aria-selected="false">Code Editor</a>
+                <a class="nav-link" data-toggle="tab" href="#code-editor" role="tab" aria-selected="false">Code
+                    Editor</a>
             </li>
         </ul>
 
