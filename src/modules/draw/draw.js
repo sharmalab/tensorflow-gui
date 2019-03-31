@@ -11,7 +11,7 @@ require("../../lib/python.js");
 const global = require("../../lib/global.js")
 
 $("#draw-sidebar-right").hide();
-$("#draw-functions").hide();
+// $("#draw-functions").hide();
 
 // ======================================= dataset =======================================
 
@@ -46,7 +46,7 @@ let stage = graph.modelStage;
 let layer = graph.modelLayers[0];
 stage.add(layer);
 
-$('#draw-sidebar-left #draw-layers li').draggable({
+$('#draw-sidebar-left div .accordion ul li').draggable({
 	cursor: 'move',
 	helper: function () {
 		$('#main-content').append('<div id="clone" style="text-decoration:none;" class="bg-dark text-white p-2">' + $(this).html() + '</div>');
@@ -154,21 +154,22 @@ function createLabel(x, y, text, layertoadd) {
 		if (isSelected) {
 			$("#right-sidebar-form").text('');
 			let layerParameters;
-			if(firstblock.parameters == null){
+			if (firstblock.parameters == null) {
 				layerParameters = global.layerParameters[label.getText().text()];
 				firstblock.parameters = layerParameters;
-			}else{
+			} else {
 				layerParameters = firstblock.parameters;
 			}
 
-			// print(layerParameters, firstblock.parameters);
-			for(const [key, value] of Object.entries(layerParameters)) {
-				$("#right-sidebar-form").append(`
+			if (layerParameters) {
+				for (const [key, value] of Object.entries(layerParameters)) {
+					$("#right-sidebar-form").append(`
 					<div class="form-group">
 						<label for="${key}">${key}:</label>
 						<input class="form-control" id="${key}" value="${value}" required>
 					</div>
 				`);
+				}
 			}
 
 			$("#draw-sidebar-right").show();
@@ -326,10 +327,10 @@ $("#draw-canvas-link").click(function () {
 	$("#draw-functions").hide();
 });
 
-$('#right-sidebar-form').on('keyup change paste', 'input, select, textarea', function(){
-	if(isSelected && firstblock){
+$('#right-sidebar-form').on('keyup change paste', 'input, select, textarea', function () {
+	if (isSelected && firstblock) {
 		let fields = {}
-		$("#right-sidebar-form").find(":input").each(function() {
+		$("#right-sidebar-form").find(":input").each(function () {
 			fields[this.id] = $(this).val();
 		});
 		firstblock.parameters = fields;

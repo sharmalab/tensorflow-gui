@@ -25,32 +25,47 @@
 <div class="draw-content">
     <div id="draw-sidebar-left">
 
-        <!-- <div >
-            <p class="h5 text-success">Models</p>
-            <nav class="navbar navbar-inverse">
-                <ul class="navbar-nav">
-                    <li>VGG</li>
-                    <li>Mask R-CNN</li>
-                    <li>MobileNet</li>
-                    <li>YOLOv1</li>
-                    <li>YOLOv2</li>
-                    <li></li>
-                </ul>
-            </nav>
-        </div> -->
-
-
         <div id="draw-functions">
-            <p class="h5 text-success">Python Functions</p>
+            <p class="h5 text-success">Data Functions</p>
             <nav class="navbar navbar-inverse">
                 <ul class="navbar-nav">
-                    <li>Load Images Files</li>
-                    <li>Load CSV Files</li>
-                    <li>Load Audio Files</li>
-                    <li>Data Augmentation Images</li>
-                    <li>Data Augmentation Texts</li>
-                    <li>Randomization</li>
-                    <li></li>
+                    <li class="accordion">
+                        <a href="#pageSubmenu1-1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Image</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu1-1">
+                            <li>LoadImage</li>
+                            <li>LoadImageFolder</li>
+                            <li>RotateImage</li>
+                            <li>ScaleImage</li>
+                        </ul>
+                    </li>
+                    <li class="accordion">
+                        <a href="#pageSubmenu1-2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            CSV</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu1-2">
+                            <li>LoadCSV</li>
+                        </ul>
+                    </li>
+                    <li class="accordion">
+                        <a href="#pageSubmenu1-3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Video</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu1-3">
+                            <li>LoadVideo</li>
+                            <li>LoadVideoFolder</li>
+                        </ul>
+                    </li>
+                    <li class="accordion">
+                        <a href="#pageSubmenu1-4" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Audio</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu1-4">
+                            <li>LoadAudio</li>
+                            <li>LoadAudioFolder</li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -59,36 +74,112 @@
             <p class="h5 text-success">Layers</p>
             <nav class="navbar navbar-inverse">
                 <ul class="navbar-nav">
-                    <li>InputLayer</li>
-                    <li>Output</li>
-                    <li>Conv1D</li>
-                    <li>Conv2D</li>
-                    <li>Conv3D</li>
-                    <li>RNN</li>
-                    <li>LSTM</li>
-                    <li>GRU</li>
-                    <li>ConvLSTM2D</li>
-                    <li>CuDNNLSTM</li>
-                    <li>MaxPool1D</li>
-                    <li>MaxPool2D</li>
-                    <li>MaxPool3D</li>
-                    <li>Dropout</li>
-                    <li>AveragePooling1D</li>
-                    <li>AveragePooling2D</li>
-                    <li>AveragePooling3D</li>
-                    <li>TimeDistributed</li>
-                    <li>Bidirectional</li>
-                    <li>ReLU</li>
-                    <li>Reshape</li>
-                    <li>Softmax</li>
-                    <li>RepeatVector</li>
-                    <li>Dense</li>
-                    <li>Activation</li>
-                    <li>Flatten</li>
-                    <li>Add</li>
-                    <li>Substract</li>
-                    <li>Concatenation</li>
-                    <li></li>
+                    <li class="accordion">
+                        <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Convolution</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu1">
+                            <li>Conv1D</li>
+                            <li>Conv2D</li>
+                            <li>Conv3D</li>
+                        </ul>
+                    </li>
+                    <li class="accordion">
+                        <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Recurrent</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu2">
+                            <li>RNN</li>
+                            <li>LSTM</li>
+                            <li>GRU</li>
+                            <li>ConvLSTM2D</li>
+                            <li>CuDNNLSTM</li>
+                            <li>TimeDistributed</li>
+                            <li>Bidirectional</li>
+                        </ul>
+                    </li>
+
+                    <li class="accordion">
+                        <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Pooling</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu3">
+                            <li>MaxPool1D</li>
+                            <li>MaxPool2D</li>
+                            <li>MaxPool3D</li>
+                            <li>Dropout</li>
+                            <li>AveragePooling1D</li>
+                            <li>AveragePooling2D</li>
+                            <li>AveragePooling3D</li>
+                        </ul>
+                    </li>
+
+                    <li class="accordion">
+                        <a href="#pageSubmenu4" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Activation</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu4">
+                            <li>ReLU</li>
+                            <li>Softmax</li>
+                            <li>Activation</li>
+                        </ul>
+                    </li>
+
+
+                    <li class="accordion">
+                        <a href="#pageSubmenu5" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Algebric</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu5">
+                            <li>Add</li>
+                            <li>Substract</li>
+                            <li>Concatenation</li>
+                        </ul>
+                    </li>
+
+                    <li class="accordion">
+                        <a href="#pageSubmenu6" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Others</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu6">
+                            <li>InputLayer</li>
+                            <li>Output</li>
+                            <li>Reshape</li>
+                            <li>RepeatVector</li>
+                            <li>Dense</li>
+                            <li>Flatten</li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+
+        <div id="draw-outputs">
+            <p class="h5 text-success">Output Functions</p>
+            <nav class="navbar navbar-inverse">
+                <ul class="navbar-nav">
+                    <li class="accordion">
+                        <a href="#pageSubmenu3-1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Charts</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu3-1">
+                            <li>Loss</li>
+                            <li>Accuracy</li>
+                            <li>MAE</li>
+                            <li>Precision</li>
+                        </ul>
+                    </li>
+                    <li class="accordion">
+                        <a href="#pageSubmenu3-2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Saver</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu3-2">
+                            <li>onBatchEnd</li>
+                            <li>onEpochEnd</li>
+                        </ul>
+                    </li>
+                    
                 </ul>
             </nav>
         </div>

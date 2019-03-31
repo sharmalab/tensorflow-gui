@@ -47,36 +47,50 @@
     overflow-y: scroll;
 }
 
-#draw-sidebar-left nav ul li {
-    padding: 10px;
-    font-size: 16px;
-    border-top: 1.2px solid #888888;
-    font-weight: bolder;
+#draw-sidebar-left nav ul li{
+    padding: 4px;
+    font-size: 14px;
+    /* border-top: 1.2px solid #888888; */
     background: transparent;
     color: #555555;
-    font-weight: bolder;
+    width: 100%;
+    display: inline-block;    
+}
+
+#draw-sidebar-left nav ul li ul li{
+    padding: 4px;
+    padding-left: 16px;
+}
+
+
+
+#draw-sidebar-left>div .accordion a{
+    padding: 8px;
+    font-size: 16px;
+    padding-top: 0px;
+    /* border-top: 1.2px solid #888888; */
+    background: transparent;
+    color: #444444;
+    width: 100%;
+    display: inline-block;
 }
 
 #draw-sidebar-left>div>p {
+    width: 100%;
+    display: inline-block;
     padding: 8px;
     padding-bottom: 0px;
-    margin-left: 20px;
-    font-size: 20px;
+    margin-bottom: 0px;
+    /* margin-left: 20px; */
+    /* margin: 0px; */
+    font-size: 18px;
     font-weight: bolder;
 }
 
-
-#draw-sidebar-left #draw-layers li:hover {
+#draw-sidebar-left div .accordion li:hover {
     color: #eeeeee;
     background: #555555;
     cursor: grab;
-}
-
-
-#draw-sidebar-left #draw-functions li:hover {
-    color: #eeeeee;
-    background: #555555;
-    cursor: pointer;
 }
 
 #draw-main {
@@ -104,7 +118,6 @@
     padding: 2px;
     /* font-size: 16px; */
     border-top: 0.8px solid #888888;
-    font-weight: bolder;
     background: transparent;
     color: #555555;
 }
@@ -115,7 +128,7 @@
     padding-bottom: 0px;
     /* margin-right: 20px; */
     font-size: 20px;
-    font-weight: bolder;
+    /* font-weight: bolder; */
 }
 
 #selectedlayer {
@@ -139,13 +152,13 @@
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px #888888;
+    /* -webkit-box-shadow: inset 0 0 6px #888888; */
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px #888888;
+    /* -webkit-box-shadow: inset 0 0 6px #888888; */
 }
 
 .CodeMirror {
@@ -166,4 +179,10 @@
 
 .tab-content{
     overflow-y: hidden;
+}
+
+#draw-layers p,#draw-functions p, #draw-outputs p{
+    margin:0;
+    padding: 0;
+    margin-left: 8px;
 }
