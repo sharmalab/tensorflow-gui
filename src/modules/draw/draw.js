@@ -15,7 +15,6 @@ $("#startTraining").hide();
 
 // ======================================= dataset =======================================
 
-
 var codemirror = CodeMirror(document.getElementById("code-editor"), {
     mode: {
         name: "python",
@@ -356,7 +355,7 @@ $("#goNext").click(function () {
     global.modelText += modelgencode;
     global.modelText += `
     optimizer = tf.keras.optimizers.Adam(lr=0.0001)
-    model.compile(optimizer = optimizer, loss='categorical_crossentropy' ,metrics=['mae','accuracy'])
+    model.compile(optimizer = optimizer, loss='mean_squared_error' ,metrics=['mae','accuracy'])
     return model\n`;
 
     global.modelText +=
@@ -365,7 +364,7 @@ $("#goNext").click(function () {
 def train():
     model = Network()
     x,y = getTrainingData()
-    model.fit(x = x, y = y, epochs=10, batch_size=128, callbacks=[LossAcc()], verbose=0)
+    model.fit(x = x, y = y, epochs=30, batch_size=10, callbacks=[LossAcc()], verbose=0)
 
 # code execution starts here
 if __name__== "__main__":

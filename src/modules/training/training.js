@@ -3,6 +3,7 @@ const global = require("../../lib/global.js");
 const childprocess = require('child_process');
 const print = console.log;
 var fs = require('fs');
+const swal = require('sweetalert');
 
 let lossChart;
 let maeChart;
@@ -80,6 +81,7 @@ function runPython() {
             $("#training-graphs").show();
             $("#training-error").hide();
             $("#training-status").text("Training completed.");
+            swal("Completed!", "Model training has been completed!", "success");
         }
         console.log(`child process exited with code ${code}`);
     });
@@ -117,7 +119,7 @@ $(document).ready(function () {
     $("#training-error").hide();
     
     points = {
-        x: [...Array(10).keys()],
+        x: [...Array(30).keys()],
         y: []
     };
 

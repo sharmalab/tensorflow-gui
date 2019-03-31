@@ -33,7 +33,8 @@
     display: inline;
     position: fixed;
     right: 10px;
-    z-index: 1;
+    z-index: 7;
+    margin-right: 10px;
 }
 
 #draw-sidebar-left {
@@ -175,7 +176,9 @@
     /* width: 100%; */
     height: 100vh;
 }
+
 #code-editor {
+    cursor: auto;
     overflow-y: hidden;
     /* max-height: calc(100vh - 110px); */
 }

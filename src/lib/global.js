@@ -6,6 +6,10 @@ let graph = new tfGraph();
 
 let editorText =
     `
+import tensorflow as tf
+from tensorflow.keras.layers import *
+from tensorflow.keras.models import Model, load_model
+
 '''
 complete getTrainingDat function for data loading and pre processing.
 Do not change the name of the function
@@ -20,9 +24,6 @@ def getTrainingData():
 let extraText =
     `
 # importing libraries
-import tensorflow as tf
-from tensorflow.keras.layers import *
-from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.callbacks import Callback, RemoteMonitor
 
 # model callback
