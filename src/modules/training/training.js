@@ -23,14 +23,14 @@ function getRandomColor() {
 }
 
 $("#backPage").click(function () {
-    loadPage("draw/draw.html")
+    // loadPage("draw/draw.html")
 });
 
 
 function runPython() {
     let codepath = './testing/code.py';
     try {
-        fs.writeFileSync(codepath, global.editorText + global.extraText + global.modelText, 'utf-8');
+        fs.writeFileSync(codepath, global.editorText, 'utf-8');
     } catch (e) {
         console.log('Failed to save the file !');
     }
@@ -66,7 +66,7 @@ function runPython() {
         $("#training-error").append("<br><button id='backButton' class='btn btn-primary'>Go Back</button>");
 
         $("#backButton").click(function () {
-            loadPage("draw/draw.html")
+            // loadPage("draw/draw.html")
         });
         //Here is where the error output goes
     });

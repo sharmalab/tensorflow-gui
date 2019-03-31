@@ -24,6 +24,7 @@
     "chart.js": "^2.8.0",
     "jquery": "^3.3.1",
     "jquery-ui-dist": "^1.12.1",
-    "mysql": "^2.16.0"
+    "mysql": "^2.16.0",
+    "sweetalert": "^2.1.2"
   }
 }

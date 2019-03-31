@@ -15,6 +15,7 @@
             </div>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu">
                 <button class="dropdown-item" id="startTraining" type="button">Train</button>
+                <button class="dropdown-item" id="goNext" type="button">Next</button>
                 <button class="dropdown-item" type="button">Save</button>
                 <button class="dropdown-item" type="button">Exit</button>
             </div>
@@ -94,6 +95,7 @@
                             <li>GRU</li>
                             <li>ConvLSTM2D</li>
                             <li>CuDNNLSTM</li>
+                            <li>CuDNNGRU</li>
                             <li>TimeDistributed</li>
                             <li>Bidirectional</li>
                         </ul>
@@ -120,6 +122,7 @@
                             Activation</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu4">
                             <li>ReLU</li>
+                            <li>LeakyReLU</li>
                             <li>Softmax</li>
                             <li>Activation</li>
                         </ul>
@@ -148,6 +151,7 @@
                             <li>RepeatVector</li>
                             <li>Dense</li>
                             <li>Flatten</li>
+                            <li>Embedding</li>
                         </ul>
                     </li>
 
@@ -179,7 +183,7 @@
                             <li>onEpochEnd</li>
                         </ul>
                     </li>
-                    
+
                 </ul>
             </nav>
         </div>
@@ -225,7 +229,7 @@
 
     <div id="draw-main">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs bg-light justify-content-center" role="tablist" style="visibility: visible;">
+        <!-- <ul class="nav nav-tabs bg-light justify-content-center" role="tablist" style="visibility: visible;">
             <li class="nav-item" id="draw-canvas-link">
                 <a class="nav-link active show" data-toggle="tab" href="#draw-canvas" role="tab"
                     aria-selected="true">Model</a>
@@ -234,12 +238,11 @@
                 <a class="nav-link" data-toggle="tab" href="#code-editor" role="tab" aria-selected="false">Code
                     Editor</a>
             </li>
-        </ul>
+        </ul> -->
 
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div id="draw-canvas" class="tab-pane active show"></div>
-            <div id="code-editor" class="hide"></div>
+        <div>
+        <div id="draw-canvas"></div>
+        <div id="code-editor" class="hide"></div>
         </div>
     </div>
 
