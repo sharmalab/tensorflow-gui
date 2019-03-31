@@ -7,6 +7,8 @@ const {
 const CodeMirror = require("../../lib/codemirror.js");
 require("../../lib/matchbrackets.js");
 require("../../lib/python.js");
+require("../../lib/show-hint.js");
+require("../../lib/python-hint.js");
 const swal = require('sweetalert');
 const global = require("../../lib/global.js")
 
@@ -14,7 +16,6 @@ $("#draw-sidebar-right").hide();
 $("#startTraining").hide();
 
 // ======================================= dataset =======================================
-
 var codemirror = CodeMirror(document.getElementById("code-editor"), {
     mode: {
         name: "python",
@@ -29,6 +30,14 @@ var codemirror = CodeMirror(document.getElementById("code-editor"), {
     value: global.editorText
 });
 
+codemirror.on('inputRead', function onChange(editor, input) {
+    if (input.text[0] === ';' || input.text[0] === ' ' || input.text[0] === ":") {
+        return;
+    }
+    editor.showHint({
+        hint: CodeMirror.pythonHint
+    });
+});
 
 // ======================================= canvas draws =======================================
 let isSelected = false;
