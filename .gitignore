@@ -83,3 +83,4 @@ typings/
 # my adds
 .vscode
 src/testing
+*.mp4
