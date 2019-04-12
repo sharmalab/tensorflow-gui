@@ -11,11 +11,13 @@ require("../../lib/show-hint.js");
 require("../../lib/python-hint.js");
 const swal = require('sweetalert');
 const global = require("../../lib/global.js")
+const childprocess = require('child_process');
+var fs = require('fs');
+const pythonFunction = require("../../lib/datafunctions");
 
 $("#draw-sidebar-right").hide();
 $("#startTraining").hide();
 
-// ======================================= dataset =======================================
 var codemirror = CodeMirror(document.getElementById("code-editor"), {
     mode: {
         name: "python",
@@ -39,7 +41,6 @@ codemirror.on('inputRead', function onChange(editor, input) {
     });
 });
 
-// ======================================= canvas draws =======================================
 let isSelected = false;
 let temparrow;
 let firstblock;
@@ -89,22 +90,22 @@ function createLabel(x, y, text, layertoadd) {
         text: text,
         fontFamily: 'Calibri',
         fontSize: 18,
-        padding: 5,
+        padding: 12,
         fill: 'black',
-        width: 150,
+        width: 180,
         align: 'center'
     }));
     graph.numberOfNodes++;
 
     let node;
     if (text == "InputLayer") {
-        node = new tfNode(label, graph.numberOfNodes, "input")
+        node = new tfNode(label, graph.numberOfNodes, text, "input")
         graph.addInput(node);
     } else if (text == "Output") {
-        node = new tfNode(label, graph.numberOfNodes, "output")
+        node = new tfNode(label, graph.numberOfNodes, text, "output")
         graph.addOutput(node);
     } else {
-        node = new tfNode(label, graph.numberOfNodes, "middle")
+        node = new tfNode(label, graph.numberOfNodes, text, "middle")
     }
 
     label.on("click", (event) => {
@@ -161,7 +162,9 @@ function createLabel(x, y, text, layertoadd) {
 
         if (isSelected) {
             $("#right-sidebar-form").text('');
+            $("#right-sidebar-form2").text('');
             let layerParameters;
+            let outputParameters;
             if (firstblock.parameters == null) {
                 layerParameters = global.layerParameters[label.getText().text()];
                 firstblock.parameters = layerParameters;
@@ -169,9 +172,26 @@ function createLabel(x, y, text, layertoadd) {
                 layerParameters = firstblock.parameters;
             }
 
+            if(firstblock.outputParameters == null) {
+                outputParameters = global.outputParameters[label.getText().text()];
+                firstblock.outputParameters = outputParameters;
+            } else {
+                outputParameters = firstblock.outputParameters;
+            }
+
             if (layerParameters) {
                 for (const [key, value] of Object.entries(layerParameters)) {
                     $("#right-sidebar-form").append(`
+					<div class="form-group">
+						<label for="${key}">${key}:</label>
+						<input class="form-control" id="${key}" value="${value}" required>
+					</div>
+				`);
+                }
+            }
+            if (outputParameters) {
+                for (const [key, value] of Object.entries(outputParameters)) {
+                    $("#right-sidebar-form2").append(`
 					<div class="form-group">
 						<label for="${key}">${key}:</label>
 						<input class="form-control" id="${key}" value="${value}" required>
@@ -260,7 +280,7 @@ function addArrow(node1, node2, layertoadd) {
 
 $("#draw-canvas").droppable({
     drop: function (event, ui) {
-        var relativeXPosition = (event.pageX - this.offsetLeft); //offset -> method allows you to retrieve the current position of an element 'relative' to the document
+        var relativeXPosition = (event.pageX - this.offsetLeft);
         var relativeYPosition = (event.pageY - this.offsetTop);
         output = createLabel(relativeXPosition, relativeYPosition, ui.helper.text().trim(), layer)
     }
@@ -337,7 +357,16 @@ $('#right-sidebar-form').on('keyup change paste', 'input, select, textarea', fun
         });
         firstblock.parameters = fields;
     }
-    // print(firstblock.parameters);
+});
+
+$('#right-sidebar-form2').on('keyup change paste', 'input, select, textarea', function () {
+    if (isSelected && firstblock) {
+        let fields = {}
+        $("#right-sidebar-form2").find(":input").each(function () {
+            fields[this.id] = $(this).val();
+        });
+        firstblock.outputParameters = fields;
+    }
 });
 
 // menu handling button click
@@ -347,37 +376,38 @@ function loadPage(page_path) {
 }
 
 $("#goNext").click(function () {
-    let modelgencode = graph.traverse();
-
-    if (modelgencode == null) {
+    let tuple = graph.traverse();
+    
+    if (tuple == null) {
         swal("Oops!", "Error in generating the code!", "error");
         return;
     }
+
+    let modelgencode = tuple[0];
+    let calledList = tuple[1];
+    let usedFunctions = tuple[2];
 
     $("#draw-canvas").hide();
     $("#draw-sidebar-left").hide();
     $("#draw-sidebar-right").hide();
     $(this).hide();
 
-    global.modelText = "\n# Generated Model\n";
-    global.modelText += "def Network():";
-    global.modelText += modelgencode;
-    global.modelText += `
-    optimizer = tf.keras.optimizers.Adam(lr=0.0001)
-    model.compile(optimizer = optimizer, loss='mean_squared_error' ,metrics=['mae','accuracy'])
-    return model\n`;
+    global.modelText = "\n# Called Functions\n" 
+    global.modelText += calledList + "\n"
 
+    global.modelText += "\n# Generated Model\n";
+    global.modelText += modelgencode;
+    
     global.modelText +=
         `
 # function for training model
 def train():
     model = Network()
     x,y = getTrainingData()
-    model.fit(x = x, y = y, epochs=30, batch_size=10, callbacks=[LossAcc()], verbose=0)
+    model.fit(x = x, y = y, epochs=15, batch_size=100, callbacks=[LossAcc()], verbose=0)
 
 # code execution starts here
-if __name__== "__main__":
-    train()
+train()
 `
     if (firstblock)
         firstblock.label.getTag().stroke("#111");
@@ -387,13 +417,41 @@ if __name__== "__main__":
     firstblock = undefined;
     temparrow = undefined;
 
-    codemirror.setValue(global.editorText + global.modelText)
+    for(var q=0;q<usedFunctions.length;q++){
+        global.functionsText += pythonFunction[usedFunctions[q]];
+    }
+
+    codemirror.setValue(global.functionsText + global.editorText + global.modelText)
 
     $("#code-editor").show();
     $("#startTraining").show()
 });
 
+
+function testPython() {
+    let codepath = './testing/code.py';
+    try {
+        fs.writeFileSync(codepath, global.extraText + codemirror.getValue(), 'utf-8');
+    } catch (e) {
+        console.log('Failed to save the file !');
+    }
+
+    var env = Object.create(process.env);
+    var pythonprocess = childprocess.spawn('python3', ['-m', 'py_compile', codepath], {
+        env: env
+    });
+
+    pythonprocess.on('close', (code) => {
+        if (code == 1) {
+            swal("Oops!", "Error in code! Please correct the code and try again!", "error");
+        }else{
+            global.editorText = global.extraText + codemirror.getValue();
+            loadPage("training/training.html");
+        }
+        console.log(`child process exited with code ${code}`);
+    });
+}
+
 $("#startTraining").click(function () {
-    global.editorText = global.extraText + codemirror.getValue();
-    loadPage("training/training.html");
+    testPython();
 });

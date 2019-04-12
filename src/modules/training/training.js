@@ -119,7 +119,7 @@ $(document).ready(function () {
     $("#training-error").hide();
     
     points = {
-        x: [...Array(30).keys()],
+        x: [...Array(15).keys()],
         y: []
     };
 

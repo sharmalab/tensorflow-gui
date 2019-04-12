@@ -31,6 +31,17 @@
             <nav class="navbar navbar-inverse">
                 <ul class="navbar-nav">
                     <li class="accordion">
+                        <a href="#pageSubmenu1-5" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            tfRecords</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu1-5">
+                            <li>LoadCustomRecord</li>
+                            <li>LoadImageRecord</li>
+                            <li>CreateCustomRecord</li>
+                            <li>CreateImageRecord</li>
+                        </ul>
+                    </li>
+                    <li class="accordion">
                         <a href="#pageSubmenu1-1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
                             style="color:#555555; text-decoration: none;"></p>
                             Image</a>
@@ -191,20 +202,23 @@
     </div>
 
     <div id="draw-sidebar-right">
-        <p class="h5 text-success text-center">Arguments</p>
-        <nav class="navbar navbar-inverse">
-            <h6 id="selectedlayer">No Layer</h6>
-            <form id="right-sidebar-form">
-                <div class="form-group">
-                    <label for="input1">Units:</label>
-                    <input type="number" class="form-control" id="input1" placeholder="64" required>
-                </div>
-                <div class="form-group">
-                    <label for="input2">Activation:</label>
-                    <input type="text" class="form-control" id="input2" placeholder="linear" required>
-                </div>
-            </form>
-        </nav>
+        <h6 id="selectedlayer" style="margin-top:4px;">No Layer</h6>
+        <div id="draw-arugments">
+            <p class="h5 text-success text-center">Arguments</p>
+            <nav class="navbar navbar-inverse">
+                <form id="right-sidebar-form">
+                </form>
+            </nav>    
+        </div>
+        
+        <div id="draw-outputs-rights">
+            <p class="h5 text-success text-center">Outputs</p>
+            <nav class="navbar navbar-inverse">
+                <form id="right-sidebar-form2">
+                </form>
+            </nav>    
+        </div>
+        
     </div>
 
     <!-- <div class="form-group">

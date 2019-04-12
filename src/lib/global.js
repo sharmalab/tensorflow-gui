@@ -42,6 +42,20 @@ let modelText = "";
 let layer = new Konva.Layer();
 graph.modelLayers.push(layer)
 
+let outputParameters = {
+    LoadImageFolder: {
+        images_list: "",
+        images_path_list: ""
+    },
+    LoadImageRecord: {
+        images_list: "",
+        images_labels_list: ""
+   },
+   LoadCSV: {
+       rows_list: "",
+       cols_list: ""
+   }
+}
 
 let layerParameters = {
     Dense: {
@@ -95,7 +109,16 @@ let layerParameters = {
         sparse: "False",
         tensor: "None",
     },
-    Output: {},
+    Output: {
+        optimizer: "sgd",
+        learning_rate: 0.001,
+        loss: "mean_squared_error",
+        loss_weights: "None",
+        sample_weight_mode: "None",
+        weighted_metrics: "None",
+        target_tensors: "None",
+        distribute: "None",
+    },
     Flatten: {},
     Add: {},
     AveragePooling1D: {
@@ -287,12 +310,39 @@ let layerParameters = {
     Softmax: {
         axis: -1
     },
+    LoadImageFolder: {
+        filepath_regex: "",
+        gray: "True",
+        asbytes: "False" 
+    },
+    CreateImageRecord: {
+        savefilename: "",
+        images: "",
+        labels: ""
+    },
+    LoadImageRecord: {
+        record_filepath: "",
+        image_size: "()",
+        batch_size: 64,
+        shuffle: "True",
+        buffer_size: 1024,
+        num_repeat: 1,
+        one_hot_labels: "True",
+        num_classes: 1
+   },
+   LoadCSV: {
+       filepath: ""
+   }
 }
+
+let functionsText = ""
 
 module.exports = {
     editorText: editorText,
     modelText: modelText,
     extraText: extraText,
     graph: graph,
-    layerParameters: layerParameters
+    layerParameters: layerParameters,
+    outputParameters: outputParameters,
+    functionsText: functionsText
 }
