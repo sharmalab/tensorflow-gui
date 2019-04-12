@@ -45,6 +45,7 @@ function runPython() {
     pythonprocess.stdout.on('data', function (data) {
         $("#training-status").text("Training...");
         lines = data.toString('utf8').split(/\r\n|\r|\n/g);
+        console.log(lines);
 
         for(let i in lines){
             dataparts = lines[i].toString('utf8').split("=")
@@ -57,6 +58,12 @@ function runPython() {
             }else if(dataparts[0] == "acc"){
                 accuracyChart.data.datasets[0].data.push(parseFloat(dataparts[1]));
                 accuracyChart.update()
+            }else if(dataparts[0] == "val_acc"){
+                accuracyChart.data.datasets[1].data.push(parseFloat(dataparts[1]));
+                accuracyChart.update()
+            }else if(dataparts[0] == "val_loss"){
+                lossChart.data.datasets[1].data.push(parseFloat(dataparts[1]));
+                lossChart.update()
             }
         }
     });
@@ -69,7 +76,6 @@ function runPython() {
         $("#backButton").click(function () {
             // loadPage("draw/draw.html")
         });
-        //Here is where the error output goes
     });
 
     pythonprocess.on('close', (code) => {
@@ -95,7 +101,12 @@ function drawChart(id, points, title, label) {
             labels: points.x,
             datasets: [{
                 data: [],
-                label: label,
+                label: "Training " + label,
+                borderColor: getRandomColor(),
+                fill: false
+            },{
+                data: [],
+                label: "Validation "+label,
                 borderColor: getRandomColor(),
                 fill: false
             }]
@@ -119,12 +130,11 @@ $(document).ready(function () {
     $("#training-error").hide();
     
     points = {
-        x: [...Array(15).keys()],
+        x: [...Array(30).keys()],
         y: []
     };
 
     lossChart = drawChart("losschart", points, "Loss", "Loss");
-    // maeChart = drawChart("maechart", points, "Mean Absolute Error", "Mean Absolute Error");
     accuracyChart = drawChart("accuracychart", points, "Accuracy", "Accuracy");
 
     $("#training-status").text("Creating Model.");

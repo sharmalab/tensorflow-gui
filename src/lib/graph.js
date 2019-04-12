@@ -1,14 +1,15 @@
 const print = console.log;
+let global = require("./global.js");
 
 class tfNode {
-    constructor(label, id,name , type = "middle") {
+    constructor(label, id, name, type = "middle") {
         this.type = type;
         this.id = id;
         this.label = label;
         this.outEdges = [];
         this.inEdges = [];
-        this.parameters = null
-        this.outputParameters = null;
+        this.parameters = global.layerParameters[name];
+        this.outputParameters = global.outputParameters[name];
         this.name = name;
     }
 
@@ -112,26 +113,43 @@ class tfGraph {
                 layerName = temp.name;
                 let tempparameters = "";
 
-                for (const [key, value] of Object.entries(temp.parameters)) {
-                    tempparameters += `${key} = ${value},`
-                }
+                if( layerName == "fit" || layerName == "fit_generator" || layerName == "evaluate" || layerName == "evaluate_generator" ){
 
-                if (layerName == "Output") {
+                    for (const [key, value] of Object.entries(temp.parameters)) {
+                        tempparameters += `${key} = ${value},`
+                    }
+
+                    modelCode += `\n# function for training model
+def train():
+    model = Network()
+    x,y = getTrainingData()
+    model.${layerName}(${tempparameters})\n`;
+
+                }else if (layerName == "Output") {
                     isCorrectModel.Output = true;
                     lastLayerName = lasttemp.name;
+
                     modelCode += `    model = Model(inputs=InputLayer_${layer["InputLayer"]}, outputs=${lastLayerName+"_"+layer[lastLayerName]})\n`;
+                    print(temp.parameters["optimizer"])
                     switch(temp.parameters["optimizer"]) {
                         case "sgd":
-                            modelCode += `    optimizer = tf.keras.optimizers.SGD(lr=temp.parameters["learning_rate"], momentum=0.0, decay=0.0,)\n`;
+                            modelCode += `    optimizer = tf.keras.optimizers.SGD(lr=${temp.parameters["learning_rate"]}, momentum=0.0, decay=0.0,)\n`;
                             break;
                         case "adam":
-                            modelCode += `    optimizer = tf.keras.optimizers.Adam(lr=temp.parameters["learning_rate"], beta_1=0.9,beta_2=0.999, epsilon=None, decay = 0.0, amsgrad=False)\n`;
+                            modelCode += `    optimizer = tf.keras.optimizers.Adam(lr=${temp.parameters["learning_rate"]}, beta_1=0.9,beta_2=0.999, epsilon=None, decay = 0.0, amsgrad=False)\n`;
                             break;
                         default:
                             break;
                     }
+
+
+                    for (const [key, value] of Object.entries(temp.parameters)) {
+                        if(key != "optimizer" && key != "learning_rate")
+                            tempparameters += `${key} = ${value},`
+                    }
+
                     modelCode += `    model = Model(inputs=InputLayer_${layer["InputLayer"]}, outputs=${lastLayerName+"_"+layer[lastLayerName]})\n`;
-                    modelCode += `    model.compile(metrics=['mae','accuracy'], ${tempparameters})\n`
+                    modelCode += `    model.compile(metrics=['mae','accuracy'], optimizer=optimizer , ${tempparameters})\n`
                     modelCode += `    return model\n`
                 } else if (layerName == "InputLayer") {
                     isCorrectModel.InputLayer = true;
@@ -139,8 +157,12 @@ class tfGraph {
                         layer[layerName]++;
                     else
                         layer[layerName] = 1;
+
+                    for (const [key, value] of Object.entries(temp.parameters)) {
+                        tempparameters += `${key} = ${value},`
+                    }
                     
-                    global.modelText += "def Network():\n";
+                    modelCode += "def Network():\n";
                     modelCode += `    ${layerName+"_"+layer[layerName]} = Input(${tempparameters})`
                 } else {
                     isCorrectModel.middle = true;
@@ -149,6 +171,10 @@ class tfGraph {
                         layer[layerName]++;
                     } else {
                         layer[layerName] = 1;
+                    }
+
+                    for (const [key, value] of Object.entries(temp.parameters)) {
+                        tempparameters += `${key} = ${value},`
                     }
 
                     if (layerName == lastLayerName)
@@ -177,6 +203,12 @@ class tfGraph {
         }
     }
 }
+
+
+global.graph = new tfGraph()
+let layer = new Konva.Layer();
+global.graph.modelLayers.push(layer)
+
 
 module.exports = {
     tfGraph,

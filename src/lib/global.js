@@ -1,8 +1,5 @@
-const {
-    tfGraph
-} = require('./graph.js');
 
-let graph = new tfGraph();
+let graph;
 
 let editorText =
     `
@@ -25,6 +22,7 @@ let extraText =
     `
 # importing libraries
 from tensorflow.keras.callbacks import Callback, RemoteMonitor
+import tensorflow as tf
 
 # model callback
 class LossAcc(Callback):
@@ -35,12 +33,11 @@ class LossAcc(Callback):
         print("epoch=", epoch, flush=True)
         print("loss=", logs.get('loss'), flush=True)
         print("acc=", logs.get('acc'), flush=True)
+        print("val_acc=", logs.get('val_acc'), flush=True)
+        print("val_loss=", logs.get('val_loss'), flush=True)
 `
 
 let modelText = "";
-
-let layer = new Konva.Layer();
-graph.modelLayers.push(layer)
 
 let outputParameters = {
     LoadImageFolder: {
@@ -117,7 +114,6 @@ let layerParameters = {
         sample_weight_mode: "None",
         weighted_metrics: "None",
         target_tensors: "None",
-        distribute: "None",
     },
     Flatten: {},
     Add: {},
@@ -332,6 +328,56 @@ let layerParameters = {
    },
    LoadCSV: {
        filepath: ""
+   },
+   fit: {
+        x: "None",
+        y: "None",
+        batch_size: "None",
+        epochs: 1,
+        verbose: 0,
+        callbacks: "None",
+        validation_split: 0.0,
+        validation_data: "None",
+        shuffle: "True",
+        class_weight: "None",
+        sample_weight: "None",
+        initial_epoch: 0,
+        steps_per_epoch: "None",
+        validation_steps: "None",
+   },
+   fit_generator: {
+        generator: "",
+        steps_per_epoch: "None",
+        epochs: 1,
+        verbose: 0,
+        callbacks: "None",
+        validation_data: "None",
+        validation_steps: "None",
+        class_weight: "None",
+        max_queue_size: 10,
+        workers: 1,
+        use_multiprocessing: "False",
+        shuffle: "True",
+        initial_epoch: 0
+   },
+   evaluate: {
+        x: "None",
+        y: "None",
+        batch_size: "None",
+        verbose: 0,
+        sample_weight: "None",
+        steps: "None",
+        max_queue_size: 10,
+        workers: 1,
+        use_multiprocessing: "False"
+   },
+   evaluate_generator: {
+        generator: "",
+        steps: "None",
+        max_queue_size: 10,
+        workers: 1,
+        use_multiprocessing: "False",
+        verbose: 0
    }
 }
 

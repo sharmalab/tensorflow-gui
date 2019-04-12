@@ -1,6 +1,7 @@
 
 # importing libraries
 from tensorflow.keras.callbacks import Callback, RemoteMonitor
+import tensorflow as tf
 
 # model callback
 class LossAcc(Callback):
@@ -11,7 +12,8 @@ class LossAcc(Callback):
         print("epoch=", epoch, flush=True)
         print("loss=", logs.get('loss'), flush=True)
         print("acc=", logs.get('acc'), flush=True)
-import tensorflow as tf
+        print("val_acc=", logs.get('val_acc'), flush=True)
+        print("val_loss=", logs.get('val_loss'), flush=True)
 
 
 def parse(serialized):
@@ -29,7 +31,7 @@ def parse(serialized):
     label = parsed_example['label']
     return image, label
 
-def LoadImageRecord(record_filepath, image_size = (28 , 28, 3) , batch_size=64, shuffle=True, buffer_size=512, num_repeat=1, one_hot_labels=True, num_classes = 10):
+def LoadImageRecord(record_filepath, image_size=() , batch_size=64, shuffle=True, buffer_size=512, num_repeat=1, one_hot_labels=True, num_classes = 10):
     dataset = tf.data.TFRecordDataset(filenames=record_filepath)
     dataset = dataset.map(parse)
     import numpy as np
@@ -58,14 +60,13 @@ def LoadImageRecord(record_filepath, image_size = (28 , 28, 3) , batch_size=64, 
 
     return images_batch, labels_batch
 
-
 def _int64_feature(value):
     return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
 def _bytes_feature(value):
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
-def CreateImageRecord(savefilename, images, labels):
+def CreateImageRecord(savefilename, images, labels, images_string=True):
     # open the TFRecords file
     writer = tf.python_io.TFRecordWriter(savefilename)
     for i in range(len(images)):
@@ -73,10 +74,17 @@ def CreateImageRecord(savefilename, images, labels):
         label = labels[i]
 
         # Create a feature
-        feature = {
-            'image': _bytes_feature(img),
-            'label': _int64_feature(label)
-        }
+        if images_string:
+            feature = {
+                'image': _bytes_feature(img),
+                'label': _int64_feature(label)
+            }
+        else:
+            feature = {
+                'image': _bytes_feature(img.tostring()),
+                'label': _int64_feature(label)
+            }
+        
         # Create an example protocol buffer
         example = tf.train.Example(features=tf.train.Features(feature=feature))
         
@@ -85,32 +93,29 @@ def CreateImageRecord(savefilename, images, labels):
     writer.close()
 
 
-import re
-def atoi(text):
-    return int(text) if text.isdigit() else text
-
-def natural_keys(text):
-    return [ atoi(c) for c in re.split(r'(d+)', text) ]
-    
+from natsort import natsorted
 import glob
-# import cv2
 def LoadImageFolder(filepath_regex, gray=True, asbytes=False):
     imgids = []
     images = []
     for img in glob.glob(filepath_regex):
         imgids.append(img)
 
-    imgids.sort(key=natural_keys)
-    
+    imgids = natsorted(imgids)
+
+    print(imgids[:5])
+
     for img_path in imgids:
         if asbytes:
             with tf.gfile.FastGFile(img_path, 'rb') as fid:
                 img = fid.read()
         else:
+            import cv2
             img = cv2.imread(img_path)
             if gray:
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         images.append(img)
+    
     return images, imgids
 
 
@@ -137,27 +142,31 @@ def getTrainingData():
 
 
 # Called Functions
-# rows,cols, = LoadCSV(filepath = "labels.csv",)
-# images, imagesname, = LoadImageFolder(filepath_regex =  "trainingSet/*/*.jpg",gray = True,asbytes = True,)
-# CreateImageRecord(savefilename = "record.tfr",images = images,labels = cols[1],)
-dataset = LoadImageRecord(record_filepath = "record.tfr",batch_size = 64,shuffle = True,buffer_size = 1024, num_repeat = 10,)
-
+rows,cols, = LoadCSV(filepath = 'testing/labels.csv',)
+images,image_names, = LoadImageFolder(filepath_regex = 'testing/*/*.jpg',gray = True,asbytes = True,)
+CreateImageRecord(savefilename = 'testing/record.tf',images = images,labels = cols[1],)
+X,Y, = LoadImageRecord(record_filepath = 'testing/record.tf',image_size = (28,28,3),batch_size = 128,shuffle = True,buffer_size = 1024,num_repeat = 20,one_hot_labels = True,num_classes = 10,)
 
 # Generated Model
+
 def Network():
-    InputLayer_1 = Input(tensor = dataset[0])
-    Flatten_1 = Flatten()(InputLayer_1)
-    Dense_1 = Dense(units = 10,activation = None,use_bias = True,kernel_initializer = 'glorot_uniform',bias_initializer = 'zeros',kernel_regularizer = None,bias_regularizer = None,activity_regularizer = None,kernel_constraint = None,bias_constraint = None,)(Flatten_1)
-    model = Model(inputs=InputLayer_1, outputs=Dense_1)
-    optimizer = tf.keras.optimizers.Adam(lr=0.0001)
-    model.compile(optimizer = optimizer, loss='categorical_crossentropy' ,metrics=['mae','accuracy'], target_tensors = [dataset[1]])
+    InputLayer_1 = Input(shape = None,batch_size = None,name = None,dtype = None,sparse = False,tensor = X,)
+    Conv2D_1 = Conv2D(filters = 32,kernel_size = (3, 3),strides = (1, 1),padding = 'valid',data_format = None,dilation_rate = (1, 1),activation = 'relu',use_bias = True,kernel_initializer = 'glorot_uniform',bias_initializer = 'zeros',kernel_regularizer = None,bias_regularizer = None,activity_regularizer = None,kernel_constraint = None,bias_constraint = None,)(InputLayer_1)
+    Flatten_1 = Flatten()(Conv2D_1)
+    Dropout_1 = Dropout(rate = 0.25,noise_shape = None,seed = None,)(Flatten_1)
+    Dense_1 = Dense(units = 128,activation = 'relu',use_bias = True,kernel_initializer = 'glorot_uniform',bias_initializer = 'zeros',kernel_regularizer = None,bias_regularizer = None,activity_regularizer = None,kernel_constraint = None,bias_constraint = None,)(Dropout_1)
+    Dense_2 = Dense(units = 10,activation = 'relu',use_bias = True,kernel_initializer = 'glorot_uniform',bias_initializer = 'zeros',kernel_regularizer = None,bias_regularizer = None,activity_regularizer = None,kernel_constraint = None,bias_constraint = None,)(Dense_1)
+    model = Model(inputs=InputLayer_1, outputs=Dense_2)
+    optimizer = tf.keras.optimizers.SGD(lr=0.001, momentum=0.0, decay=0.0,)
+    model = Model(inputs=InputLayer_1, outputs=Dense_2)
+    model.compile(metrics=['mae','accuracy'], optimizer=optimizer , loss = 'categorical_crossentropy',loss_weights = None,sample_weight_mode = None,weighted_metrics = None,target_tensors = [Y],)
     return model
+
 
 # function for training model
 def train():
     model = Network()
-    # batch_size=100
-    model.fit(epochs = 10, steps_per_epoch = 42000//64 , callbacks=[LossAcc()], verbose=0)
+    x,y = getTrainingData()
+    model.fit(x = None,y = None,batch_size = 128,epochs = 20,verbose = 0,callbacks = [LossAcc()],validation_split = 0,validation_data = None,shuffle = True,class_weight = None,sample_weight = None,initial_epoch = 0,steps_per_epoch = 42000//128,validation_steps = None,)
 
-# code execution starts here
 train()

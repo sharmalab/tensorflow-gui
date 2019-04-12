@@ -80,13 +80,7 @@ def CreateImageRecord(savefilename, images, labels, images_string=True):
 
 `,
     LoadImageFolder: `
-import re
-def atoi(text):
-    return int(text) if text.isdigit() else text
-
-def natural_keys(text):
-    return [ atoi(c) for c in re.split(r'(\d+)', text) ]
-    
+from natsort import natsorted
 import glob
 def LoadImageFolder(filepath_regex, gray=True, asbytes=False):
     imgids = []
@@ -94,7 +88,7 @@ def LoadImageFolder(filepath_regex, gray=True, asbytes=False):
     for img in glob.glob(filepath_regex):
         imgids.append(img)
 
-    imgids.sort(key=natural_keys)
+    imgids = natsorted(imgids)
     
     for img_path in imgids:
         if asbytes:

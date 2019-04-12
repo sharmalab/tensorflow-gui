@@ -163,40 +163,27 @@ function createLabel(x, y, text, layertoadd) {
         if (isSelected) {
             $("#right-sidebar-form").text('');
             $("#right-sidebar-form2").text('');
-            let layerParameters;
-            let outputParameters;
-            if (firstblock.parameters == null) {
-                layerParameters = global.layerParameters[label.getText().text()];
-                firstblock.parameters = layerParameters;
-            } else {
-                layerParameters = firstblock.parameters;
-            }
+            let layerParameters = firstblock.parameters;
+            let outputParameters = firstblock.outputParameters;        
 
-            if(firstblock.outputParameters == null) {
-                outputParameters = global.outputParameters[label.getText().text()];
-                firstblock.outputParameters = outputParameters;
-            } else {
-                outputParameters = firstblock.outputParameters;
-            }
-
-            if (layerParameters) {
+            if(layerParameters){
                 for (const [key, value] of Object.entries(layerParameters)) {
                     $("#right-sidebar-form").append(`
-					<div class="form-group">
-						<label for="${key}">${key}:</label>
-						<input class="form-control" id="${key}" value="${value}" required>
-					</div>
-				`);
+                    <div class="form-group">
+                        <label for="${key}">${key}:</label>
+                        <input class="form-control" id="${key}" value="${value}" required>
+                    </div>
+                    `);
                 }
             }
-            if (outputParameters) {
+            if(outputParameters){            
                 for (const [key, value] of Object.entries(outputParameters)) {
                     $("#right-sidebar-form2").append(`
-					<div class="form-group">
-						<label for="${key}">${key}:</label>
-						<input class="form-control" id="${key}" value="${value}" required>
-					</div>
-				`);
+                    <div class="form-group">
+                        <label for="${key}">${key}:</label>
+                        <input class="form-control" id="${key}" value="${value}" required>
+                    </div>
+                    `);
                 }
             }
 
@@ -377,7 +364,7 @@ function loadPage(page_path) {
 
 $("#goNext").click(function () {
     let tuple = graph.traverse();
-    
+
     if (tuple == null) {
         swal("Oops!", "Error in generating the code!", "error");
         return;
@@ -397,16 +384,9 @@ $("#goNext").click(function () {
 
     global.modelText += "\n# Generated Model\n";
     global.modelText += modelgencode;
-    
-    global.modelText +=
-        `
-# function for training model
-def train():
-    model = Network()
-    x,y = getTrainingData()
-    model.fit(x = x, y = y, epochs=15, batch_size=100, callbacks=[LossAcc()], verbose=0)
 
-# code execution starts here
+
+    global.modelText +=`
 train()
 `
     if (firstblock)
