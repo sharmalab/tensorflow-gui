@@ -130,7 +130,7 @@ def train():
                     lastLayerName = lasttemp.name;
 
                     modelCode += `    model = Model(inputs=InputLayer_${layer["InputLayer"]}, outputs=${lastLayerName+"_"+layer[lastLayerName]})\n`;
-                    print(temp.parameters["optimizer"])
+                    // print(temp.parameters["optimizer"])
                     switch(temp.parameters["optimizer"]) {
                         case "sgd":
                             modelCode += `    optimizer = tf.keras.optimizers.SGD(lr=${temp.parameters["learning_rate"]}, momentum=0.0, decay=0.0,)\n`;
@@ -142,14 +142,13 @@ def train():
                             break;
                     }
 
-
                     for (const [key, value] of Object.entries(temp.parameters)) {
                         if(key != "optimizer" && key != "learning_rate")
                             tempparameters += `${key} = ${value},`
                     }
 
                     modelCode += `    model = Model(inputs=InputLayer_${layer["InputLayer"]}, outputs=${lastLayerName+"_"+layer[lastLayerName]})\n`;
-                    modelCode += `    model.compile(metrics=['mae','accuracy'], optimizer=optimizer , ${tempparameters})\n`
+                    modelCode += `    model.compile(metrics=['mae','accuracy', 'mse', 'mape', 'cosine', 'categorical_crossentropy'], optimizer=optimizer , ${tempparameters})\n`
                     modelCode += `    return model\n`
                 } else if (layerName == "InputLayer") {
                     isCorrectModel.InputLayer = true;

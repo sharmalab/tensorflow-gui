@@ -3,39 +3,33 @@ let graph;
 
 let editorText =
     `
-import tensorflow as tf
-from tensorflow.keras.layers import *
-from tensorflow.keras.models import Model, load_model
-
-'''
-complete getTrainingDat function for data loading and pre processing.
-Do not change the name of the function
-'''
-def getTrainingData():
-    X = None
-    Y = None    
-    return X,Y
 
 `
 
 let extraText =
     `
 # importing libraries
-from tensorflow.keras.callbacks import Callback, RemoteMonitor
 import tensorflow as tf
+from tensorflow.keras.layers import *
+from tensorflow.keras.models import Model, load_model
+from tensorflow.keras.callbacks import Callback, RemoteMonitor, TensorBoard
+import tensorflow as tf
+from time import time
 
-# model callback
-class LossAcc(Callback):
-    def __init__(self):
-        super().__init__()
-
-    def on_epoch_end(self, epoch, logs={}):
-        print("epoch=", epoch, flush=True)
-        print("loss=", logs.get('loss'), flush=True)
-        print("acc=", logs.get('acc'), flush=True)
-        print("val_acc=", logs.get('val_acc'), flush=True)
-        print("val_loss=", logs.get('val_loss'), flush=True)
+tensorboard = TensorBoard(log_dir="testing/logs/{}".format(time()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
 `
+
+// # model callback
+// class LossAcc(Callback):
+//     def __init__(self):
+//         super().__init__()
+
+//     def on_epoch_end(self, epoch, logs={}):
+//         print("epoch=", epoch, flush=True)
+//         print("loss=", logs.get('loss'), flush=True)
+//         print("acc=", logs.get('acc'), flush=True)
+//         print("val_acc=", logs.get('val_acc'), flush=True)
+//         print("val_loss=", logs.get('val_loss'), flush=True)
 
 let modelText = "";
 
@@ -335,7 +329,7 @@ let layerParameters = {
         batch_size: "None",
         epochs: 1,
         verbose: 0,
-        callbacks: "None",
+        callbacks: "[LossAcct(), tensorboard]",
         validation_split: 0.0,
         validation_data: "None",
         shuffle: "True",
