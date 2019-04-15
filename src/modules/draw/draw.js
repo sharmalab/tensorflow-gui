@@ -401,7 +401,7 @@ train()
         global.functionsText += pythonFunction[usedFunctions[q]];
     }
 
-    codemirror.setValue(global.functionsText + global.editorText + global.modelText)
+    codemirror.setValue(global.extraText + global.functionsText + global.editorText + global.modelText)
 
     $("#code-editor").show();
     $("#startTraining").show()
@@ -411,7 +411,7 @@ train()
 function testPython() {
     let codepath = './testing/code.py';
     try {
-        fs.writeFileSync(codepath, global.extraText + codemirror.getValue(), 'utf-8');
+        fs.writeFileSync(codepath, codemirror.getValue(), 'utf-8');
     } catch (e) {
         console.log('Failed to save the file !');
     }
@@ -425,7 +425,7 @@ function testPython() {
         if (code == 1) {
             swal("Oops!", "Error in code! Please correct the code and try again!", "error");
         }else{
-            global.editorText = global.extraText + codemirror.getValue();
+            global.editorText = codemirror.getValue();
             loadPage("training/training.html");
         }
         console.log(`child process exited with code ${code}`);

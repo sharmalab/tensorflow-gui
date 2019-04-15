@@ -41,31 +41,35 @@ function runPython() {
         env: env
     });
 
+    var tensorbaord = childprocess.spawn('tensorboard', ["--logdir=testing/logs/"], {
+        env: env
+    });
+
 
     pythonprocess.stdout.on('data', function (data) {
-        $("#training-status").text("Training...");
+        // $("#training-status").text("Training...");
         lines = data.toString('utf8').split(/\r\n|\r|\n/g);
         console.log(lines);
 
-        for(let i in lines){
-            dataparts = lines[i].toString('utf8').split("=")
-            if(dataparts[0] == "loss"){
-                lossChart.data.datasets[0].data.push(parseFloat(dataparts[1]));
-                lossChart.update()
-            }else if(dataparts[0].includes("mean_absolute_error")){
-                maeChart.data.datasets[0].data.push(parseFloat(dataparts[1]));
-                maeChart.update()
-            }else if(dataparts[0] == "acc"){
-                accuracyChart.data.datasets[0].data.push(parseFloat(dataparts[1]));
-                accuracyChart.update()
-            }else if(dataparts[0] == "val_acc"){
-                accuracyChart.data.datasets[1].data.push(parseFloat(dataparts[1]));
-                accuracyChart.update()
-            }else if(dataparts[0] == "val_loss"){
-                lossChart.data.datasets[1].data.push(parseFloat(dataparts[1]));
-                lossChart.update()
-            }
-        }
+        // for(let i in lines){
+        //     dataparts = lines[i].toString('utf8').split("=")
+        //     if(dataparts[0] == "loss"){
+        //         lossChart.data.datasets[0].data.push(parseFloat(dataparts[1]));
+        //         lossChart.update()
+        //     }else if(dataparts[0].includes("mean_absolute_error")){
+        //         maeChart.data.datasets[0].data.push(parseFloat(dataparts[1]));
+        //         maeChart.update()
+        //     }else if(dataparts[0] == "acc"){
+        //         accuracyChart.data.datasets[0].data.push(parseFloat(dataparts[1]));
+        //         accuracyChart.update()
+        //     }else if(dataparts[0] == "val_acc"){
+        //         accuracyChart.data.datasets[1].data.push(parseFloat(dataparts[1]));
+        //         accuracyChart.update()
+        //     }else if(dataparts[0] == "val_loss"){
+        //         lossChart.data.datasets[1].data.push(parseFloat(dataparts[1]));
+        //         lossChart.update()
+        //     }
+        // }
     });
 
     pythonprocess.stderr.on('data', function (data) {
@@ -82,11 +86,11 @@ function runPython() {
         if (code == 1) {
             $("#training-graphs").hide();
             $("#training-error").show();
-            $("#training-status").text("Training failed.");
+            // $("#training-status").text("Training failed.");
         } else {
             $("#training-graphs").show();
             $("#training-error").hide();
-            $("#training-status").text("Training completed.");
+            // $("#training-status").text("Training completed.");
             swal("Completed!", "Model training has been completed!", "success");
         }
         console.log(`child process exited with code ${code}`);
@@ -134,9 +138,9 @@ $(document).ready(function () {
         y: []
     };
 
-    lossChart = drawChart("losschart", points, "Loss", "Loss");
-    accuracyChart = drawChart("accuracychart", points, "Accuracy", "Accuracy");
+    // lossChart = drawChart("losschart", points, "Loss", "Loss");
+    // accuracyChart = drawChart("accuracychart", points, "Accuracy", "Accuracy");
 
-    $("#training-status").text("Creating Model.");
+    // $("#training-status").text("Creating Model.");
 
 });
