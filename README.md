@@ -7,3 +7,19 @@ This project aims to develop a TensorFlow compatible GUI to perform all the oper
 2. Input data (image and csv) pipeline (png to tfrecords) has been developed. 
 
 3. Training and testing pipeline along with result visualization and analysis part is in progress. 
+
+## Prerequisites
+- tensorflow
+- pandas
+- natsort
+- opencv
+
+## How to Setup
+- `git clone https://github.com/vikasgola/tensorflow-gui`
+- `cd tensorflow-gui/scripts/`
+- `chmod +x setup.sh run.sh`
+- `./setup.sh`
+
+## How to Run
+- `cd tensorflow-gui/scripts/`
+- `./run.sh`
