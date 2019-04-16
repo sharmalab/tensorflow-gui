@@ -2,7 +2,7 @@
 
 echo "Setting up enviroment for TensorFlow-GUI"
 
-conda --version > /dev/null
+conda --version 2> /dev/null
 if [ $? == 0 ]
 then
     echo "Conda found!"

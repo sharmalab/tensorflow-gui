@@ -2,7 +2,7 @@
 
 echo "Welcome to TensorFlow-GUI"
 
-conda --version > /dev/null
+conda --version 2> /dev/null
 if [ $? == 0 ]
 then
     source activate tfgui
