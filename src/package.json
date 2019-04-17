@@ -17,14 +17,12 @@
   },
   "homepage": "https://github.com/vikasgola/tensorflow-gui#readme",
   "devDependencies": {
-    "electron": "^4.0.8",
-    "electron-reload": "^1.4.0"
+    "electron": "^4.0.8"
   },
   "dependencies": {
     "chart.js": "^2.8.0",
     "jquery": "^3.3.1",
     "jquery-ui-dist": "^1.12.1",
-    "mysql": "^2.16.0",
     "sweetalert": "^2.1.2"
   }
 }
