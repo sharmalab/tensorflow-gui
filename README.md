@@ -23,3 +23,15 @@ This project aims to develop a TensorFlow compatible GUI to perform all the oper
 ## How to Run
 - `cd tensorflow-gui/scripts/`
 - `./run.sh`
+
+# Issues and Solution
+
+- Issue: npm: command not found
+
+-Solution: Install `Node.js`. For details click here https://nodejs.org/en/
+
+-Issue: electron: not found
+
+-Solution: Install `npm install electron -g`
+
+check details here https://electronjs.org/docs/tutorial/installation
