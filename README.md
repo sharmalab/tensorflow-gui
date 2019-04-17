@@ -14,7 +14,7 @@ This project aims to develop a TensorFlow compatible GUI to perform all the oper
 - natsort
 - opencv
 
-## How to Setup
+## Installation
 - `git clone https://github.com/vikasgola/tensorflow-gui`
 - `cd tensorflow-gui/scripts/`
 - `chmod +x setup.sh run.sh`
@@ -24,14 +24,8 @@ This project aims to develop a TensorFlow compatible GUI to perform all the oper
 - `cd tensorflow-gui/scripts/`
 - `./run.sh`
 
-# Issues and Solution
+## Contribution guidelines
+If you found any bug, please feel free to open an issue.
 
-- Issue: npm: command not found
-
--Solution: Install `Node.js`. For details click here https://nodejs.org/en/
-
--Issue: electron: not found
-
--Solution: Install `npm install electron -g`
-
-check details here https://electronjs.org/docs/tutorial/installation
+## Issues and Solution
+No issues.
