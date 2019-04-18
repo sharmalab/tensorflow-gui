@@ -7,7 +7,7 @@ if [ $? == 0 ]
 then
     source activate tfgui
     npm start --prefix=../src/
-    source deactivate
+    conda deactivate
 else
     npm start --prefix=../src/
 fi

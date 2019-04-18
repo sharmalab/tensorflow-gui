@@ -18,7 +18,7 @@ else
     pip3 install opencv-python
 fi
 
-sudo apt install nodejs
+sudo apt install nodejs npm
 npm install --prefix=../src/
 
 echo "Completed!"

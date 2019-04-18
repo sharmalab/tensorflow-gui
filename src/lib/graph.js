@@ -123,7 +123,10 @@ class tfGraph {
 def train():
     model = Network()
     x,y = getTrainingData()
-    model.${layerName}(${tempparameters})\n`;
+    model.${layerName}(${tempparameters})\n
+
+train()
+`;
 
                 }else if (layerName == "Output") {
                     isCorrectModel.Output = true;

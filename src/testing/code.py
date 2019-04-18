@@ -1,19 +1,8 @@
-
 # importing libraries
-from tensorflow.keras.callbacks import Callback, RemoteMonitor
+from tensorflow.keras.callbacks import Callback, RemoteMonitor, TensorBoard
 import tensorflow as tf
-
-# model callback
-class LossAcc(Callback):
-    def __init__(self):
-        super().__init__()
-
-    def on_epoch_end(self, epoch, logs={}):
-        print("epoch=", epoch, flush=True)
-        print("loss=", logs.get('loss'), flush=True)
-        print("acc=", logs.get('acc'), flush=True)
-        print("val_acc=", logs.get('val_acc'), flush=True)
-        print("val_loss=", logs.get('val_loss'), flush=True)
+from time import time
+tensorboard = TensorBoard(log_dir="testing/logs/{}".format(time()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
 
 
 def parse(serialized):
@@ -145,7 +134,10 @@ def getTrainingData():
 rows,cols, = LoadCSV(filepath = 'testing/labels.csv',)
 images,image_names, = LoadImageFolder(filepath_regex = 'testing/*/*.jpg',gray = True,asbytes = True,)
 CreateImageRecord(savefilename = 'testing/record.tf',images = images,labels = cols[1],)
-X,Y, = LoadImageRecord(record_filepath = 'testing/record.tf',image_size = (28,28,3),batch_size = 128,shuffle = True,buffer_size = 1024,num_repeat = 20,one_hot_labels = True,num_classes = 10,)
+X,Y, = LoadImageRecord(record_filepath = 'testing/record.tf',image_size = (28,28,3),batch_size = 128,shuffle = True,buffer_size = 1024,num_repeat = 100,one_hot_labels = True,num_classes = 10,)
+
+tf.summary.image('input_data', X)
+tf.summary.merge_all()
 
 # Generated Model
 
@@ -159,7 +151,7 @@ def Network():
     model = Model(inputs=InputLayer_1, outputs=Dense_2)
     optimizer = tf.keras.optimizers.SGD(lr=0.001, momentum=0.0, decay=0.0,)
     model = Model(inputs=InputLayer_1, outputs=Dense_2)
-    model.compile(metrics=['mae','accuracy'], optimizer=optimizer , loss = 'categorical_crossentropy',loss_weights = None,sample_weight_mode = None,weighted_metrics = None,target_tensors = [Y],)
+    model.compile(metrics=['mae','accuracy', 'mse', 'mape', 'cosine', 'categorical_crossentropy'], optimizer=optimizer , loss = 'categorical_crossentropy',loss_weights = None,sample_weight_mode = None,weighted_metrics = None,target_tensors = [Y],)
     return model
 
 
@@ -167,6 +159,6 @@ def Network():
 def train():
     model = Network()
     x,y = getTrainingData()
-    model.fit(x = None,y = None,batch_size = 128,epochs = 20,verbose = 0,callbacks = [LossAcc()],validation_split = 0,validation_data = None,shuffle = True,class_weight = None,sample_weight = None,initial_epoch = 0,steps_per_epoch = 42000//128,validation_steps = None,)
+    model.fit(x = None,y = None,batch_size = None,epochs = 20,verbose = 0,callbacks = [tensorboard],validation_split = 0,validation_data = None,shuffle = True,class_weight = None,sample_weight = None,initial_epoch = 0,steps_per_epoch = 42000//128,validation_steps = None,)
 
 train()

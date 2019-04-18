@@ -384,11 +384,8 @@ $("#goNext").click(function () {
 
     global.modelText += "\n# Generated Model\n";
     global.modelText += modelgencode;
-
-
-    global.modelText +=`
-train()
-`
+    global.modelText +=`\n`
+    
     if (firstblock)
         firstblock.label.getTag().stroke("#111");
     if (temparrow)
