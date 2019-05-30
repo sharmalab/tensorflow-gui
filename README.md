@@ -1,3 +1,5 @@
+<center><img src="https://avatars1.githubusercontent.com/u/15658638?s=280&v=4"></center>
+
 # TensorFlow-GUI
 This project aims to develop a TensorFlow compatible GUI to perform all the operations done by TensorFlow. 
 
@@ -31,5 +33,5 @@ Mentors: **Monjoy Saha** (monjoy.saha -at- emory.edu) and **Pooya Mobadersany** 
 ## Contribution guidelines
 If you found any bug, please feel free to open an issue.
 
-## Issues and Solution
+## Questions and Answers
 No issues.
