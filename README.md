@@ -1,4 +1,6 @@
-<center><img src="https://avatars1.githubusercontent.com/u/15658638?s=280&v=4"></center>
+<p align="center"> 
+<img align="center" src="https://avatars1.githubusercontent.com/u/15658638?s=280&v=4"></center>
+</p>
 
 # TensorFlow-GUI
 This project aims to develop a TensorFlow compatible GUI to perform all the operations done by TensorFlow. 
