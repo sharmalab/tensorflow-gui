@@ -2,7 +2,7 @@
 
 echo "Setting up enviroment for TensorFlow-GUI"
 
-conda --version 2> /dev/null
+conda --version 2 > /dev/null
 if [ $? == 0 ]
 then
     echo "Conda found!"
@@ -18,7 +18,7 @@ else
     pip3 install opencv-python
 fi
 
-sudo apt install nodejs npm
+sudo apt install nodejs npm nodejs-legacy -y
 npm install --prefix=../src/
 
 echo "Completed!"
