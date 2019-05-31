@@ -35,5 +35,5 @@ Mentors: **Monjoy Saha** (monjoy.saha -at- emory.edu) and **Pooya Mobadersany** 
 ## Contribution guidelines
 If you found any bug, please feel free to open an issue.
 
-## Questions and Answers
+## FAQ
 No issues.
