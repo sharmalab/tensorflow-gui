@@ -2,7 +2,7 @@
     padding: 20px;
     background: #333333;
     color: white;
-    height: 140px;
+    height: 110px;
     /* width: 100%; */
     position: relative;
     /* display: inline-block; */
@@ -38,13 +38,13 @@
 
 #user-profile-pic {
     margin-right: 20px;
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: 80px;
     float: left;
 }
 
 #user-projects{
-    margin-top: 8px;
+    padding-top: 8px;
     padding: 12px;
 }
 
