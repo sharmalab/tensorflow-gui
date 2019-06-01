@@ -4,6 +4,8 @@
     display: flex;
     align-items: center;
     height: 100vh;
+    background-image: url('/home/vikasgola/Downloads/back.svg');
+    background-repeat: no-repeat;
 }
 
 .card {
