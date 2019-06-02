@@ -1,6 +1,7 @@
 #user-header {
     padding: 20px;
-    background: #333333;
+    /* background: linear-gradient(to right, #FF6F00,#FFA800); */
+    background: #f57c00;
     color: white;
     height: 110px;
     /* width: 100%; */
@@ -26,6 +27,7 @@
 .card{
     margin: 10px;
     max-width: 300px;
+    color: #425066;
 }
 
 #user-details {
@@ -46,6 +48,9 @@
 #user-projects{
     padding-top: 8px;
     padding: 12px;
+    color: #425066;
+    background: linear-gradient(#E6E6E6, #FFFFFF);
+    height: 100%;
 }
 
 #user-projects-card-list{

@@ -1,6 +1,8 @@
 #draw-header {
     padding: 15px;
-    background: rgba(40, 40, 40, 1.0);
+    /* background: rgba(40, 40, 40, 1.0); */
+    /* background: linear-gradient(to right, #FF6F00,#FFA800); */
+    background: #f57c00;
     color: white;
     height: 70px;
     position: relative;
@@ -42,7 +44,8 @@
     min-width: 170px;
     width: 15%;
     height: calc(100vh - 70px);
-    background: #eeeeee;
+    /* background: #eeeeee; */
+    background: #E6E6E6;
     float: left;
     /* margin-right: 12px; */
     overflow-y: scroll;
