@@ -377,6 +377,15 @@ let layerParameters = {
 
 let functionsText = ""
 
+let projectDetails = {
+    name: "",
+    isOpen: false,
+    details: "",
+    code: "",
+    graph: ""
+};
+
+
 module.exports = {
     editorText: editorText,
     modelText: modelText,
@@ -384,5 +393,6 @@ module.exports = {
     graph: graph,
     layerParameters: layerParameters,
     outputParameters: outputParameters,
-    functionsText: functionsText
+    functionsText: functionsText,
+    projectDetails: projectDetails
 }

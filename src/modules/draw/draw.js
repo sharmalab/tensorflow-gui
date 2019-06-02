@@ -18,6 +18,9 @@ const pythonFunction = require("../../lib/datafunctions");
 $("#draw-sidebar-right").hide();
 $("#startTraining").hide();
 
+$("#project-name").text(global.projectDetails.name);
+$("#project-details").text(global.projectDetails.details.substr(0,30)+"...");
+
 var codemirror = CodeMirror(document.getElementById("code-editor"), {
     mode: {
         name: "python",

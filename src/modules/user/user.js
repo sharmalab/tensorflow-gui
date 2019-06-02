@@ -2,7 +2,8 @@ const {
     ipcRenderer
 } = require('electron')
 const swal = require('sweetalert');
-const fs = require('fs')
+const fs = require('fs');
+const global = require('../../lib/global');
 const print = console.log;
 
 function loadPage(page_path) {
@@ -50,6 +51,7 @@ $("#user-create-project-button").click(() => {
                             if (err) {
                                 print("Error writing file", err);
                             } else {
+                                loadProjects();
                                 swal("Create New Project", "Project created successfully.", "success");
                             }
                         });
@@ -68,10 +70,11 @@ function getDirectories(path) {
     });
 }
 
-$(document).ready(() => {
+function loadProjects(){
     let basepath = process.cwd() + "/testing/Projects/";
     let dirlist = getDirectories(basepath)
 
+    $("#user-projects-card-row").empty();
     for (let dir in dirlist) {
         fs.readFile(basepath + dirlist[dir] + "/info.json", (err, fileData) => {
             if (err) {
@@ -93,15 +96,21 @@ $(document).ready(() => {
                     </div>
                 `);
 
-                // $(".openbuttons").click(() => {
-                //     print(;
-                //     loadPage("draw/draw.html")
-                // });
+                $(".openbuttons").click((value) => {
+                    let pdosi = $(value.target).siblings();
+                    global.projectDetails.name = pdosi[0].innerText;
+                    global.projectDetails.details = pdosi[1].innerText;
+                    loadPage("draw/draw.html")
+                });
             } catch (err) {
                 return print("Error in reading all projects", err)
             }
         })
     }
+}
+
+$(document).ready(() => {
+    loadProjects();
 
     function openProject(object){
         print(object);
