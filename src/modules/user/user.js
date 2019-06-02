@@ -25,6 +25,7 @@ $("#user-create-project-button").click(() => {
             let basepath = process.cwd() + "/testing/Projects/";
             if (!fs.existsSync(basepath)) {
                 fs.mkdirSync(basepath);
+                fs.mkdirSync(basepath+"logs");
             }
 
             if (!fs.existsSync(basepath + dir)) {

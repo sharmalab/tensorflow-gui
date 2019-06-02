@@ -74,22 +74,25 @@ function runPython() {
 
     pythonprocess.stderr.on('data', function (data) {
         console.log('stderr: ' + data);
-        $("#training-error").html(`<p class="text-danger">${data}</p>`);
-        $("#training-error").append("<br><button id='backButton' class='btn btn-primary'>Go Back</button>");
 
-        $("#backButton").click(function () {
+        swal("Error", `${data}`, "error");
+
+        // $("#training-error").html(`<p class="text-danger">${data}</p>`);
+        // $("#training-error").append("<br><button id='backButton' class='btn btn-primary'>Go Back</button>");
+
+        // $("#backButton").click(function () {
             // loadPage("draw/draw.html")
-        });
+        // });
     });
 
     pythonprocess.on('close', (code) => {
         if (code == 1) {
             $("#training-graphs").hide();
-            $("#training-error").show();
+            // $("#training-error").show();
             // $("#training-status").text("Training failed.");
         } else {
             $("#training-graphs").show();
-            $("#training-error").hide();
+            // $("#training-error").hide();
             // $("#training-status").text("Training completed.");
             swal("Completed!", "Model training has been completed!", "success");
         }

@@ -14,9 +14,7 @@ from tensorflow.keras.layers import *
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.callbacks import Callback, RemoteMonitor, TensorBoard
 import tensorflow as tf
-from time import time
-
-tensorboard = TensorBoard(log_dir="testing/logs/{}".format(time()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+from time import asctime
 `
 
 // # model callback

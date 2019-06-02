@@ -401,6 +401,12 @@ $("#goNext").click(function () {
         global.functionsText += pythonFunction[usedFunctions[q]];
     }
 
+    global.extraText += `
+
+tensorboard = TensorBoard(log_dir="testing/Projects/${global.name}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+
+`
+
     codemirror.setValue(global.extraText + global.functionsText + global.editorText + global.modelText)
 
     $("#code-editor").show();
