@@ -6,6 +6,7 @@ const fs = require('fs');
 const global = require('../../lib/global');
 const print = console.log;
 const childprocess = require('child_process');
+var rimraf = require("rimraf");
 
 function loadPage(page_path) {
     $("#main-content").html('');
@@ -90,13 +91,48 @@ function loadProjects() {
                         <div class="card-body">
                             <h5 class="card-title">${object.name}</h5>
                             <p class="card-text">${object.details}</p>
-                            <button type="button" class="btn btn-primary openbuttons">
+                            <button type="button" class="btn btn-primary m-1 openbuttons">
                                 Open Project
+                            </button>
+                            <button type="button" class="btn btn-primary m-1 updatebuttons">
+                                Update Project Details
+                            </button>
+                            <button type="button" class="btn btn-danger m-1 deletebuttons">
+                                Delete Project
                             </button>
                             </div>
                         </div>
                     </div>
                 `);
+
+                $(".updatebuttons").click((value) => {
+                    
+                });
+
+                $(".deletebuttons").click((value) => {
+                    let pdosi = $(value.target).siblings();
+                    swal({
+                        title: "Are you sure?",
+                        text: `You are going to delete project named '${pdosi[0].innerText}'.Once deleted, you will not be able to recover this project!`,
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                            try{
+                                rimraf.sync(basepath + dirlist[dir]);
+                                swal(`Your project '${pdosi[0].innerText}' has been deleted!`, {
+                                    icon: "success",
+                                });
+                            }catch(err){
+                                swal(`Failed to delete project.`, {
+                                    icon: "error",
+                                });
+                            }
+                            loadProjects();
+                        }
+                    });
+                });
 
                 $(".openbuttons").click((value) => {
                     let pdosi = $(value.target).siblings();
