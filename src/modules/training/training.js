@@ -4,7 +4,6 @@ const childprocess = require('child_process');
 const print = console.log;
 var fs = require('fs');
 const swal = require('sweetalert');
-
 let lossChart;
 let maeChart;
 let accuracyChart;
@@ -30,6 +29,7 @@ $("#backPage").click(function () {
 
 function runPython() {
     let codepath = './testing/code.py';
+    let processError = "";
     try {
         fs.writeFileSync(codepath, global.editorText, 'utf-8');
     } catch (e) {
@@ -37,19 +37,25 @@ function runPython() {
     }
 
     var env = Object.create(process.env);
+    // var tensorbaord = childprocess.spawn('tensorboard', ["--logdir=testing/Projects/"+global.projectDetails.name+"/logs/"], {
+    //     env: env
+    // });
+
     var pythonprocess = childprocess.spawn('python3', [codepath], {
         env: env
     });
 
-    var tensorbaord = childprocess.spawn('tensorboard', ["--logdir=testing/logs/"], {
-        env: env
-    });
+
+    // tensorbaord.stderr.on('data', function (data) {
+    //     console.log(data);
+    // });
 
 
     pythonprocess.stdout.on('data', function (data) {
+        console.log(data);
         // $("#training-status").text("Training...");
-        lines = data.toString('utf8').split(/\r\n|\r|\n/g);
-        console.log(lines);
+        // lines = data.toString('utf8').split(/\r\n|\r|\n/g);
+        // console.log(lines);
 
         // for(let i in lines){
         //     dataparts = lines[i].toString('utf8').split("=")
@@ -75,8 +81,7 @@ function runPython() {
     pythonprocess.stderr.on('data', function (data) {
         console.log('stderr: ' + data);
 
-        swal("Error", `${data}`, "error");
-
+        processError = data;
         // $("#training-error").html(`<p class="text-danger">${data}</p>`);
         // $("#training-error").append("<br><button id='backButton' class='btn btn-primary'>Go Back</button>");
 
@@ -87,15 +92,20 @@ function runPython() {
 
     pythonprocess.on('close', (code) => {
         if (code == 1) {
-            $("#training-graphs").hide();
+            // $("#training-graphs").hide();
             // $("#training-error").show();
             // $("#training-status").text("Training failed.");
+            swal("Error", `${processError}`, "error");            
         } else {
-            $("#training-graphs").show();
+            // $("#training-graphs").show();
             // $("#training-error").hide();
             // $("#training-status").text("Training completed.");
             swal("Completed!", "Model training has been completed!", "success");
         }
+
+        // setTimeout(()=>{
+        //     tensorbaord.kill();
+        // }, 2000);
         console.log(`child process exited with code ${code}`);
     });
 }
@@ -134,12 +144,12 @@ function drawChart(id, points, title, label) {
 
 $(document).ready(function () {
     runPython();
-    $("#training-error").hide();
+    // $("#training-error").hide();
     
-    points = {
-        x: [...Array(30).keys()],
-        y: []
-    };
+    // points = {
+    //     x: [...Array(30).keys()],
+    //     y: []
+    // };
 
     // lossChart = drawChart("losschart", points, "Loss", "Loss");
     // accuracyChart = drawChart("accuracychart", points, "Accuracy", "Accuracy");

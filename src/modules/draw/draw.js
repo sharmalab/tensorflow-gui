@@ -403,7 +403,7 @@ $("#goNext").click(function () {
 
     global.extraText += `
 
-tensorboard = TensorBoard(log_dir="testing/Projects/${global.name}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+tensorboard = TensorBoard(log_dir="testing/Projects/${global.projectDetails.name}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
 
 `
 

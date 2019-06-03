@@ -122,7 +122,6 @@ class tfGraph {
                     modelCode += `\n# function for training model
 def train():
     model = Network()
-    x,y = getTrainingData()
     model.${layerName}(${tempparameters})\n
 
 train()

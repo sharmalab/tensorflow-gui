@@ -5,6 +5,7 @@ const swal = require('sweetalert');
 const fs = require('fs');
 const global = require('../../lib/global');
 const print = console.log;
+const childprocess = require('child_process');
 
 function loadPage(page_path) {
     $("#main-content").html('');
@@ -25,7 +26,6 @@ $("#user-create-project-button").click(() => {
             let basepath = process.cwd() + "/testing/Projects/";
             if (!fs.existsSync(basepath)) {
                 fs.mkdirSync(basepath);
-                fs.mkdirSync(basepath+"logs");
             }
 
             if (!fs.existsSync(basepath + dir)) {
@@ -34,6 +34,7 @@ $("#user-create-project-button").click(() => {
                         print("Error creating folder", err);
                     }
                 });
+                fs.mkdirSync(basepath + dir + "/logs");
                 swal({
                     text: "Project Details",
                     title: "Create New Project",
@@ -71,7 +72,7 @@ function getDirectories(path) {
     });
 }
 
-function loadProjects(){
+function loadProjects() {
     let basepath = process.cwd() + "/testing/Projects/";
     let dirlist = getDirectories(basepath)
 
@@ -101,6 +102,18 @@ function loadProjects(){
                     let pdosi = $(value.target).siblings();
                     global.projectDetails.name = pdosi[0].innerText;
                     global.projectDetails.details = pdosi[1].innerText;
+
+                    let killtensorboard = childprocess.spawn('killall', ["-9", "tensorboard"]);
+
+                    var env = Object.create(process.env);
+                    killtensorboard.on('close', (code) => {
+                        let tensorbaord = childprocess.spawn('tensorboard', ["--logdir=testing/Projects/" + global.projectDetails.name + "/logs/", "--reload_interval", "4"], {
+                            env: env
+                        });
+
+                        console.log(`child process exited with code ${code}`);
+                    });
+
                     loadPage("draw/draw.html")
                 });
             } catch (err) {
@@ -113,7 +126,7 @@ function loadProjects(){
 $(document).ready(() => {
     loadProjects();
 
-    function openProject(object){
+    function openProject(object) {
         print(object);
         print(JSON.parse(object))
     }

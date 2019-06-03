@@ -5,7 +5,6 @@ const {
 } = require('electron')
 let print = console.log;
 
-// create new browser window
 let win;
 function createWindow() {
     win = new BrowserWindow({
@@ -19,6 +18,7 @@ function createWindow() {
     });
 }
 
+// on ready, create the new browser window
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {

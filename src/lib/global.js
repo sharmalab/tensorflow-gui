@@ -101,7 +101,7 @@ let layerParameters = {
     Output: {
         optimizer: "sgd",
         learning_rate: 0.001,
-        loss: "mean_squared_error",
+        loss: "'mean_squared_error'",
         loss_weights: "None",
         sample_weight_mode: "None",
         weighted_metrics: "None",
@@ -327,7 +327,7 @@ let layerParameters = {
         batch_size: "None",
         epochs: 1,
         verbose: 0,
-        callbacks: "[LossAcct(), tensorboard]",
+        callbacks: "[tensorboard]",
         validation_split: 0.0,
         validation_data: "None",
         shuffle: "True",
