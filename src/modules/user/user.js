@@ -6,7 +6,6 @@ const fs = require('fs');
 const global = require('../../lib/global');
 const print = console.log;
 const childprocess = require('child_process');
-var rimraf = require("rimraf");
 
 function loadPage(page_path) {
     $("#main-content").html('');
@@ -48,7 +47,7 @@ $("#user-create-project-button").click(() => {
                         let data = {
                             name: dir,
                             details: value,
-                            time: new Date(Date.now()).toString()
+                            creation_time: new Date(Date.now()).toString()
                         };
                         fs.writeFile(basepath + dir + "/info.json", JSON.stringify(data), 'utf-8', err => {
                             if (err) {
@@ -94,45 +93,23 @@ function loadProjects() {
                             <button type="button" class="btn btn-primary m-1 openbuttons">
                                 Open Project
                             </button>
-                            <button type="button" class="btn btn-primary m-1 updatebuttons">
-                                Update Project Details
-                            </button>
-                            <button type="button" class="btn btn-danger m-1 deletebuttons">
-                                Delete Project
+                            <button type="button" class="btn btn-primary m-1 settingsbuttons">
+                                Settings
                             </button>
                             </div>
                         </div>
                     </div>
                 `);
 
-                $(".updatebuttons").click((value) => {
-                    
+                $(".settingsbuttons").click((value) => {
+                    let pdosi = $(value.target).siblings();
+                    global.projectDetails.name = pdosi[0].innerText;
+                    global.projectDetails.details = pdosi[1].innerText;
+
+                    loadPage("project/project.html");
                 });
 
-                $(".deletebuttons").click((value) => {
-                    let pdosi = $(value.target).siblings();
-                    swal({
-                        title: "Are you sure?",
-                        text: `You are going to delete project named '${pdosi[0].innerText}'.Once deleted, you will not be able to recover this project!`,
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                    }).then((willDelete) => {
-                        if (willDelete) {
-                            try{
-                                rimraf.sync(basepath + dirlist[dir]);
-                                swal(`Your project '${pdosi[0].innerText}' has been deleted!`, {
-                                    icon: "success",
-                                });
-                            }catch(err){
-                                swal(`Failed to delete project.`, {
-                                    icon: "error",
-                                });
-                            }
-                            loadProjects();
-                        }
-                    });
-                });
+                
 
                 $(".openbuttons").click((value) => {
                     let pdosi = $(value.target).siblings();
@@ -150,7 +127,7 @@ function loadProjects() {
                         console.log(`child process exited with code ${code}`);
                     });
 
-                    loadPage("draw/draw.html")
+                    loadPage("draw/draw.html");
                 });
             } catch (err) {
                 return print("Error in reading all projects", err)
@@ -161,9 +138,4 @@ function loadProjects() {
 
 $(document).ready(() => {
     loadProjects();
-
-    function openProject(object) {
-        print(object);
-        print(JSON.parse(object))
-    }
 });

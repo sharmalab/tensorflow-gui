@@ -1,0 +1,40 @@
+<header id="draw-header">
+    <p class="draw-title">Tensorflow GUI</p>
+    <div id="right-draw-header">
+        <div>
+            <button id="goBack" class="btn btn-light p-2 btn-responsive">Back</button>
+        </div>
+    </div>
+</header>
+
+<div>
+    <div class="project-details">
+        <form class="form-horizontal">
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="project-name">Project Name: </label>
+                <div class="col-sm-4">
+                    <input readonly type="text" class="form-control" id="project-name">
+                </div>
+            </div>
+            <br>
+            <div class="form-group row">
+                <label class="control-label col-sm-2" for="project-description">Project Description: </label>
+                <div class="col-sm-4">
+                    <input readonly type="text" class="form-control" id="project-description">
+                </div>
+            </div>
+        </form>
+        <button class="btn btn-primary m-2 updatebuttons">
+            Update Details
+        </button>
+        <button class="btn btn-primary deletebuttons m-2">
+            Delete Project
+        </button>
+    </div>
+</div>
+
+
+<script>
+    delete require.cache[require.resolve('./project/project.js')]
+    require("./project/project.js")
+</script>

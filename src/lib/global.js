@@ -379,6 +379,8 @@ let projectDetails = {
     name: "",
     isOpen: false,
     details: "",
+    creation_time: "",
+    last_edited: "",
     code: "",
     graph: ""
 };
