@@ -2,7 +2,7 @@ const print = console.log;
 let global = require("./global.js");
 
 class tfNode {
-    constructor(label, id, name, type = "middle") {
+    constructor(label, id=-1, name, type = "middle") {
         this.type = type;
         this.id = id;
         this.label = label;
@@ -42,7 +42,29 @@ class tfGraph {
         this.inputs = [];
         this.outputs = [];
         this.modelStage;
-        this.modelLayers = []
+        this.modelLayers = [];
+        this.nodes = [];
+        this.edges = [];
+    }
+
+    addNode(node){
+        this.nodes.push(node);
+        this.numberOfNodes++;
+    }
+
+    addEdge(edge){
+        this.edges.push(edge);
+        this.numberOfEdges++;
+    }
+
+    removeNode(node){
+        this.nodes = this.nodes.filter(function(el) { return el != node; }); 
+        this.numberOfNodes--;
+    }
+
+    removeEdge(edge){
+        this.edges = this.edges.filter(function(el) { return el != edge; }); 
+        this.numberOfEdges--;
     }
 
     addInput(input) {

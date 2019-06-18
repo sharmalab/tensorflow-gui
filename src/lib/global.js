@@ -373,6 +373,10 @@ let projectDetails = {
     graph: ""
 };
 
+let isLoaded = {
+    draw: false
+}
+
 
 module.exports = {
     editorText: editorText,
@@ -382,5 +386,6 @@ module.exports = {
     layerParameters: layerParameters,
     outputParameters: outputParameters,
     functionsText: functionsText,
-    projectDetails: projectDetails
+    projectDetails: projectDetails,
+    isLoaded: isLoaded
 }

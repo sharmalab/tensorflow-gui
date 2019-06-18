@@ -48,8 +48,6 @@ $("#user-create-project-button").click(() => {
                             name: dir,
                             details: value,
                             creation_time: new Date(Date.now()).toString(),
-                            code: "",
-                            graph: ""
                         };
                         fs.writeFile(basepath + dir + "/info.json", JSON.stringify(data), 'utf-8', err => {
                             if (err) {

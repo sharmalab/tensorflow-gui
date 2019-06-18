@@ -19,7 +19,7 @@ $("#draw-sidebar-right").hide();
 $("#startTraining").hide();
 
 $("#project-name").text(global.projectDetails.name);
-$("#project-details").text(global.projectDetails.details.substr(0,30)+"...");
+$("#project-details").text(global.projectDetails.details.substr(0, 30) + "...");
 
 var codemirror = CodeMirror(document.getElementById("code-editor"), {
     mode: {
@@ -44,19 +44,25 @@ codemirror.on('inputRead', function onChange(editor, input) {
     });
 });
 
+
 let isSelected = false;
 let temparrow;
 let firstblock;
+let dir = global.projectDetails.name;
+let basepath = process.cwd() + "/testing/Projects/";
+
 let graph = global.graph;
 graph.modelStage = new Konva.Stage({
     container: 'draw-canvas',
     width: 2 * window.innerWidth,
     height: 2 * window.innerHeight,
 });
-let stage = graph.modelStage;
 
+
+let stage = graph.modelStage;
 let layer = graph.modelLayers[0];
 stage.add(layer);
+
 
 $('#draw-sidebar-left div .accordion ul li').draggable({
     cursor: 'move',
@@ -73,7 +79,8 @@ $('#draw-sidebar-left div .accordion ul li').draggable({
     }
 });
 
-function createLabel(x, y, text, layertoadd) {
+
+function createLabel(x, y, text, layertoadd, id = null) {
     let label = new Konva.Label({
         x: x,
         y: y,
@@ -86,7 +93,7 @@ function createLabel(x, y, text, layertoadd) {
         lineJoin: 'round',
         fill: '#eee',
         stroke: '#333',
-        shadowColor: '#111',
+        // shadowColor: '#111',
     }));
 
     label.add(new Konva.Text({
@@ -98,17 +105,20 @@ function createLabel(x, y, text, layertoadd) {
         width: 180,
         align: 'center'
     }));
-    graph.numberOfNodes++;
+
 
     let node;
+    if (!id) {
+        id = graph.numberOfNodes;
+    }
     if (text == "InputLayer") {
-        node = new tfNode(label, graph.numberOfNodes, text, "input")
+        node = new tfNode(label, id, text, "input")
         graph.addInput(node);
     } else if (text == "Output") {
-        node = new tfNode(label, graph.numberOfNodes, text, "output")
+        node = new tfNode(label, id, text, "output")
         graph.addOutput(node);
     } else {
-        node = new tfNode(label, graph.numberOfNodes, text, "middle")
+        node = new tfNode(label, id, text, "middle")
     }
 
     label.on("click", (event) => {
@@ -152,8 +162,11 @@ function createLabel(x, y, text, layertoadd) {
                 } else if (temparrow && isSelected) {
                     temparrow.arrow.remove();
                     firstblock.label.getTag().stroke("#111");
-                    if (firstblock != node)
-                        addArrow(firstblock, node, layertoadd).arrow.moveToBottom();
+                    if (firstblock != node) {
+                        let outputedge = addArrow(firstblock, node, layertoadd);
+                        outputedge.arrow.moveToBottom();
+                        graph.addEdge(outputedge);
+                    }
                     firstblock = undefined;
                     temparrow = undefined;
                     isSelected = false;
@@ -167,9 +180,9 @@ function createLabel(x, y, text, layertoadd) {
             $("#right-sidebar-form").text('');
             $("#right-sidebar-form2").text('');
             let layerParameters = firstblock.parameters;
-            let outputParameters = firstblock.outputParameters;        
+            let outputParameters = firstblock.outputParameters;
 
-            if(layerParameters){
+            if (layerParameters) {
                 for (const [key, value] of Object.entries(layerParameters)) {
                     $("#right-sidebar-form").append(`
                     <div class="form-group">
@@ -179,7 +192,7 @@ function createLabel(x, y, text, layertoadd) {
                     `);
                 }
             }
-            if(outputParameters){            
+            if (outputParameters) {
                 for (const [key, value] of Object.entries(outputParameters)) {
                     $("#right-sidebar-form2").append(`
                     <div class="form-group">
@@ -255,7 +268,6 @@ function addArrow(node1, node2, layertoadd) {
             arrow.setPoints(p);
             layertoadd.draw();
         });
-        graph.numberOfEdges++;
     }
 
     edge = new tfEdge(node1, node2, arrow, graph.numberOfEdges)
@@ -273,6 +285,7 @@ $("#draw-canvas").droppable({
         var relativeXPosition = (event.pageX - this.offsetLeft);
         var relativeYPosition = (event.pageY - this.offsetTop);
         output = createLabel(relativeXPosition, relativeYPosition, ui.helper.text().trim(), layer)
+        graph.addNode(output);
     }
 });
 
@@ -292,16 +305,23 @@ $(document).keyup(function (e) {
         if (isSelected && !temparrow) {
             if (firstblock) {
                 if (firstblock.type == "input") {
-                    graph = graph.inputs.filter(a => a != firstblock);
+                    graph.inputs = graph.inputs.filter(a => a != firstblock);
+                    print(graph.inputs);
                 } else if (firstblock.type == "output") {
-                    graph = graph.outputs.filter(a => a != firstblock);
+                    graph.outputs = graph.outputs.filter(a => a != firstblock);
                 }
 
+                graph.removeNode(firstblock);
+
                 firstblock.label.remove()
-                for (let i in firstblock.outEdges)
+                for (let i in firstblock.outEdges) {
+                    graph.removeEdge(firstblock.outEdges[i]);
                     firstblock.outEdges[i].arrow.remove()
-                for (let i in firstblock.inEdges)
+                }
+                for (let i in firstblock.inEdges) {
+                    graph.removeEdge(firstblock.inEdges[i]);
                     firstblock.inEdges[i].arrow.remove()
+                }
                 firstblock = undefined;
             }
             isSelected = false;
@@ -309,6 +329,31 @@ $(document).keyup(function (e) {
         }
     }
 });
+
+try{
+    if(global.isLoaded.draw){
+        throw new Error("No need to load again");
+    }
+    let graphdata = fs.readFileSync(basepath + dir + "/graph.json");
+    let savedGraph = JSON.parse(graphdata);
+    let temphash = {};
+    print(graph);
+
+    savedGraph.nodes.forEach(element => {
+        let node = createLabel(element.x, element.y, element.text, layer, element.id);
+        node.layerParameters = element.layerParameters;
+        node.outputParameters = element.outputParameters;
+        graph.addNode(node);
+        temphash[element.id] = graph.nodes[graph.nodes.length-1];
+    });
+
+    savedGraph.edges.forEach(element => {
+        let edge = addArrow(temphash[element.from], temphash[element.to] , layer);
+        graph.addEdge(edge);
+    });
+}catch(err){
+    print("skip loading graph.json");
+}
 
 layer.draw();
 
@@ -363,6 +408,7 @@ $('#right-sidebar-form2').on('keyup change paste', 'input, select, textarea', fu
 function loadPage(page_path) {
     $("#main-content").html('');
     $("#main-content").load(page_path);
+    global.isLoaded.draw = false;
 }
 
 $("#goNext").click(function () {
@@ -382,13 +428,13 @@ $("#goNext").click(function () {
     $("#draw-sidebar-right").hide();
     $(this).hide();
 
-    global.modelText = "\n# Called Functions\n" 
+    global.modelText = "\n# Called Functions\n"
     global.modelText += calledList + "\n"
 
     global.modelText += "\n# Generated Model\n";
     global.modelText += modelgencode;
-    global.modelText +=`\n`
-    
+    global.modelText += `\n`
+
     if (firstblock)
         firstblock.label.getTag().stroke("#111");
     if (temparrow)
@@ -397,7 +443,7 @@ $("#goNext").click(function () {
     firstblock = undefined;
     temparrow = undefined;
 
-    for(var q=0;q<usedFunctions.length;q++){
+    for (var q = 0; q < usedFunctions.length; q++) {
         global.functionsText += pythonFunction[usedFunctions[q]];
     }
 
@@ -430,14 +476,56 @@ function testPython() {
     pythonprocess.on('close', (code) => {
         if (code == 1) {
             swal("Oops!", "Error in code! Please correct the code and try again!", "error");
-        }else{
+        } else {
             global.editorText = codemirror.getValue();
+            saveProject();
             loadPage("training/training.html");
         }
         console.log(`child process exited with code ${code}`);
     });
 }
 
+
+function saveProject(){
+    let data = {
+        nodes: [],
+        edges: []
+    };
+
+    graph.nodes.forEach(element => {
+        data.nodes.push({
+            id: element.id,
+            x: element.label.attrs.x,
+            y: element.label.attrs.y,
+            text: element.label.children[1].attrs.text,
+            layerParameters: element.layerParameters,
+            outputParameters: element.outputParameters
+        });
+    });
+    graph.edges.forEach(element => {
+        data.edges.push({
+            from: element.fromNode.id,
+            to: element.toNode.id
+        });
+    });
+
+    fs.writeFile(basepath + dir + "/graph.json", JSON.stringify(data), 'utf-8', err => {
+        if (err) {
+            print("Error writing file", err);
+        } else {
+            swal("Saving Project", "Project saved successfully.", "success");
+        }
+    });
+}
+
 $("#startTraining").click(function () {
     testPython();
 });
+
+
+
+$("#saveProject").click(function () {
+    saveProject();
+});
+
+global.isLoaded.draw = true;
