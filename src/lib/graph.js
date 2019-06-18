@@ -132,7 +132,7 @@ train()
                     lastLayerName = lasttemp.name;
 
                     modelCode += `    model = Model(inputs=InputLayer_${layer["InputLayer"]}, outputs=${lastLayerName+"_"+layer[lastLayerName]})\n`;
-                    // print(temp.parameters["optimizer"])
+                    
                     switch(temp.parameters["optimizer"]) {
                         case "sgd":
                             modelCode += `    optimizer = tf.keras.optimizers.SGD(lr=${temp.parameters["learning_rate"]}, momentum=0.0, decay=0.0,)\n`;

@@ -1,5 +1,13 @@
 .project-details{
     margin-top: 32px;
-    margin-left: 12px;
-    margin-right: 12px;
+    text-align: center;
+    align-content: center;
+    width: 40%;
+}
+
+form{
+    margin-bottom: 32px;
+}
+
+.project-details input{
 }

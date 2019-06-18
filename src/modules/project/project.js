@@ -43,5 +43,58 @@ $(".deletebuttons").click((value) => {
 });
 
 $(".updatebuttons").click((value) => {
+    // swal({
+    //     text: "Project Name",
+    //     title: "Update Project Details",
+    //     content: "input",
+    //     buttons: ["Cancel", "Next"],
+    // }).then((value) => {
+    //     if (value == "") {
+    //         swal("Error", "Projet Name can't be empty.", "error");
+    //     } else if (value) {
+    //         let dir = value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    //         let basepath = process.cwd() + "/testing/Projects/";
+    //         if (!fs.existsSync(basepath)) {
+    //             fs.mkdirSync(basepath);
+    //         }
+
+    //         if (!fs.existsSync(basepath + dir)) {
+    //             swal({
+    //                 text: "Project Details",
+    //                 title: "Update Project Details",
+    //                 content: "input",
+    //                 buttons: ["Cancel", "Update"],
+    //             }).then(value => {
+    //                 if (value == "") {
+    //                     swal("Error", "Project Details can't be empty.");
+    //                 } else if (value) {
+    //                     fs.mkdirSync(basepath + dir, err => {
+    //                         if (err) {
+    //                             print("Error creating folder", err);
+    //                         }
+    //                     });
+    //                     fs.mkdirSync(basepath + dir + "/logs");
+    //                     let data = {
+    //                         name: dir,
+    //                         details: value,
+    //                         creation_time: new Date(Date.now()).toString(),
+    //                         code: "",
+    //                         graph: ""
+    //                     };
+    //                     fs.writeFile(basepath + dir + "/info.json", JSON.stringify(data), 'utf-8', err => {
+    //                         if (err) {
+    //                             print("Error writing file", err);
+    //                         } else {
+    //                             loadProjects();
+    //                             swal("Create New Project", "Project created successfully.", "success");
+    //                         }
+    //                     });
+    //                 }
+    //             });
+    //         } else {
+    //             swal("Error", "Project with this name already exists.", "error");
+    //         }
+    //     }
+    // });
     swal("Info","This feature is currently in development. Stay tune for updates.","info");
 });

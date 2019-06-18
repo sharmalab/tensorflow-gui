@@ -17,18 +17,6 @@ import tensorflow as tf
 from time import asctime
 `
 
-// # model callback
-// class LossAcc(Callback):
-//     def __init__(self):
-//         super().__init__()
-
-//     def on_epoch_end(self, epoch, logs={}):
-//         print("epoch=", epoch, flush=True)
-//         print("loss=", logs.get('loss'), flush=True)
-//         print("acc=", logs.get('acc'), flush=True)
-//         print("val_acc=", logs.get('val_acc'), flush=True)
-//         print("val_loss=", logs.get('val_loss'), flush=True)
-
 let modelText = "";
 
 let outputParameters = {
