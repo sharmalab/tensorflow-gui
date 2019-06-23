@@ -461,7 +461,7 @@ tensorboard = TensorBoard(log_dir="Projects/${global.projectDetails.name}/logs/{
 
 
 function testPython() {
-    let codepath = './testing/code.py';
+    let codepath = `./testing/Projects/${global.projectDetails.name}/editor.py`;
     try {
         fs.writeFileSync(codepath, codemirror.getValue(), 'utf-8');
     } catch (e) {
@@ -511,9 +511,18 @@ function saveProject(){
 
     fs.writeFile(basepath + dir + "/graph.json", JSON.stringify(data), 'utf-8', err => {
         if (err) {
+            swal("Saving Project", "Failed to save project.", "error");
             print("Error writing file", err);
         } else {
-            swal("Saving Project", "Project saved successfully.", "success");
+            fs.writeFile(basepath + dir + "/editor.py", global.editorText, 'utf-8', err => {
+                if (err) {
+                    swal("Saving Project", "Failed to save project.", "error");
+                    print("Error writing file", err);
+                } else {
+                    
+                    swal("Saving Project", "Project saved successfully.", "success");
+                }
+            })      
         }
     });
 }

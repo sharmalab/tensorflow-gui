@@ -76,6 +76,10 @@ function loadProjects() {
     let basepath = process.cwd() + "/testing/Projects/";
     let dirlist = getDirectories(basepath)
 
+    if(dirlist.length != 0){
+        $("#no-projects").hide();
+    }
+
     $("#user-projects-card-row").empty();
     for (let dir in dirlist) {
         fs.readFile(basepath + dirlist[dir] + "/info.json", (err, fileData) => {
@@ -137,5 +141,6 @@ function loadProjects() {
 }
 
 $(document).ready(() => {
+    global.isLoaded.draw = false;
     loadProjects();
 });
