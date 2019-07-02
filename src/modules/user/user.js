@@ -76,7 +76,7 @@ function loadProjects() {
     let basepath = process.cwd() + "/testing/Projects/";
     let dirlist = getDirectories(basepath)
 
-    if(dirlist.length != 0){
+    if (dirlist.length != 0) {
         $("#no-projects").hide();
     }
 
@@ -94,10 +94,15 @@ function loadProjects() {
                         <div class="card-body">
                             <h5 class="card-title">${object.name}</h5>
                             <p class="card-text">${object.details}</p>
-                            <button type="button" class="btn btn-primary m-1 openbuttons">
-                                Open Project
-                            </button>
-                            <button type="button" class="btn btn-primary m-1 settingsbuttons">
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Open Project in </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                    <a class="dropdown-item">Code editor</a>
+                                    <a class="dropdown-item openbuttons">Graph editor</a>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary m-1 settingsbuttons">
                                 Settings
                             </button>
                             </div>
@@ -113,10 +118,8 @@ function loadProjects() {
                     loadPage("project/project.html");
                 });
 
-                
-
                 $(".openbuttons").click((value) => {
-                    let pdosi = $(value.target).siblings();
+                    let pdosi = $(value.target).parent().parent().siblings();
                     global.projectDetails.name = pdosi[0].innerText;
                     global.projectDetails.details = pdosi[1].innerText;
 
