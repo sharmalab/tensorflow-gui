@@ -59,6 +59,8 @@
     color: #425066;
     background: linear-gradient(#E6E6E6, #FFFFFF);
     height: 100%;
+    overflow-y: auto;
+    padding-bottom: 64px; 
 }
 
 #user-projects-card-list{
