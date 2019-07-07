@@ -66,6 +66,10 @@ $("#user-create-project-button").click(() => {
     });
 });
 
+$("#user-settings-button").click(() => { 
+    loadPage("settings/settings.html");
+});
+
 function getDirectories(path) {
     return fs.readdirSync(path).filter(function (file) {
         return fs.statSync(path + '/' + file).isDirectory();

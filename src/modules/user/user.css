@@ -19,13 +19,14 @@
 }
 
 #left-user-header {
-    height: 100%;
-    float: left;
+    position: fixed;
+    left: 10px;
+    z-index: 7;
+    margin-left: 10px;
 }
 
 
 #right-user-header {
-    display: inline;
     position: fixed;
     right: 10px;
     z-index: 7;
