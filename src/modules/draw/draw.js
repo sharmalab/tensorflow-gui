@@ -16,7 +16,7 @@ var fs = require('fs');
 const pythonFunction = require("../../lib/datafunctions");
 
 $("#draw-sidebar-right").hide();
-$("#startTraining").hide();
+$("#trainbutton").hide();
 
 $("#project-name").text(global.projectDetails.name);
 $("#project-details").text(global.projectDetails.details.substr(0, 30) + "...");
@@ -330,29 +330,33 @@ $(document).keyup(function (e) {
     }
 });
 
-try{
-    if(global.isLoaded.draw){
+try {
+    if (global.isLoaded.draw) {
         throw new Error("No need to load again");
     }
+
     let graphdata = fs.readFileSync(basepath + dir + "/graph.json");
+    let codedata = fs.readFileSync(basepath + dir + "/editor.py", "utf8");
     let savedGraph = JSON.parse(graphdata);
     let temphash = {};
-    print(graph);
 
     savedGraph.nodes.forEach(element => {
         let node = createLabel(element.x, element.y, element.text, layer, element.id);
         node.layerParameters = element.layerParameters;
         node.outputParameters = element.outputParameters;
         graph.addNode(node);
-        temphash[element.id] = graph.nodes[graph.nodes.length-1];
+        temphash[element.id] = graph.nodes[graph.nodes.length - 1];
     });
-
+    
+    
     savedGraph.edges.forEach(element => {
-        let edge = addArrow(temphash[element.from], temphash[element.to] , layer);
+        let edge = addArrow(temphash[element.from], temphash[element.to], layer);
         graph.addEdge(edge);
     });
-}catch(err){
-    print("skip loading graph.json");
+    global.editorText = codedata;
+    codemirror.setValue(global.editorText);
+} catch (err) {
+    print("skip loading graph.json", err);
 }
 
 layer.draw();
@@ -456,7 +460,7 @@ tensorboard = TensorBoard(log_dir="Projects/${global.projectDetails.name}/logs/{
     codemirror.setValue(global.extraText + global.functionsText + global.editorText + global.modelText)
 
     $("#code-editor").show();
-    $("#startTraining").show()
+    $("#trainbutton").show();
 });
 
 
@@ -486,7 +490,7 @@ function testPython() {
 }
 
 
-function saveProject(){
+function saveProject() {
     let data = {
         nodes: [],
         edges: []
@@ -514,27 +518,34 @@ function saveProject(){
             swal("Saving Project", "Failed to save project.", "error");
             print("Error writing file", err);
         } else {
+            global.editorText = codemirror.getValue();
             fs.writeFile(basepath + dir + "/editor.py", global.editorText, 'utf-8', err => {
                 if (err) {
                     swal("Saving Project", "Failed to save project.", "error");
                     print("Error writing file", err);
                 } else {
-                    
+
                     swal("Saving Project", "Project saved successfully.", "success");
                 }
-            })      
+            })
         }
     });
 }
 
-$("#startTraining").click(function () {
+$("#trainbutton").click(function () {
     testPython();
 });
-
-
 
 $("#saveProject").click(function () {
     saveProject();
 });
 
 global.isLoaded.draw = true;
+if (global.projectDetails.iseditor) {
+    $("#draw-canvas").hide();
+    $("#draw-sidebar-left").hide();
+    $("#draw-sidebar-right").hide();
+    $("#goNext").hide();
+    $("#code-editor").show();
+    $("#trainbutton").show();
+}

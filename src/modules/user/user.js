@@ -29,12 +29,6 @@ $("#user-create-project-button").click(() => {
             }
 
             if (!fs.existsSync(basepath + dir)) {
-                fs.mkdirSync(basepath + dir, err => {
-                    if (err) {
-                        print("Error creating folder", err);
-                    }
-                });
-                fs.mkdirSync(basepath + dir + "/logs");
                 swal({
                     text: "Project Details",
                     title: "Create New Project",
@@ -44,6 +38,12 @@ $("#user-create-project-button").click(() => {
                     if (value == "") {
                         swal("Error", "Project Details can't be empty.");
                     } else if (value) {
+                        fs.mkdirSync(basepath + dir, err => {
+                            if (err) {
+                                print("Error creating folder", err);
+                            }
+                        });
+                        fs.mkdirSync(basepath + dir + "/logs");
                         let data = {
                             name: dir,
                             details: value,
@@ -66,7 +66,7 @@ $("#user-create-project-button").click(() => {
     });
 });
 
-$("#user-settings-button").click(() => { 
+$("#user-settings-button").click(() => {
     loadPage("settings/settings.html");
 });
 
@@ -74,6 +74,25 @@ function getDirectories(path) {
     return fs.readdirSync(path).filter(function (file) {
         return fs.statSync(path + '/' + file).isDirectory();
     });
+}
+
+function openProject(value) {
+    let pdosi = $(value.target).parent().parent().siblings();
+    global.projectDetails.name = pdosi[0].innerText;
+    global.projectDetails.details = pdosi[1].innerText;
+
+    let killtensorboard = childprocess.spawn('killall', ["-9", "tensorboard"]);
+
+    var env = Object.create(process.env);
+    killtensorboard.on('close', (code) => {
+        let tensorbaord = childprocess.spawn('tensorboard', ["--logdir=testing/Projects/" + global.projectDetails.name + "/logs/", "--reload_interval", "4"], {
+            env: env
+        });
+
+        console.log(`child process exited with code ${code}`);
+    });
+
+    loadPage("draw/draw.html");
 }
 
 function loadProjects() {
@@ -102,7 +121,7 @@ function loadProjects() {
                                 <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Open Project in </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item">Code editor</a>
+                                    <a class="dropdown-item opencodeeditor">Code editor</a>
                                     <a class="dropdown-item openbuttons">Graph editor</a>
                                 </div>
                             </div>
@@ -122,23 +141,13 @@ function loadProjects() {
                     loadPage("project/project.html");
                 });
 
+                $(".opencodeeditor").click((value) => {
+                    global.projectDetails.iseditor = true;
+                    openProject(value);
+                });
+
                 $(".openbuttons").click((value) => {
-                    let pdosi = $(value.target).parent().parent().siblings();
-                    global.projectDetails.name = pdosi[0].innerText;
-                    global.projectDetails.details = pdosi[1].innerText;
-
-                    let killtensorboard = childprocess.spawn('killall', ["-9", "tensorboard"]);
-
-                    var env = Object.create(process.env);
-                    killtensorboard.on('close', (code) => {
-                        let tensorbaord = childprocess.spawn('tensorboard', ["--logdir=testing/Projects/" + global.projectDetails.name + "/logs/", "--reload_interval", "4"], {
-                            env: env
-                        });
-
-                        console.log(`child process exited with code ${code}`);
-                    });
-
-                    loadPage("draw/draw.html");
+                    openProject(value);
                 });
             } catch (err) {
                 return print("Error in reading all projects", err)
@@ -148,6 +157,7 @@ function loadProjects() {
 }
 
 $(document).ready(() => {
+    global.projectDetails.iseditor = false;
     global.isLoaded.draw = false;
     loadProjects();
 });

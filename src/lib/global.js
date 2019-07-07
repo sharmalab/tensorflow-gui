@@ -365,12 +365,10 @@ let functionsText = ""
 
 let projectDetails = {
     name: "",
-    isOpen: false,
+    iseditor: false,
     details: "",
     creation_time: "",
     last_edited: "",
-    code: "",
-    graph: ""
 };
 
 let isLoaded = {
