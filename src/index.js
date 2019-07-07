@@ -3,6 +3,7 @@ const {
     BrowserWindow,
     ipcMain
 } = require('electron')
+const childprocess = require('child_process');
 let print = console.log;
 
 let win;
@@ -22,8 +23,11 @@ function createWindow() {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
+    let killtensorboard = childprocess.spawn('killall', ["-9", "tensorboard"]);
     if (process.platform !== 'darwin') {
-        app.quit()
+        killtensorboard.on('close', (code) => {
+            app.quit()
+        });
     }
 });
 

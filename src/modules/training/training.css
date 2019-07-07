@@ -1,53 +1,21 @@
-#training-header {
-    padding: 15px;
-    background: linear-gradient(to right, #FF6F00,#FFA800);
-    /* background: rgba(40, 40, 40, 1.0); */
-    color: white;
-    height: 70px;
-    position: relative;
-}
-
-.training-title {
-    text-align: center;
-    position: absolute;
-    top: 20px;
-    font-size: 22px;
-    font-weight: bolder;
-    width: 100%;
-}
-
-#left-training-header {
-    height: 100%;
-    display: inline-block;
-    /* float: left; */
-}
-
-#training-details {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-}
-
-#right-training-header {
-    display: inline;
-    position: fixed;
-    right: 10px;
-    z-index: 1;
-}
-
-#training-main canvas{
-    /* border: 2px solid #888888; */
-    /* margin-bottom: 20px; */
-    display: block;
-}
-
 #training-main{
-    /* padding: 20px; */
-    /* height: calc(100% - 70px); */
     height: 100%;
-    /* overflow-y: auto; */
+    border: 0px;
+}
+
+.controls{
+    position: relative;
+    bottom: 10%;
+    background-color:rgba(238, 238, 238, 0.6);
+    margin-left: 50px;
+    margin-right: 50px;
+    padding: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #aaaaaa;
+}
+.controls button{
+    float: right;
 }
 
 
@@ -65,15 +33,8 @@
     -webkit-box-shadow: inset 0 0 6px #888888;
 }
 
-
-#training-error{
-    width: 100%;
-    margin: auto;
-    margin-top: 10%;
-    text-align: center;
-}
-
 #tensorboard{
     width: 100%;
     height: 100%;
+    border: 0px;
 }

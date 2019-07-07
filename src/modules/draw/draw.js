@@ -453,7 +453,7 @@ $("#goNext").click(function () {
 
     global.extraText += `
 
-tensorboard = TensorBoard(log_dir="Projects/${global.projectDetails.name}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+tensorboard = TensorBoard(log_dir="testing/Projects/${global.projectDetails.name}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
 
 `
 
@@ -482,8 +482,9 @@ function testPython() {
             swal("Oops!", "Error in code! Please correct the code and try again!", "error");
         } else {
             global.editorText = codemirror.getValue();
-            saveProject();
+            // saveProject();
             loadPage("training/training.html");
+            global.projectDetails.iseditor = false;
         }
         console.log(`child process exited with code ${code}`);
     });

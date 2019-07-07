@@ -5,15 +5,28 @@ const print = console.log;
 var fs = require('fs');
 const swal = require('sweetalert');
 
+let intervalid;
+let pythonprocess;
+let pythonclosed = false;
+
 function loadPage(page_path) {
     $("#main-content").html('');
     $("#main-content").load(page_path);
 }
 
 $("#backPage").click(function () {
-    // loadPage("draw/draw.html")
+    if (!pythonclosed) {
+        swal("Info", "Model training is in progress. Stop the training or let it finish to go back!", "info");
+    } else {
+        global.projectDetails.iseditor = true;
+        loadPage("draw/draw.html")
+    }
 });
 
+$("#stop-button").click(() => {
+    clearInterval(intervalid);
+    pythonprocess.kill('SIGINT');
+});
 
 function runPython() {
     let codepath = `./testing/Projects/${global.projectDetails.name}/editor.py`;
@@ -25,9 +38,12 @@ function runPython() {
     }
 
     var env = Object.create(process.env);
-    var pythonprocess = childprocess.spawn('python3', [codepath], {
+    pythonprocess = childprocess.spawn('python3', [codepath], {
         env: env
     });
+    setTimeout(()=>{
+        $("#training-status").text("Training...");
+    },3000);
 
     pythonprocess.stdout.on('data', function (data) {
         console.log(data);
@@ -39,15 +55,23 @@ function runPython() {
     });
 
     pythonprocess.on('close', (code) => {
+        pythonclosed = true;
         if (code == 1) {
+            $("#training-status").text("Training Failed.");
             swal("Error", `${processError}`, "error");
         } else {
+            $("#training-status").text("Training Completed.");
             swal("Completed!", "Model training has been completed!", "success");
         }
+        $("#stop-button").prop('disabled', true);
         console.log(`child process exited with code ${code}`);
     });
 }
 
 $(document).ready(function () {
+    $("#training-status").text("Starting Training...");
     runPython();
+    intervalid = setInterval(() => {
+        $('#tensorboard').contents().find('#reload-button').trigger("click");
+    }, 5000);
 });
