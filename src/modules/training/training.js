@@ -41,9 +41,9 @@ function runPython() {
     pythonprocess = childprocess.spawn('python3', [codepath], {
         env: env
     });
-    setTimeout(()=>{
+    setTimeout(() => {
         $("#training-status").text("Training...");
-    },3000);
+    }, 3000);
 
     pythonprocess.stdout.on('data', function (data) {
         console.log(data);
@@ -63,6 +63,7 @@ function runPython() {
             $("#training-status").text("Training Completed.");
             swal("Completed!", "Model training has been completed!", "success");
         }
+        clearInterval(intervalid);
         $("#stop-button").prop('disabled', true);
         console.log(`child process exited with code ${code}`);
     });
@@ -73,5 +74,5 @@ $(document).ready(function () {
     runPython();
     intervalid = setInterval(() => {
         $('#tensorboard').contents().find('#reload-button').trigger("click");
-    }, 5000);
+    }, 8000);
 });

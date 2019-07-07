@@ -49,6 +49,9 @@ $("#user-create-project-button").click(() => {
                             details: value,
                             creation_time: new Date(Date.now()).toString(),
                         };
+                        let initgraph = { "nodes": [{ "id": 0, "x": 450, "y": 139, "text": "InputLayer" }, { "id": 1, "x": 453, "y": 259, "text": "Dense" }, { "id": 2, "x": 458, "y": 380, "text": "Output" }], "edges": [{ "from": 0, "to": 1 }, { "from": 1, "to": 2 }] };
+                        fs.writeFileSync(basepath + dir + "/graph.json", JSON.stringify(initgraph));
+                        fs.writeFileSync(basepath + dir + "/editor.py", "");
                         fs.writeFile(basepath + dir + "/info.json", JSON.stringify(data), 'utf-8', err => {
                             if (err) {
                                 print("Error writing file", err);
@@ -85,7 +88,7 @@ function openProject(value) {
 
     var env = Object.create(process.env);
     killtensorboard.on('close', (code) => {
-        let tensorbaord = childprocess.spawn('tensorboard', ["--logdir=testing/Projects/" + global.projectDetails.name + "/logs/", "--reload_interval", "4"], {
+        let tensorbaord = childprocess.spawn('tensorboard', ["--logdir=testing/Projects/" + global.projectDetails.name + "/logs/"], {
             env: env
         });
 
