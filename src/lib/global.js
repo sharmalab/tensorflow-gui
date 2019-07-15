@@ -1,10 +1,7 @@
 
 let graph;
 
-let editorText =
-    `
-
-`
+let editorText =``
 
 let extraText =
     `
@@ -12,8 +9,7 @@ let extraText =
 import tensorflow as tf
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import Model, load_model
-from tensorflow.keras.callbacks import Callback, RemoteMonitor, TensorBoard
-import tensorflow as tf
+from tensorflow.keras.callbacks import TensorBoard
 from time import asctime
 `
 

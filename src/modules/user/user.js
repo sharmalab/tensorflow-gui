@@ -50,8 +50,52 @@ $("#user-create-project-button").click(() => {
                             creation_time: new Date(Date.now()).toString(),
                         };
                         let initgraph = { "nodes": [{ "id": 0, "x": 450, "y": 139, "text": "InputLayer" }, { "id": 1, "x": 453, "y": 259, "text": "Dense" }, { "id": 2, "x": 458, "y": 380, "text": "Output" }], "edges": [{ "from": 0, "to": 1 }, { "from": 1, "to": 2 }] };
+                        let initeditor = `
+
+# importing libraries
+from tensorflow.keras.callbacks import TensorBoard
+import tensorflow as tf
+from time import asctime
+from tensorflow.keras.layers import *
+from tensorflow.keras.models import Model, load_model
+import numpy as np
+
+'''
+Do not remove tensorboard initialization.
+Also, don't forget to add tensorboard as callback in your model.
+'''
+tensorboard = TensorBoard(log_dir="testing/Projects/${dir}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+
+
+def getTrainingData():
+    fashion_mnist = tf.keras.datasets.fashion_mnist
+    (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
+    train_images = train_images / 255.0
+    test_images = test_images / 255.0
+    return train_images, train_labels
+
+
+def Network():
+    input = Input(shape=(28, 28))
+    flatten = Flatten()(input)
+    dense = Dense(128, activation=tf.nn.relu)(flatten)
+    output = Dense(10, activation=tf.nn.softmax)(dense)
+    model = Model(inputs=input, outputs=output)
+    model.compile(metrics=['mae','accuracy', 'mse', 'mape', 'cosine', 'categorical_crossentropy'], optimizer='adam' , loss = 'sparse_categorical_crossentropy')
+    return model
+
+
+# function for training model
+def train():
+    model = Network()
+    X, Y = getTrainingData()
+    model.fit(x = X,y = Y,batch_size = None,epochs = 10,verbose = 0,callbacks = [tensorboard],validation_split = 0,validation_data = None,shuffle = True)
+
+train()
+
+`
                         fs.writeFileSync(basepath + dir + "/graph.json", JSON.stringify(initgraph));
-                        fs.writeFileSync(basepath + dir + "/editor.py", "");
+                        fs.writeFileSync(basepath + dir + "/editor.py", initeditor);
                         fs.writeFile(basepath + dir + "/info.json", JSON.stringify(data), 'utf-8', err => {
                             if (err) {
                                 print("Error writing file", err);

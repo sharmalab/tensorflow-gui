@@ -135,8 +135,7 @@ class tfGraph {
                 layerName = temp.name;
                 let tempparameters = "";
 
-                if( layerName == "fit" || layerName == "fit_generator" || layerName == "evaluate" || layerName == "evaluate_generator" ){
-
+                if( layerName == "fit" || layerName == "fit_generator"){
                     for (const [key, value] of Object.entries(temp.parameters)) {
                         tempparameters += `${key} = ${value},`
                     }

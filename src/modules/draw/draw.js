@@ -331,30 +331,29 @@ $(document).keyup(function (e) {
 });
 
 try {
-    if (global.isLoaded.draw) {
-        throw new Error("No need to load again");
+    if (!global.isLoaded.draw) {
+        let graphdata = fs.readFileSync(basepath + dir + "/graph.json");
+        let codedata = fs.readFileSync(basepath + dir + "/editor.py", "utf8");
+        let savedGraph = JSON.parse(graphdata);
+        let temphash = {};
+
+        savedGraph.nodes.forEach(element => {
+            let node = createLabel(element.x, element.y, element.text, layer, element.id);
+            node.layerParameters = element.layerParameters;
+            node.outputParameters = element.outputParameters;
+            graph.addNode(node);
+            temphash[element.id] = graph.nodes[graph.nodes.length - 1];
+        });
+
+
+        savedGraph.edges.forEach(element => {
+            let edge = addArrow(temphash[element.from], temphash[element.to], layer);
+            graph.addEdge(edge);
+        });
+        global.editorText = codedata;
+        codemirror.setValue(global.editorText);
     }
 
-    let graphdata = fs.readFileSync(basepath + dir + "/graph.json");
-    let codedata = fs.readFileSync(basepath + dir + "/editor.py", "utf8");
-    let savedGraph = JSON.parse(graphdata);
-    let temphash = {};
-
-    savedGraph.nodes.forEach(element => {
-        let node = createLabel(element.x, element.y, element.text, layer, element.id);
-        node.layerParameters = element.layerParameters;
-        node.outputParameters = element.outputParameters;
-        graph.addNode(node);
-        temphash[element.id] = graph.nodes[graph.nodes.length - 1];
-    });
-    
-    
-    savedGraph.edges.forEach(element => {
-        let edge = addArrow(temphash[element.from], temphash[element.to], layer);
-        graph.addEdge(edge);
-    });
-    global.editorText = codedata;
-    codemirror.setValue(global.editorText);
 } catch (err) {
     print("skip loading graph.json", err);
 }
@@ -363,30 +362,30 @@ layer.draw();
 
 
 // add scaling
-var scaleBy = 1.01;
-stage.on('wheel', e => {
-    e.evt.preventDefault();
-    var oldScale = stage.scaleX();
+// var scaleBy = 1.01;
+// stage.on('wheel', e => {
+//     e.evt.preventDefault();
+//     var oldScale = stage.scaleX();
 
-    var mousePointTo = {
-        x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
-        y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale
-    };
+//     var mousePointTo = {
+//         x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
+//         y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale
+//     };
 
-    var newScale =
-        e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-    stage.scale({
-        x: newScale,
-        y: newScale
-    });
+//     var newScale =
+//         e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+//     stage.scale({
+//         x: newScale,
+//         y: newScale
+//     });
 
-    var newPos = {
-        x: -(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale,
-        y: -(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale
-    };
-    stage.position(newPos);
-    stage.batchDraw();
-});
+//     var newPos = {
+//         x: -(mousePointTo.x - stage.getPointerPosition().x / newScale) * newScale,
+//         y: -(mousePointTo.y - stage.getPointerPosition().y / newScale) * newScale
+//     };
+//     stage.position(newPos);
+//     stage.batchDraw();
+// });
 
 $('#right-sidebar-form').on('keyup change paste', 'input, select, textarea', function () {
     if (isSelected && firstblock) {
@@ -452,12 +451,11 @@ $("#goNext").click(function () {
     }
 
     global.extraText += `
-
 tensorboard = TensorBoard(log_dir="testing/Projects/${global.projectDetails.name}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
 
 `
 
-    codemirror.setValue(global.extraText + global.functionsText + global.editorText + global.modelText)
+    codemirror.setValue(global.extraText + global.functionsText + global.modelText);
 
     $("#code-editor").show();
     $("#trainbutton").show();

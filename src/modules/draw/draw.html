@@ -31,7 +31,7 @@
     <div id="draw-sidebar-left">
 
         <div id="draw-functions">
-            <p class="h5 text-success">Data Functions</p>
+            <p class="h5 text-success">Custom Functions</p>
             <nav class="navbar navbar-inverse">
                 <ul class="navbar-nav">
                     <li class="accordion">
@@ -39,9 +39,9 @@
                             style="color:#555555; text-decoration: none;"></p>
                             tfRecords</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu1-5">
-                            <li>LoadCustomRecord</li>
+                            <li>LoadCustomRecord <span style="color:red">*</span></li>
                             <li>LoadImageRecord</li>
-                            <li>CreateCustomRecord</li>
+                            <li>CreateCustomRecord <span style="color:red">*</span></li>
                             <li>CreateImageRecord</li>
                         </ul>
                     </li>
@@ -50,10 +50,10 @@
                             style="color:#555555; text-decoration: none;"></p>
                             Image</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu1-1">
-                            <li>LoadImage</li>
+                            <!-- <li>LoadImage</li> -->
                             <li>LoadImageFolder</li>
-                            <li>RotateImage</li>
-                            <li>ScaleImage</li>
+                            <li>RotateImages <span style="color:red">*</span></li>
+                            <li>ScaleImages <span style="color:red">*</span></li>
                         </ul>
                     </li>
                     <li class="accordion">
@@ -69,8 +69,8 @@
                             style="color:#555555; text-decoration: none;"></p>
                             Video</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu1-3">
-                            <li>LoadVideo</li>
-                            <li>LoadVideoFolder</li>
+                            <!-- <li>LoadVideo</li> -->
+                            <li>LoadVideoFolder <span style="color:red">*</span></li>
                         </ul>
                     </li>
                     <li class="accordion">
@@ -78,8 +78,8 @@
                             style="color:#555555; text-decoration: none;"></p>
                             Audio</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu1-4">
-                            <li>LoadAudio</li>
-                            <li>LoadAudioFolder</li>
+                            <!-- <li>LoadAudio</li> -->
+                            <li>LoadAudioFolder <span style="color:red">*</span></li>
                         </ul>
                     </li>
                 </ul>
@@ -111,8 +111,8 @@
                             <li>ConvLSTM2D</li>
                             <li>CuDNNLSTM</li>
                             <li>CuDNNGRU</li>
-                            <li>TimeDistributed</li>
-                            <li>Bidirectional</li>
+                            <li>TimeDistributed <span style="color:red">*</span></li>
+                            <li>Bidirectional <span style="color:red">*</span></li>
                         </ul>
                     </li>
 
@@ -144,7 +144,7 @@
                     </li>
 
 
-                    <li class="accordion">
+                    <!-- <li class="accordion">
                         <a href="#pageSubmenu5" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
                             style="color:#555555; text-decoration: none;"></p>
                             Algebric</a>
@@ -153,7 +153,7 @@
                             <li>Substract</li>
                             <li>Concatenation</li>
                         </ul>
-                    </li>
+                    </li> -->
 
                     <li class="accordion">
                         <a href="#pageSubmenu6" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
@@ -169,51 +169,37 @@
                             <li>Embedding</li>
                         </ul>
                     </li>
-
                 </ul>
             </nav>
         </div>
 
         <div id="draw-outputs">
-            <p class="h5 text-success">Output Functions</p>
+            <p class="h5 text-success">Train & Test</p>
             <nav class="navbar navbar-inverse">
                 <ul class="navbar-nav">
                     <li class="accordion">
-                        <a href="#pageSubmenu3-1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
-                            style="color:#555555; text-decoration: none;"></p>
-                            Charts</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu3-1">
-                            <li>Loss</li>
-                            <li>Accuracy</li>
-                            <li>MAE</li>
-                            <li>Precision</li>
-                        </ul>
-                    </li>
-                    <li class="accordion">
-                        <a href="#pageSubmenu3-2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
-                            style="color:#555555; text-decoration: none;"></p>
-                            Saver</a>
-                        <ul class="collapse list-unstyled" id="pageSubmenu3-2">
-                            <li>onBatchEnd</li>
-                            <li>onEpochEnd</li>
-                        </ul>
-                    </li>
-
-                    <li class="accordion">
                         <a href="#pageSubmenu3-3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
                             style="color:#555555; text-decoration: none;"></p>
-                            Train & Test</a>
+                            Train</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu3-3">
                             <li>fit</li>
                             <li>fit_generator</li>
-                            <li>evaluate</li>
-                            <li>evaluate_generator</li>
                         </ul>
                     </li>
 
+                    <li class="accordion">
+                        <a href="#pageSubmenu3-4" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                            style="color:#555555; text-decoration: none;"></p>
+                            Test</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu3-4">
+                            <li>evaluate <span style="color:red">*</span></li>
+                            <li>evaluate_generator <span style="color:red">*</span></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>
+
     </div>
 
     <div id="draw-sidebar-right">

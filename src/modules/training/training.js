@@ -28,6 +28,10 @@ $("#stop-button").click(() => {
     pythonprocess.kill('SIGINT');
 });
 
+$("#control-bar").draggable({
+    axis: "y"
+});
+
 function runPython() {
     let codepath = `./testing/Projects/${global.projectDetails.name}/editor.py`;
     let processError = "";
