@@ -368,9 +368,8 @@ let projectDetails = {
 };
 
 let isLoaded = {
-    draw: false
+    nodeeditor: false
 }
-
 
 module.exports = {
     editorText: editorText,

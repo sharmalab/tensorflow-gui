@@ -1,0 +1,29 @@
+<header id="draw-header">
+    <div id="left-draw-header">
+        <div id="draw-details">
+            <p class="h6 p-0 m-0" id="project-name">First Project</p>
+            <p class="p-0 m-0" id="project-details">project details</p>
+        </div>
+    </div>
+
+    <p class="draw-title">Tensorflow GUI</p>
+
+    <div id="right-draw-header">
+        <div>
+            <button id="saveProject" class="btn btn-light p-2 btn-responsive">Save</button>
+            <button id="trainbutton" class="btn btn-light p-2 btn-responsive">Train</button>
+        </div>
+    </div>
+</header>
+
+<div class="draw-content">
+    <div id="draw-main">
+        <div id="code-editor"></div>
+    </div>
+
+</div>
+
+<script>
+    delete require.cache[require.resolve('./codeeditor/codeeditor.js')]
+    require("./codeeditor/codeeditor.js");
+</script>

@@ -4,46 +4,15 @@ const {
     tfNode,
     tfEdge
 } = require('../../lib/graph');
-const CodeMirror = require("../../lib/codemirror.js");
-require("../../lib/matchbrackets.js");
-require("../../lib/python.js");
-require("../../lib/show-hint.js");
-require("../../lib/python-hint.js");
 const swal = require('sweetalert');
 const global = require("../../lib/global.js")
-const childprocess = require('child_process');
 var fs = require('fs');
 const pythonFunction = require("../../lib/datafunctions");
 
+
 $("#draw-sidebar-right").hide();
-$("#trainbutton").hide();
-
 $("#project-name").text(global.projectDetails.name);
-$("#project-details").text(global.projectDetails.details.substr(0, 30) + "...");
-
-var codemirror = CodeMirror(document.getElementById("code-editor"), {
-    mode: {
-        name: "python",
-        version: 3,
-        singleLineStringErrors: false
-    },
-    lineNumbers: true,
-    indentUnit: 4,
-    smartIndent: true,
-    styleActiveLine: true,
-    matchBrackets: true,
-    value: global.editorText
-});
-
-codemirror.on('inputRead', function onChange(editor, input) {
-    if (input.text[0] === ';' || input.text[0] === ' ' || input.text[0] === ":") {
-        return;
-    }
-    editor.showHint({
-        hint: CodeMirror.pythonHint
-    });
-});
-
+$("#project-details").text(global.projectDetails.details.substr(0, 20) + "...");
 
 let isSelected = false;
 let temparrow;
@@ -57,11 +26,33 @@ graph.modelStage = new Konva.Stage({
     width: 2 * window.innerWidth,
     height: 2 * window.innerHeight,
 });
-
-
 let stage = graph.modelStage;
-let layer = graph.modelLayers[0];
+let layer = graph.modelLayer;
 stage.add(layer);
+
+
+if (!global.isLoaded.nodeeditor) {
+    let graphdata = fs.readFileSync(basepath + dir + "/graph.json");
+    let savedGraph = JSON.parse(graphdata);
+    let temphash = {};
+
+    savedGraph.nodes.forEach(element => {
+        let node = createLabel(element.x, element.y, element.text, layer, element.id);
+        node.parameters = element.parameters;
+        node.outputParameters = element.outputParameters;
+        global.graph.addNode(node);
+        temphash[element.id] = graph.nodes[graph.nodes.length - 1];
+    });
+
+    savedGraph.edges.forEach(element => {
+        let edge = addArrow(temphash[element.from], temphash[element.to], layer);
+        global.graph.addEdge(edge);
+    });
+    layer.draw();
+}
+global.isLoaded.nodeeditor = true;
+layer.draw();
+
 
 
 $('#draw-sidebar-left div .accordion ul li').draggable({
@@ -277,9 +268,6 @@ function addArrow(node1, node2, layertoadd) {
     return edge;
 }
 
-
-
-
 $("#draw-canvas").droppable({
     drop: function (event, ui) {
         var relativeXPosition = (event.pageX - this.offsetLeft);
@@ -330,36 +318,6 @@ $(document).keyup(function (e) {
     }
 });
 
-try {
-    if (!global.isLoaded.draw) {
-        let graphdata = fs.readFileSync(basepath + dir + "/graph.json");
-        let codedata = fs.readFileSync(basepath + dir + "/editor.py", "utf8");
-        let savedGraph = JSON.parse(graphdata);
-        let temphash = {};
-
-        savedGraph.nodes.forEach(element => {
-            let node = createLabel(element.x, element.y, element.text, layer, element.id);
-            node.layerParameters = element.layerParameters;
-            node.outputParameters = element.outputParameters;
-            graph.addNode(node);
-            temphash[element.id] = graph.nodes[graph.nodes.length - 1];
-        });
-
-
-        savedGraph.edges.forEach(element => {
-            let edge = addArrow(temphash[element.from], temphash[element.to], layer);
-            graph.addEdge(edge);
-        });
-        global.editorText = codedata;
-        codemirror.setValue(global.editorText);
-    }
-
-} catch (err) {
-    print("skip loading graph.json", err);
-}
-
-layer.draw();
-
 
 // add scaling
 // var scaleBy = 1.01;
@@ -407,11 +365,10 @@ $('#right-sidebar-form2').on('keyup change paste', 'input, select, textarea', fu
     }
 });
 
-// menu handling button click
 function loadPage(page_path) {
+    global.isLoaded.nodeeditor = false;
     $("#main-content").html('');
     $("#main-content").load(page_path);
-    global.isLoaded.draw = false;
 }
 
 $("#goNext").click(function () {
@@ -425,11 +382,6 @@ $("#goNext").click(function () {
     let modelgencode = tuple[0];
     let calledList = tuple[1];
     let usedFunctions = tuple[2];
-
-    $("#draw-canvas").hide();
-    $("#draw-sidebar-left").hide();
-    $("#draw-sidebar-right").hide();
-    $(this).hide();
 
     global.modelText = "\n# Called Functions\n"
     global.modelText += calledList + "\n"
@@ -455,39 +407,15 @@ tensorboard = TensorBoard(log_dir="testing/Projects/${global.projectDetails.name
 
 `
 
-    codemirror.setValue(global.extraText + global.functionsText + global.modelText);
-
-    $("#code-editor").show();
-    $("#trainbutton").show();
-});
-
-
-function testPython() {
-    let codepath = `./testing/Projects/${global.projectDetails.name}/editor.py`;
-    try {
-        fs.writeFileSync(codepath, codemirror.getValue(), 'utf-8');
-    } catch (e) {
-        console.log('Failed to save the file !');
-    }
-
-    var env = Object.create(process.env);
-    var pythonprocess = childprocess.spawn('python3', ['-m', 'py_compile', codepath], {
-        env: env
-    });
-
-    pythonprocess.on('close', (code) => {
-        if (code == 1) {
-            swal("Oops!", "Error in code! Please correct the code and try again!", "error");
+    fs.writeFile(basepath + dir + "/editor.py", global.extraText + global.functionsText + global.modelText, 'utf-8', err => {
+        if (err) {
+            swal("Saving Project", "Failed to save project.", "error");
+            print("Error writing file", err);
         } else {
-            global.editorText = codemirror.getValue();
-            // saveProject();
-            loadPage("training/training.html");
-            global.projectDetails.iseditor = false;
+            loadPage("codeeditor/codeeditor.html");
         }
-        console.log(`child process exited with code ${code}`);
     });
-}
-
+});
 
 function saveProject() {
     let data = {
@@ -501,7 +429,7 @@ function saveProject() {
             x: element.label.attrs.x,
             y: element.label.attrs.y,
             text: element.label.children[1].attrs.text,
-            layerParameters: element.layerParameters,
+            parameters: element.parameters,
             outputParameters: element.outputParameters
         });
     });
@@ -517,34 +445,12 @@ function saveProject() {
             swal("Saving Project", "Failed to save project.", "error");
             print("Error writing file", err);
         } else {
-            global.editorText = codemirror.getValue();
-            fs.writeFile(basepath + dir + "/editor.py", global.editorText, 'utf-8', err => {
-                if (err) {
-                    swal("Saving Project", "Failed to save project.", "error");
-                    print("Error writing file", err);
-                } else {
-
-                    swal("Saving Project", "Project saved successfully.", "success");
-                }
-            })
+            swal("Saving Project", "Project saved successfully.", "success");
         }
     });
 }
 
-$("#trainbutton").click(function () {
-    testPython();
-});
 
 $("#saveProject").click(function () {
     saveProject();
 });
-
-global.isLoaded.draw = true;
-if (global.projectDetails.iseditor) {
-    $("#draw-canvas").hide();
-    $("#draw-sidebar-left").hide();
-    $("#draw-sidebar-right").hide();
-    $("#goNext").hide();
-    $("#code-editor").show();
-    $("#trainbutton").show();
-}

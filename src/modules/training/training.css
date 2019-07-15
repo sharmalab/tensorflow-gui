@@ -5,19 +5,18 @@
 
 .controls{
     position: relative;
-    bottom: 10%;
+    bottom: 12%;
     background-color:rgba(189, 186, 186, 0.6);
     margin-left: 50px;
     margin-right: 50px;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 6px;
+    border-radius: 6px;
     overflow: hidden;
     border: 1px solid #aaaaaa;
 }
 .controls button{
     float: right;
 }
-
 
 ::-webkit-scrollbar {
     width: 12px;

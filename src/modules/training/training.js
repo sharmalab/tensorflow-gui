@@ -18,8 +18,7 @@ $("#backPage").click(function () {
     if (!pythonclosed) {
         swal("Info", "Model training is in progress. Stop the training or let it finish to go back!", "info");
     } else {
-        global.projectDetails.iseditor = true;
-        loadPage("draw/draw.html")
+        loadPage("codeeditor/codeeditor.html")
     }
 });
 
@@ -68,6 +67,7 @@ function runPython() {
             swal("Completed!", "Model training has been completed!", "success");
         }
         clearInterval(intervalid);
+        $('#tensorboard').contents().find('#reload-button').trigger("click");
         $("#stop-button").prop('disabled', true);
         console.log(`child process exited with code ${code}`);
     });

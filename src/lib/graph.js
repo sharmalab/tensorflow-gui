@@ -42,7 +42,7 @@ class tfGraph {
         this.inputs = [];
         this.outputs = [];
         this.modelStage;
-        this.modelLayers = [];
+        this.modelLayer;
         this.nodes = [];
         this.edges = [];
     }
@@ -227,10 +227,8 @@ train()
 }
 
 
-global.graph = new tfGraph()
-let layer = new Konva.Layer();
-global.graph.modelLayers.push(layer)
-
+global.graph = new tfGraph();
+global.graph.modelLayer = new Konva.Layer();
 
 module.exports = {
     tfGraph,

@@ -24,6 +24,7 @@ app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
     let killtensorboard = childprocess.spawn('killall', ["-9", "tensorboard"]);
+    // let killpython = childprocess.spawn('killall', ["-9", "python3"]);
     if (process.platform !== 'darwin') {
         killtensorboard.on('close', (code) => {
             app.quit()

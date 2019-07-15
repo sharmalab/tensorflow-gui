@@ -1,6 +1,3 @@
-const {
-    ipcRenderer
-} = require('electron')
 const swal = require('sweetalert');
 const fs = require('fs');
 const global = require('../../lib/global');
@@ -49,7 +46,7 @@ $("#user-create-project-button").click(() => {
                             details: value,
                             creation_time: new Date(Date.now()).toString(),
                         };
-                        let initgraph = { "nodes": [{ "id": 0, "x": 450, "y": 139, "text": "InputLayer" }, { "id": 1, "x": 453, "y": 259, "text": "Dense" }, { "id": 2, "x": 458, "y": 380, "text": "Output" }], "edges": [{ "from": 0, "to": 1 }, { "from": 1, "to": 2 }] };
+                        let initgraph = {"nodes":[{"id":0,"x":418,"y":122,"text":"InputLayer","parameters":{"shape":"None","batch_size":"None","name":"None","dtype":"None","sparse":"False","tensor":"None"}},{"id":1,"x":387,"y":255,"text":"Dense","parameters":{"units":1,"activation":"None","use_bias":"True","kernel_initializer":"'glorot_uniform'","bias_initializer":"'zeros'","kernel_regularizer":"None","bias_regularizer":"None","activity_regularizer":"None","kernel_constraint":"None","bias_constraint":"None"}},{"id":2,"x":352,"y":363,"text":"Output","parameters":{"optimizer":"sgd","learning_rate":0.001,"loss":"'mean_squared_error'","loss_weights":"None","sample_weight_mode":"None","weighted_metrics":"None","target_tensors":"None"}},{"id":3,"x":333,"y":462,"text":"fit","parameters":{"x":"None","y":"None","batch_size":"None","epochs":1,"verbose":0,"callbacks":"[tensorboard]","validation_split":0,"validation_data":"None","shuffle":"True","class_weight":"None","sample_weight":"None","initial_epoch":0,"steps_per_epoch":"None","validation_steps":"None"}}],"edges":[{"from":0,"to":1},{"from":1,"to":2},{"from":2,"to":3}]};
                         let initeditor = `
 
 # importing libraries
@@ -123,7 +120,7 @@ function getDirectories(path) {
     });
 }
 
-function openProject(value) {
+function openProject(value, page) {
     let pdosi = $(value.target).parent().parent().siblings();
     global.projectDetails.name = pdosi[0].innerText;
     global.projectDetails.details = pdosi[1].innerText;
@@ -139,7 +136,7 @@ function openProject(value) {
         console.log(`child process exited with code ${code}`);
     });
 
-    loadPage("draw/draw.html");
+    loadPage(page);
 }
 
 function loadProjects() {
@@ -169,7 +166,7 @@ function loadProjects() {
                                 Open Project in </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                     <a class="dropdown-item opencodeeditor">Code editor</a>
-                                    <a class="dropdown-item openbuttons">Graph editor</a>
+                                    <a class="dropdown-item openbuttons">Node editor</a>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary m-1 settingsbuttons">
@@ -189,12 +186,11 @@ function loadProjects() {
                 });
 
                 $(".opencodeeditor").click((value) => {
-                    global.projectDetails.iseditor = true;
-                    openProject(value);
+                    openProject(value, "codeeditor/codeeditor.html");
                 });
 
                 $(".openbuttons").click((value) => {
-                    openProject(value);
+                    openProject(value, "nodeeditor/nodeeditor.html");
                 });
             } catch (err) {
                 return print("Error in reading all projects", err)
@@ -204,7 +200,6 @@ function loadProjects() {
 }
 
 $(document).ready(() => {
-    global.projectDetails.iseditor = false;
-    global.isLoaded.draw = false;
+    global.isLoaded.nodeeditor = false;
     loadProjects();
 });
