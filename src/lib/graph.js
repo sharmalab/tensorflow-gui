@@ -141,11 +141,8 @@ class tfGraph {
                     }
 
                     modelCode += `\n# function for training model
-def train():
-    model = Network()
-    model.${layerName}(${tempparameters})\n
-
-train()
+model = Network()
+model.${layerName}(${tempparameters})\n
 `;
 
                 }else if (layerName == "Output") {

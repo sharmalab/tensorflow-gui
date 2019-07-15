@@ -39,7 +39,7 @@ codemirror.on('inputRead', function onChange(editor, input) {
 
 let dir = global.projectDetails.name;
 let basepath = process.cwd() + "/testing/Projects/";
-global.editorText = fs.readFileSync(basepath + dir + "/editor.py", "utf8");;
+global.editorText = fs.readFileSync(basepath + dir + "/editor.py", "utf8");
 codemirror.setValue(global.editorText);
 
 
@@ -49,7 +49,7 @@ function loadPage(page_path) {
 }
 
 function testPython() {
-    let codepath = `./testing/Projects/${global.projectDetails.name}/editor.py`;
+    let codepath = basepath+dir+'/editor.py';
     try {
         fs.writeFileSync(codepath, codemirror.getValue(), 'utf-8');
     } catch (e) {
@@ -62,11 +62,10 @@ function testPython() {
     });
 
     pythonprocess.on('close', (code) => {
-        if (code == 1) {
+        if (code != 0) {
             swal("Oops!", "Error in code! Please correct the code and try again!", "error");
         } else {
             global.editorText = codemirror.getValue();
-            saveProject(false);
             loadPage("training/training.html");
         }
         console.log(`child process exited with code ${code}`);

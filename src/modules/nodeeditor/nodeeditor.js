@@ -11,6 +11,7 @@ const pythonFunction = require("../../lib/datafunctions");
 
 
 $("#draw-sidebar-right").hide();
+$("#codenode-desc").hide();
 $("#project-name").text(global.projectDetails.name);
 $("#project-details").text(global.projectDetails.details.substr(0, 20) + "...");
 
@@ -288,6 +289,7 @@ $(document).keyup(function (e) {
             firstblock = undefined;
             isSelected = false;
             layer.draw();
+            $("#draw-sidebar-right").hide();
         }
     } else if (e.key === "Delete") {
         if (isSelected && !temparrow) {
@@ -311,6 +313,7 @@ $(document).keyup(function (e) {
                     firstblock.inEdges[i].arrow.remove()
                 }
                 firstblock = undefined;
+                $("#draw-sidebar-right").hide();
             }
             isSelected = false;
             layer.draw();
@@ -453,4 +456,53 @@ function saveProject() {
 
 $("#saveProject").click(function () {
     saveProject();
+});
+
+$("#new-codenode-btn").click(function () {
+    $("#codenode-desc").show();
+    $("#new-codenode-btn").hide();
+});
+
+$("#codenode-cancel-btn").click(function () {
+    $("#codenode-desc").hide();
+    $("#new-codenode-btn").show();
+
+    $("#codenode-name").val('');
+    $("#codenode-code").val('');
+    $("#codenode-parameters").val('');
+    $("#codenode-returns").val('');
+});
+
+$("#codenode-create-btn").click(function () {
+    let name = $("#codenode-name").val();
+    let code = $("#codenode-code").val();
+    let parameters = $("#codenode-parameters").val();
+    let returns = $("#codenode-returns").val();
+
+    let temp = code.split(/\n/);
+    for (var i = 0; i < temp.length; i++) {
+        temp[i] = "    " + temp[i];
+    }
+    temp = temp.join("\n");
+
+    pythonFunction[name] = `
+def ${name}(${parameters}):
+${temp}
+    return ${returns}
+`
+
+    temp = {};
+    parameters.split(",").forEach((par) => {
+        temp[par] = "";
+    });
+    global.layerParameters[name] = temp;
+
+    temp = {};
+    returns.split(",").forEach((par) => {
+        temp[par] = "";
+    });
+    global.outputParameters[name] = temp;
+
+    temp = createLabel(400, 400, name, layer);
+    graph.addNode(temp);
 });

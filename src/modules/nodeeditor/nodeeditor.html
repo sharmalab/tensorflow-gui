@@ -212,7 +212,26 @@
 
     <div id="draw-main">
         <div id="draw-canvas"></div>
+
+        <div class="fixed-action-btn">
+            <button id="new-codenode-btn" class="btn btn-primary btn-circle">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+            <div id="codenode-desc">
+                <label>Name: </label><input id="codenode-name" class="form-control">
+                <label>Parameters: </label><input id="codenode-parameters" class="form-control">
+                <label>Code:</label>
+                <textarea class="d-block" id="codenode-code" style="height:49%; width: 100%"></textarea>
+                <label>Returns: </label><input id="codenode-returns" class="form-control">
+
+                <div class="text-center center p-2">
+                    <button class="btn btn-success" id="codenode-create-btn">Create</button>
+                    <button class="btn btn-danger" id="codenode-cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
 
 <script>

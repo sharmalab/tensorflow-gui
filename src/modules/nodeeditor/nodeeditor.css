@@ -176,3 +176,19 @@
     padding: 0;
     /* padding-left: 8px; */
 }
+
+.fixed-action-btn{
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+}
+
+#codenode-desc{
+    width: 100%;
+    height: calc(100vh - 100px);
+    overflow: auto;
+    background-color: #e9ebdd;
+    z-index: 7;
+    border-radius: 10px;
+    padding: 8px;
+}
