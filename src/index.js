@@ -1,7 +1,8 @@
 const {
     app,
     BrowserWindow,
-    ipcMain
+    ipcMain,
+    Menu
 } = require('electron')
 const childprocess = require('child_process');
 let print = console.log;
@@ -17,6 +18,21 @@ function createWindow() {
     win.on('closed', () => {
         win = null
     });
+
+    var menu = Menu.buildFromTemplate([{
+        label: 'File',
+        submenu: [
+            {
+                label: 'Home',
+                click() {
+                    win.reload();
+                }
+            },
+            { label: 'Exit' }
+        ]
+    }]);
+    Menu.setApplicationMenu(menu);
+
 }
 
 // on ready, create the new browser window
