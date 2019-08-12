@@ -2,7 +2,7 @@
 
 echo "Setting up enviroment for TensorFlow-GUI"
 
-conda --version 2 > /dev/null
+conda --version 2> /dev/null
 if [ $? == 0 ]
 then
     conda create -n tfgui python=3.5
