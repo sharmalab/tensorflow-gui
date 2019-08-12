@@ -16,7 +16,8 @@ else
     pip3 install opencv-python
 fi
 
-sudo apt install nodejs npm nodejs-legacy -y
+sudo apt install nodejs npm -y
+sudo apt install nodejs-legacy -y
 npm install --prefix=../src/
 
 echo "Completed!"
