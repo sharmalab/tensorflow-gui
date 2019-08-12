@@ -28,6 +28,13 @@ function createWindow() {
                     win.reload();
                 }
             },
+            {
+                label: 'Debug Mode',
+                accelerator: process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Ctrl+Shift+I',
+                click(){
+                    win.webContents.openDevTools();
+                }
+            },
             { label: 'Exit' }
         ]
     }]);
