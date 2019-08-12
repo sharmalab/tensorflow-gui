@@ -21,6 +21,9 @@ $("#user-create-project-button").click(() => {
         } else if (value) {
             let dir = value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             let basepath = process.cwd() + "/testing/Projects/";
+            if (!fs.existsSync(process.cwd() + "/testing")) {
+                fs.mkdirSync(process.cwd() + "/testing");
+            }
             if (!fs.existsSync(basepath)) {
                 fs.mkdirSync(basepath);
             }
