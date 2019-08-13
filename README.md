@@ -15,7 +15,7 @@ Mentors: **Monjoy Saha** (monjoy.saha -at- emory.edu) and **Pooya Mobadersany** 
 3. Training and testing pipeline along with result visualization and analysis part is in progress. 
 
 ## Installation & Setup
-- `git clone https://github.com/vikasgola/tensorflow-gui`
+- `git clone https://github.com/sharmalab/tensorflow-gui`
 - `cd tensorflow-gui/scripts/`
 - `chmod +x setup.sh run.sh`
 - `./setup.sh`
