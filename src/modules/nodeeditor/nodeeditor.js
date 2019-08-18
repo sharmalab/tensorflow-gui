@@ -501,7 +501,9 @@ ${temp}
     returns.split(",").forEach((par) => {
         temp[par] = "";
     });
-    global.outputParameters[name] = temp;
+    if(temp != {}){
+        global.outputParameters[name] = temp;
+    }
 
     temp = createLabel(400, 400, name, layer);
     graph.addNode(temp);
