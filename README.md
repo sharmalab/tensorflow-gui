@@ -15,11 +15,22 @@ Mentors: **Monjoy Saha** (monjoy.saha -at- emory.edu) and **Pooya Mobadersany** 
 3. Training and testing pipeline along with result visualization and analysis part is in progress. 
 
 ## Installation & Setup
-- `git clone https://github.com/sharmalab/tensorflow-gui`
-- `cd tensorflow-gui/scripts/`
-- `chmod +x setup.sh run.sh`
-- `./setup.sh`
+- Clone the repo from GitHub
+
+    `git clone https://github.com/sharmalab/tensorflow-gui`
+- Give permission to scripts to install the required libraries
+  
+    `cd tensorflow-gui/scripts/`
+
+    `chmod +x setup.sh run.sh`
+- Run the script to setup and install required libraries
+
+    `./setup.sh`
 
 ## How to Run
-- `cd tensorflow-gui/scripts/`
-- `./run.sh`
+- Change the directory
+
+    `cd tensorflow-gui/scripts/`
+- Start the TensorFlow-GUI
+
+    `./run.sh`
