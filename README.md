@@ -1,4 +1,3 @@
-
 <a href="url"><img src="https://1.bp.blogspot.com/-T-jEcKc3EIc/XJVXUldWEJI/AAAAAAAAB4U/Mqk1-XPQ0LEuemA16SXUQ4gbeXwjiDFDwCLcBGAs/s1600/GSoC%2B-%2BVertical%2BWide%2B-%2BGray%2BText%2B-%2BWhite%2BBG.png" align="left" height="200" width="300" ></a>
 
 
