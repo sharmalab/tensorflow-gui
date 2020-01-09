@@ -14,6 +14,7 @@ else
     sudo apt install -y python3 python3-pip python3-setuptools
     pip3 install -r ../requirements.txt
     pip3 install opencv-python
+    pip3 install tensorboard
 fi
 
 sudo apt install nodejs npm -y

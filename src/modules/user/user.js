@@ -203,6 +203,11 @@ function loadProjects() {
 }
 
 $(document).ready(() => {
+    global.projectDetails.name = "";
+    global.projectDetails.details = "";
+    global.editorText = "";
+    global.modelText = "";
+    global.functionsText = "";
     global.isLoaded.nodeeditor = false;
     loadProjects();
 });
