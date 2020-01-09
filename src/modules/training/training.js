@@ -32,7 +32,7 @@ $("#control-bar").draggable({
 });
 
 function runPython() {
-    let codepath = `./testing/Projects/${global.projectDetails.name}/editor.py`;
+    let codepath = `../testing/Projects/${global.projectDetails.name}/editor.py`;
     let processError = "";
     try {
         fs.writeFileSync(codepath, global.editorText, 'utf-8');

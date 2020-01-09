@@ -17,7 +17,7 @@ $('#login-form').submit(function() {
         values[this.name] = $(this).val();
     });
 
-    if(values["email"] == "vikasgola2015@gmail.com" && values["password"] == "thisispassword"){
+    if(values["email"] == "testing@gmail.com" && values["password"] == "password"){
         loadPage("user/user.html")
     }
 

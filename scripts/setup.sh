@@ -18,6 +18,10 @@ fi
 
 sudo apt install nodejs npm -y
 sudo apt install nodejs-legacy -y
-npm install --prefix=../src/
 
-echo "Completed!"
+if npm install --prefix=../src/; then
+    mkdir -p ../testing/Projects/;
+    echo "Completed!";
+else
+    echo "please run 'npm install --prefix=../src/'";
+fi

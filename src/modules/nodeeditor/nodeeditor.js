@@ -19,7 +19,7 @@ let isSelected = false;
 let temparrow;
 let firstblock;
 let dir = global.projectDetails.name;
-let basepath = process.cwd() + "/testing/Projects/";
+let basepath = process.cwd() + "/../testing/Projects/";
 
 let graph = global.graph;
 graph.modelStage = new Konva.Stage({
@@ -406,7 +406,7 @@ $("#goNext").click(function () {
     }
 
     global.extraText += `
-tensorboard = TensorBoard(log_dir="testing/Projects/${global.projectDetails.name}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+tensorboard = TensorBoard(log_dir="../testing/Projects/${global.projectDetails.name}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
 
 `
 
