@@ -38,7 +38,7 @@ codemirror.on('inputRead', function onChange(editor, input) {
 
 
 let dir = global.projectDetails.name;
-let basepath = process.cwd() + "/testing/Projects/";
+let basepath = process.cwd() + "/../testing/Projects/";
 global.editorText = fs.readFileSync(basepath + dir + "/editor.py", "utf8");
 codemirror.setValue(global.editorText);
 

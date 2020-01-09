@@ -17,7 +17,7 @@ $("#project-name").val(global.projectDetails.name);
 $("#project-description").val(global.projectDetails.details);
 
 $(".deletebuttons").click((value) => {
-    let basepath = process.cwd() + "/testing/Projects/";
+    let basepath = process.cwd() + "/../testing/Projects/";
     let pdosi = $(value.target).siblings();
     swal({
         title: "Are you sure?",

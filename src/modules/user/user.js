@@ -20,9 +20,9 @@ $("#user-create-project-button").click(() => {
             swal("Error", "Projet Name can't be empty.", "error");
         } else if (value) {
             let dir = value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-            let basepath = process.cwd() + "/testing/Projects/";
-            if (!fs.existsSync(process.cwd() + "/testing")) {
-                fs.mkdirSync(process.cwd() + "/testing");
+            let basepath = process.cwd() + "/../testing/Projects/";
+            if (!fs.existsSync(process.cwd() + "/../testing")) {
+                fs.mkdirSync(process.cwd() + "/../testing");
             }
             if (!fs.existsSync(basepath)) {
                 fs.mkdirSync(basepath);
@@ -64,7 +64,7 @@ import numpy as np
 Do not remove tensorboard initialization.
 Also, don't forget to add tensorboard as callback in your model.
 '''
-tensorboard = TensorBoard(log_dir="testing/Projects/${dir}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+tensorboard = TensorBoard(log_dir="../testing/Projects/${dir}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
 
 
 def getTrainingData():
@@ -132,7 +132,7 @@ function openProject(value, page) {
 
     var env = Object.create(process.env);
     killtensorboard.on('close', (code) => {
-        let tensorbaord = childprocess.spawn('tensorboard', ["--logdir=testing/Projects/" + global.projectDetails.name + "/logs/"], {
+        let tensorbaord = childprocess.spawn('tensorboard', ["--logdir=../testing/Projects/" + global.projectDetails.name + "/logs/"], {
             env: env
         });
 
@@ -143,7 +143,7 @@ function openProject(value, page) {
 }
 
 function loadProjects() {
-    let basepath = process.cwd() + "/testing/Projects/";
+    let basepath = process.cwd() + "/../testing/Projects/";
     let dirlist = getDirectories(basepath)
 
     if (dirlist.length != 0) {
