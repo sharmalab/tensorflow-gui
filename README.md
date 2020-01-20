@@ -16,7 +16,7 @@ Mentors: **Monjoy Saha** (monjoy.saha@emory.edu) and **Pooya Mobadersany** (pooy
 ![Gui Demo Video](screenshots/shots.gif)
 
 ## Progress and Features
-Progress of the project and features of the tensorflow-gui can be checked [here](https://github.com/sharmalab/tensorflow-gui/wiki/Progress). 
+Progress of the project and features of the tensorflow-gui can be checked [here](https://github.com/sharmalab/tensorflow-gui/wiki/Progress-and-Features). 
 
 ## Installation & Setup
 - Clone the repo from GitHub
