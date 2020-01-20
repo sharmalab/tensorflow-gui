@@ -1,39 +1,43 @@
-<a href="url"><img src="https://1.bp.blogspot.com/-T-jEcKc3EIc/XJVXUldWEJI/AAAAAAAAB4U/Mqk1-XPQ0LEuemA16SXUQ4gbeXwjiDFDwCLcBGAs/s1600/GSoC%2B-%2BVertical%2BWide%2B-%2BGray%2BText%2B-%2BWhite%2BBG.png" align="left" height="200" width="300" ></a>
-
 
 # TensorFlow-GUI
+
+![GSoC Icon](https://developers.google.com/open-source/gsoc/resources/downloads/GSoC-logo-horizontal-200.png)
+[![GitHub stars](https://img.shields.io/github/stars/sharmalab/tensorflow-gui)](https://github.com/sharmalab/tensorflow-gui/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/sharmalab/tensorflow-gui)](https://github.com/sharmalab/tensorflow-gui/issues)
+[![GitHub forks](https://img.shields.io/github/forks/sharmalab/tensorflow-gui)](https://github.com/sharmalab/tensorflow-gui/network)
+![GitHub License](https://img.shields.io/github/license/sharmalab/tensorflow-gui)
+
 This project aims to develop a TensorFlow compatible GUI to perform all the operations done by TensorFlow.
 
 Student: **Vikas Gola**
 
-Mentors: **Monjoy Saha** (monjoy.saha -at- emory.edu) and **Pooya Mobadersany** (pooya.mobadersany -at- emory.edu)
+Mentors: **Monjoy Saha** (monjoy.saha@emory.edu) and **Pooya Mobadersany** (pooya.mobadersany@emory.edu)
 
 ![Gui Demo Video](screenshots/shots.gif)
 
-## Features
-1. At present Conv1D, Conv2D, Conv3D, RNN, LSTM, GRU, ConvLSTM2D, CuDNNLSTM, CuDNNGRU, MaxPool1D, MaxPool2D, MaxPool3D, Dropout, AveragePooling1D, AveragePooling2D, AveragePooling3D, ReLU, LeakyReLU, Softmax, Activation, Input, Output, Reshape, RepeatVector, Dense, Flatten, and Embedding layers have been included in the GUI. 
-
-2. Input data (image and csv) pipeline (png to tfrecords) has been developed. 
-
-3. Training and testing pipeline along with result visualization and analysis part is in progress. 
+## Progress and Features
+Progress of the project and features of the tensorflow-gui can be checked [here](https://github.com/sharmalab/tensorflow-gui/wiki/Progress). 
 
 ## Installation & Setup
 - Clone the repo from GitHub
-
-    `git clone https://github.com/sharmalab/tensorflow-gui`
+    ```
+    git clone https://github.com/sharmalab/tensorflow-gui
+    ```
 - Give permission to scripts to install the required libraries
-  
-    `cd tensorflow-gui/scripts/`
-
-    `chmod +x setup.sh run.sh`
+    ```  
+    cd tensorflow-gui/scripts/
+    chmod +x setup.sh run.sh
+    ```
 - Run the script to setup and install required libraries
-
-    `./setup.sh`
-
+    ```
+    ./setup.sh
+    ```
 ## How to Run
 - Change the directory
-
-    `cd tensorflow-gui/scripts/`
+    ```
+    cd tensorflow-gui/scripts/
+    ```
 - Start the TensorFlow-GUI
-
-    `./run.sh`
+    ```
+    ./run.sh
+    ```
