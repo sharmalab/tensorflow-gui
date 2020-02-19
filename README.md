@@ -16,9 +16,12 @@ Mentors: **Monjoy Saha** (monjoy.saha@emory.edu) and **Pooya Mobadersany** (pooy
 ![Gui Demo Video](screenshots/shots.gif)
 
 ## Progress and Features
-Progress of the project and features of the tensorflow-gui can be checked [here](https://github.com/sharmalab/tensorflow-gui/wiki/Progress-and-Features). 
+Progress and features of the Tensorflow-GUI can be checked [here](https://github.com/sharmalab/tensorflow-gui/wiki/Progress-and-Features). 
 
 ## Installation & Setup
+
+#### For Ubuntu
+- (Optional but recommended) Install the Anaconda from [here](https://www.anaconda.com/).
 - Clone the repo from GitHub
     ```
     git clone https://github.com/sharmalab/tensorflow-gui
@@ -32,12 +35,37 @@ Progress of the project and features of the tensorflow-gui can be checked [here]
     ```
     ./setup.sh
     ```
+
+#### For Windows 10
+- Download and Install Anaconda from [here](https://www.anaconda.com/) for the current user.
+- Download and Install NodeJs from [here](https://nodejs.org/en/).
+- Download and Install git from [here](https://git-scm.com/).
+- Open powershell and follow next instructions.
+- Clone the repo from GitHub
+    ```
+    git clone https://github.com/sharmalab/tensorflow-gui
+    ```
+- Give permission to scripts to install the required libraries
+    ```  
+    cd tensorflow-gui\scripts\
+    ```
+- Run the script to setup and install required libraries
+    ```
+    .\setup.ps1
+    ```
+
+***Note***: Make sure NodeJs, Anaconda, and git are available from powershell
+
 ## How to Run
+
 - Change the directory
     ```
     cd tensorflow-gui/scripts/
     ```
 - Start the TensorFlow-GUI
     ```
+    For Ubuntu
     ./run.sh
+    For Windows
+    .\run.ps1
     ```
