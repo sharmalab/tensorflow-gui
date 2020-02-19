@@ -12,7 +12,8 @@ function createWindow() {
     win = new BrowserWindow({
         width: 1280,
         height: 720,
-        nodeIntegration: true
+        darkTheme: true,
+        webPreferences: { nodeIntegration: true},
     });
     win.loadFile('modules/index.html')
     win.on('closed', () => {
@@ -46,8 +47,13 @@ function createWindow() {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-    let killtensorboard = childprocess.spawn('killall', ["-9", "tensorboard"]);
-    // let killpython = childprocess.spawn('killall', ["-9", "python3"]);
+    let killtensorboard;
+    if (process.platform == 'win32') {
+        killtensorboard = childprocess.spawn('taskkill', ['/f','/im', 'tensorboard'])
+    }else{
+        killtensorboard = childprocess.spawn('killall', ["-9", "tensorboard"]);
+    }
+    
     if (process.platform !== 'darwin') {
         killtensorboard.on('close', (code) => {
             app.quit()

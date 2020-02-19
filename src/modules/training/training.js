@@ -4,6 +4,7 @@ const childprocess = require('child_process');
 const print = console.log;
 var fs = require('fs');
 const swal = require('sweetalert');
+const path = require('path');
 
 let intervalid;
 let pythonprocess;
@@ -41,9 +42,11 @@ function runPython() {
     }
 
     var env = Object.create(process.env);
-    pythonprocess = childprocess.spawn('python3', [codepath], {
+    var pythoncmd = process.platform == "win32"? path.join(env['CONDA_PREFIX'],'python.exe'): 'python3';
+    pythonprocess = childprocess.spawn(pythoncmd, [codepath], {
         env: env
     });
+    
     setTimeout(() => {
         $("#training-status").text("Training...");
     }, 3000);
@@ -59,7 +62,7 @@ function runPython() {
 
     pythonprocess.on('close', (code) => {
         pythonclosed = true;
-        if (code == 1) {
+        if (code != 0) {
             $("#training-status").text("Training Failed.");
             swal("Error", `${processError}`, "error");
         } else {

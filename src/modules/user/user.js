@@ -3,6 +3,8 @@ const fs = require('fs');
 const global = require('../../lib/global');
 const print = console.log;
 const childprocess = require('child_process');
+const path = require('path');
+
 
 function loadPage(page_path) {
     $("#main-content").html('');
@@ -20,9 +22,9 @@ $("#user-create-project-button").click(() => {
             swal("Error", "Projet Name can't be empty.", "error");
         } else if (value) {
             let dir = value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-            let basepath = process.cwd() + "/../testing/Projects/";
-            if (!fs.existsSync(process.cwd() + "/../testing")) {
-                fs.mkdirSync(process.cwd() + "/../testing");
+            let basepath = path.join(process.cwd(), "/../testing/Projects/");
+            if (!fs.existsSync(path.join(process.cwd() , "/../testing"))) {
+                fs.mkdirSync(path.join(process.cwd() , "/../testing"));
             }
             if (!fs.existsSync(basepath)) {
                 fs.mkdirSync(basepath);
@@ -43,7 +45,7 @@ $("#user-create-project-button").click(() => {
                                 print("Error creating folder", err);
                             }
                         });
-                        fs.mkdirSync(basepath + dir + "/logs");
+                        fs.mkdirSync(path.join(basepath,dir,"logs"));
                         let data = {
                             name: dir,
                             details: value,
@@ -64,7 +66,7 @@ import numpy as np
 Do not remove tensorboard initialization.
 Also, don't forget to add tensorboard as callback in your model.
 '''
-tensorboard = TensorBoard(log_dir="../testing/Projects/${dir}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+tensorboard = TensorBoard(log_dir="../testing/Projects/${dir}/logs/{}".format(asctime()).replace(":"."-"), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
 
 
 def getTrainingData():
@@ -94,9 +96,9 @@ def train():
 train()
 
 `
-                        fs.writeFileSync(basepath + dir + "/graph.json", JSON.stringify(initgraph));
-                        fs.writeFileSync(basepath + dir + "/editor.py", initeditor);
-                        fs.writeFile(basepath + dir + "/info.json", JSON.stringify(data), 'utf-8', err => {
+                        fs.writeFileSync(path.join(basepath, dir, "graph.json"), JSON.stringify(initgraph));
+                        fs.writeFileSync(path.join(basepath, dir, "editor.py"), initeditor);
+                        fs.writeFile(path.join(basepath, dir, "info.json"), JSON.stringify(data), 'utf-8', err => {
                             if (err) {
                                 print("Error writing file", err);
                             } else {
@@ -128,22 +130,33 @@ function openProject(value, page) {
     global.projectDetails.name = pdosi[0].innerText;
     global.projectDetails.details = pdosi[1].innerText;
 
-    let killtensorboard = childprocess.spawn('killall', ["-9", "tensorboard"]);
-
+    
+    let killtensorboard;
+    if(process.platform == "win32"){
+        killtensorboard = childprocess.spawn('taskkill', ['/f','/im', 'tensorboard.exe'])
+    }else{
+        killtensorboard = childprocess.spawn('killall', ["-9", "tensorboard"]);
+    }
+    
+    var tensorbaord;
     var env = Object.create(process.env);
     killtensorboard.on('close', (code) => {
-        let tensorbaord = childprocess.spawn('tensorboard', ["--logdir=../testing/Projects/" + global.projectDetails.name + "/logs/"], {
+        let tensorbaordcmd = process.platform == "win32"? path.join(env['CONDA_PREFIX'], 'Scripts','tensorboard.exe'): 'tensorboard';
+        tensorbaord = childprocess.spawn(tensorbaordcmd, ["--logdir="+path.join("../testing/Projects/", global.projectDetails.name, "logs"),"--host=127.0.0.1"], {
             env: env
         });
 
-        console.log(`child process exited with code ${code}`);
+        tensorbaord.on('close', (code)=>{
+            console.log(code);
+        });
+        // console.log(`child process exited with code ${code}`);
     });
 
     loadPage(page);
 }
 
 function loadProjects() {
-    let basepath = process.cwd() + "/../testing/Projects/";
+    let basepath = path.join(process.cwd(), "/../testing/Projects/");
     let dirlist = getDirectories(basepath)
 
     if (dirlist.length != 0) {
@@ -152,7 +165,7 @@ function loadProjects() {
 
     $("#user-projects-card-row").empty();
     for (let dir in dirlist) {
-        fs.readFile(basepath + dirlist[dir] + "/info.json", (err, fileData) => {
+        fs.readFile(path.join(basepath, dirlist[dir], "info.json"), (err, fileData) => {
             if (err) {
                 return print("Error in reading all projects", err)
             }

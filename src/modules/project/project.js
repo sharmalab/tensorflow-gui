@@ -1,6 +1,7 @@
 const global = require('../../lib/global');
 var rimraf = require("rimraf");
 const swal = require('sweetalert');
+const path = require('path');
 
 function loadPage(page_path) {
     $("#main-content").html('');
@@ -17,7 +18,7 @@ $("#project-name").val(global.projectDetails.name);
 $("#project-description").val(global.projectDetails.details);
 
 $(".deletebuttons").click((value) => {
-    let basepath = process.cwd() + "/../testing/Projects/";
+    let basepath = path.join(process.cwd(), "/../testing/Projects/");
     let pdosi = $(value.target).siblings();
     swal({
         title: "Are you sure?",
@@ -28,7 +29,7 @@ $(".deletebuttons").click((value) => {
     }).then((willDelete) => {
         if (willDelete) {
             try {
-                rimraf.sync(basepath + "/" + global.projectDetails.name);
+                rimraf.sync(path.join(basepath,global.projectDetails.name));
                 swal(`Your project '${global.projectDetails.name}' has been deleted!`, {
                     icon: "success",
                 });

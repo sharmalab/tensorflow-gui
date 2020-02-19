@@ -1,9 +1,4 @@
 const print = console.log;
-// const CodeMirror = require("../../lib/codemirror.js");
-// require("../../lib/matchbrackets.js");
-// require("../../lib/python.js");
-// require("../../lib/show-hint.js");
-// require("../../lib/python-hint.js");
 const swal = require('sweetalert');
 const global = require("../../lib/global.js")
 const childprocess = require('child_process');
@@ -19,8 +14,8 @@ $("#project-name").text(global.projectDetails.name);
 $("#project-details").text(global.projectDetails.details.substr(0, 20) + "...");
 
 let dir = global.projectDetails.name;
-let basepath = process.cwd() + "/../testing/Projects/";
-global.editorText = fs.readFileSync(basepath + dir + "/editor.py", "utf8");
+let basepath = path.join(process.cwd(), "/../testing/Projects/");
+global.editorText = fs.readFileSync(path.join(basepath, dir, "editor.py"), "utf8");
 
 function uriFromPath(_path) {
     var pathName = path.resolve(_path).replace(/\\/g, '/');
@@ -48,7 +43,7 @@ amdRequire(['vs/editor/editor.main'], () => {
     }
 
     function testPython() {
-        let codepath = basepath + dir + '/editor.py';
+        let codepath = path.join(basepath, dir, "editor.py");
         try {
             fs.writeFileSync(codepath, codeeditor.getValue(), 'utf-8');
         } catch (e) {
@@ -56,7 +51,9 @@ amdRequire(['vs/editor/editor.main'], () => {
         }
 
         var env = Object.create(process.env);
-        var pythonprocess = childprocess.spawn('python3', ['-m', 'py_compile', codepath], {
+        console.log(env);
+        var pythoncmd = process.platform == "win32"? path.join(env['CONDA_PREFIX'],'python.exe'): 'python3';
+        var pythonprocess = childprocess.spawn(pythoncmd, ['-m', 'py_compile', codepath], {
             env: env
         });
 
@@ -74,7 +71,7 @@ amdRequire(['vs/editor/editor.main'], () => {
 
     function saveProject(isShow) {
         global.editorText = codeeditor.getValue();
-        fs.writeFile(basepath + dir + "/editor.py", global.editorText, 'utf-8', err => {
+        fs.writeFile(path.join(basepath, dir, "editor.py"), global.editorText, 'utf-8', err => {
             if (err) {
                 swal("Saving Project", "Failed to save project.", "error");
                 print("Error writing file", err);
