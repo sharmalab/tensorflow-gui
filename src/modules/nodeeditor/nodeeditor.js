@@ -8,7 +8,7 @@ const swal = require('sweetalert');
 const global = require("../../lib/global.js")
 var fs = require('fs');
 const pythonFunction = require("../../lib/datafunctions");
-
+const path = require('path');
 
 $("#draw-sidebar-right").hide();
 $("#codenode-desc").hide();
@@ -19,7 +19,7 @@ let isSelected = false;
 let temparrow;
 let firstblock;
 let dir = global.projectDetails.name;
-let basepath = process.cwd() + "/../testing/Projects/";
+let basepath = path.join(process.cwd(), "/../testing/Projects/");
 
 let graph = global.graph;
 graph.modelStage = new Konva.Stage({
@@ -33,7 +33,7 @@ stage.add(layer);
 
 
 if (!global.isLoaded.nodeeditor) {
-    let graphdata = fs.readFileSync(basepath + dir + "/graph.json");
+    let graphdata = fs.readFileSync(path.join(basepath, dir, "graph.json"));
     let savedGraph = JSON.parse(graphdata);
     let temphash = {};
 
@@ -406,11 +406,11 @@ $("#goNext").click(function () {
     }
 
     global.extraText += `
-tensorboard = TensorBoard(log_dir="../testing/Projects/${global.projectDetails.name}/logs/{}".format(asctime()), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+tensorboard = TensorBoard(log_dir="../testing/Projects/${global.projectDetails.name}/logs/{}".format(asctime()).replace(":","-"), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
 
 `
 
-    fs.writeFile(basepath + dir + "/editor.py", global.extraText + global.functionsText + global.modelText, 'utf-8', err => {
+    fs.writeFile(path.join(basepath, dir, "editor.py"), global.extraText + global.functionsText + global.modelText, 'utf-8', err => {
         if (err) {
             swal("Saving Project", "Failed to save project.", "error");
             print("Error writing file", err);
@@ -443,7 +443,7 @@ function saveProject() {
         });
     });
 
-    fs.writeFile(basepath + dir + "/graph.json", JSON.stringify(data), 'utf-8', err => {
+    fs.writeFile(path.join(basepath, dir, "graph.json"), JSON.stringify(data), 'utf-8', err => {
         if (err) {
             swal("Saving Project", "Failed to save project.", "error");
             print("Error writing file", err);
