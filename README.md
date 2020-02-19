@@ -45,7 +45,7 @@ Progress and features of the Tensorflow-GUI can be checked [here](https://github
     ```
     git clone https://github.com/sharmalab/tensorflow-gui
     ```
-- Give permission to scripts to install the required libraries
+- change the directory
     ```  
     cd tensorflow-gui\scripts\
     ```
