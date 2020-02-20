@@ -8,6 +8,7 @@ conda create -n tfgui python=3.5
 conda activate tfgui
 conda install --file .\..\requirements.txt
 conda install -c menpo opencv
+conda install -c conda-forge python-language-server 
 conda deactivate
 
 Set-Location .\..\src\

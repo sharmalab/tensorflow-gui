@@ -1,39 +1,37 @@
 var Konva = require('../../lib/konva');
-const print = console.log;
 const {
     tfNode,
     tfEdge
 } = require('../../lib/graph');
-const swal = require('sweetalert');
-const global = require("../../lib/global.js")
-var fs = require('fs');
 const pythonFunction = require("../../lib/datafunctions");
-const path = require('path');
 
-$("#draw-sidebar-right").hide();
-$("#codenode-desc").hide();
-$("#project-name").text(global.projectDetails.name);
-$("#project-details").text(global.projectDetails.details.substr(0, 20) + "...");
-
-let isSelected = false;
 let temparrow;
 let firstblock;
-let dir = global.projectDetails.name;
-let basepath = path.join(process.cwd(), "/../testing/Projects/");
+let isSelected;
+let dir;
 
-let graph = global.graph;
-graph.modelStage = new Konva.Stage({
-    container: 'draw-canvas',
-    width: 2 * window.innerWidth,
-    height: 2 * window.innerHeight,
-});
-let stage = graph.modelStage;
-let layer = graph.modelLayer;
-stage.add(layer);
+function init(){
+    isSelected = false;
+    temparrow = undefined;
+    firstblock = undefined;
+    dir = globaljs.projectDetails.name;
 
-
-if (!global.isLoaded.nodeeditor) {
-    let graphdata = fs.readFileSync(path.join(basepath, dir, "graph.json"));
+    let graph = globaljs.graph;
+    $("#draw-sidebar-right").hide();
+    $("#codenode-desc").hide();
+    $("#project-name").text(globaljs.projectDetails.name);
+    $("#project-details").text(globaljs.projectDetails.details.substr(0, 20) + "...");
+    graph.modelStage = new Konva.Stage({
+        container: 'draw-canvas',
+        width: 2 * window.innerWidth,
+        height: 2 * window.innerHeight,
+    });
+    let stage = graph.modelStage;
+    let layer = graph.modelLayer;
+    stage.add(layer);
+    
+    // if (!globaljs.isLoaded.nodeeditor) {
+    let graphdata = fs.readFileSync(path.join(projects_path, dir, "graph.json"));
     let savedGraph = JSON.parse(graphdata);
     let temphash = {};
 
@@ -41,38 +39,201 @@ if (!global.isLoaded.nodeeditor) {
         let node = createLabel(element.x, element.y, element.text, layer, element.id);
         node.parameters = element.parameters;
         node.outputParameters = element.outputParameters;
-        global.graph.addNode(node);
+        globaljs.graph.addNode(node);
         temphash[element.id] = graph.nodes[graph.nodes.length - 1];
     });
 
     savedGraph.edges.forEach(element => {
         let edge = addArrow(temphash[element.from], temphash[element.to], layer);
-        global.graph.addEdge(edge);
+        globaljs.graph.addEdge(edge);
     });
     layer.draw();
-}
-global.isLoaded.nodeeditor = true;
-layer.draw();
+    // }
+    // globaljs.isLoaded.nodeeditor = true;
+    // layer.draw();
 
+    $('#draw-sidebar-left div .accordion ul li').draggable({
+        cursor: 'move',
+        helper: function () {
+            $('#main-content').append('<div id="clone" style="text-decoration:none;" class="bg-dark text-white p-2">' + $(this).html() + '</div>');
+            return $("#clone");
+        },
+        appendTo: 'body',
+        textDecoration: "none",
+        start: function (e, ui) {
+            ui.helper.addClass({
+                textDecoration: "none"
+            });
+        }
+    });
 
+    $("#draw-canvas").droppable({
+        drop: function (event, ui) {
+            var relativeXPosition = (event.pageX - this.offsetLeft);
+            var relativeYPosition = (event.pageY - this.offsetTop);
+            output = createLabel(relativeXPosition, relativeYPosition, ui.helper.text().trim(), layer)
+            graph.addNode(output);
+        }
+    });
+        
+    $(document).keyup(function (e) {
+        if (e.key === "Escape") {
+            if (isSelected) {
+                firstblock.label.getTag().stroke("#111");
+                if (temparrow)
+                    temparrow.arrow.remove()
+                temparrow = undefined;
+                firstblock = undefined;
+                isSelected = false;
+                layer.draw();
+                $("#draw-sidebar-right").hide();
+            }
+        } else if (e.key === "Delete") {
+            if (isSelected && !temparrow) {
+                if (firstblock) {
+                    if (firstblock.type == "input") {
+                        graph.inputs = graph.inputs.filter(a => a != firstblock);
+                        print(graph.inputs);
+                    } else if (firstblock.type == "output") {
+                        graph.outputs = graph.outputs.filter(a => a != firstblock);
+                    }
 
-$('#draw-sidebar-left div .accordion ul li').draggable({
-    cursor: 'move',
-    helper: function () {
-        $('#main-content').append('<div id="clone" style="text-decoration:none;" class="bg-dark text-white p-2">' + $(this).html() + '</div>');
-        return $("#clone");
-    },
-    appendTo: 'body',
-    textDecoration: "none",
-    start: function (e, ui) {
-        ui.helper.addClass({
-            textDecoration: "none"
+                    graph.removeNode(firstblock);
+
+                    firstblock.label.remove()
+                    for (let i in firstblock.outEdges) {
+                        graph.removeEdge(firstblock.outEdges[i]);
+                        firstblock.outEdges[i].arrow.remove()
+                    }
+                    for (let i in firstblock.inEdges) {
+                        graph.removeEdge(firstblock.inEdges[i]);
+                        firstblock.inEdges[i].arrow.remove()
+                    }
+                    firstblock = undefined;
+                    $("#draw-sidebar-right").hide();
+                }
+                isSelected = false;
+                layer.draw();
+            }
+        }
+    });
+        
+    $("#saveProject").click(function () {
+        saveProject();
+    });
+
+    $("#new-codenode-btn").click(function () {
+        $("#codenode-desc").show();
+        $("#new-codenode-btn").hide();
+    });
+
+    $("#codenode-cancel-btn").click(function () {
+        $("#codenode-desc").hide();
+        $("#new-codenode-btn").show();
+
+        $("#codenode-name").val('');
+        $("#codenode-code").val('');
+        $("#codenode-parameters").val('');
+        $("#codenode-returns").val('');
+    });
+
+    $("#codenode-create-btn").click(function () {
+        let name = $("#codenode-name").val();
+        let code = $("#codenode-code").val();
+        let parameters = $("#codenode-parameters").val();
+        let returns = $("#codenode-returns").val();
+
+        let temp = code.split(/\n/);
+        for (var i = 0; i < temp.length; i++) {
+            temp[i] = "    " + temp[i];
+        }
+        temp = temp.join("\n");
+
+        pythonFunction[name] = `
+def ${name}(${parameters}):
+${temp}
+    return ${returns}
+`
+
+        temp = {};
+        parameters.split(",").forEach((par) => {
+            temp[par] = "";
         });
-    }
-});
+        globaljs.layerParameters[name] = temp;
 
+        temp = {};
+        returns.split(",").forEach((par) => {
+            temp[par] = "";
+        });
+        if(temp != {}){
+            globaljs.outputParameters[name] = temp;
+        }
+
+        temp = createLabel(400, 400, name, layer);
+        graph.addNode(temp);
+    });
+    $('#right-sidebar-form').on('keyup change paste', 'input, select, textarea', function () {
+        if (isSelected && firstblock) {
+            let fields = {}
+            $("#right-sidebar-form").find(":input").each(function () {
+                fields[this.id] = $(this).val();
+            });
+            firstblock.parameters = fields;
+        }
+    });
+    
+    $('#right-sidebar-form2').on('keyup change paste', 'input, select, textarea', function () {
+        if (isSelected && firstblock) {
+            let fields = {}
+            $("#right-sidebar-form2").find(":input").each(function () {
+                fields[this.id] = $(this).val();
+            });
+            firstblock.outputParameters = fields;
+        }
+    });
+    
+}    
+
+function generateCode(){
+    let tuple = globaljs.graph.traverse();
+
+    if (tuple == null) {
+        swal("Oops!", "Error in generating the code!", "error");
+        return;
+    }
+
+    let modelgencode = tuple[0];
+    let calledList = tuple[1];
+    let usedFunctions = tuple[2];
+
+    globaljs.modelText = "\n# Called Functions\n"
+    globaljs.modelText += calledList + "\n"
+
+    globaljs.modelText += "\n# Generated Model\n";
+    globaljs.modelText += modelgencode;
+    globaljs.modelText += `\n`
+
+    if (firstblock)
+        firstblock.label.getTag().stroke("#111");
+    if (temparrow)
+        temparrow.arrow.remove();
+    isSelected = false;
+    firstblock = undefined;
+    temparrow = undefined;
+
+    for (var q = 0; q < usedFunctions.length; q++) {
+        globaljs.functionsText += pythonFunction[usedFunctions[q]];
+    }
+
+    globaljs.extraText += `
+tensorboard = TensorBoard(log_dir="../testing/Projects/${globaljs.projectDetails.name}/logs/{}".format(asctime().replace(":","-")), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
+
+`
+    fs.writeFileSync(path.join(projects_path, dir, "editor.py"), globaljs.extraText + globaljs.functionsText + globaljs.modelText, 'utf-8');
+}
 
 function createLabel(x, y, text, layertoadd, id = null) {
+    let graph = globaljs.graph;
     let label = new Konva.Label({
         x: x,
         y: y,
@@ -262,65 +423,12 @@ function addArrow(node1, node2, layertoadd) {
         });
     }
 
-    edge = new tfEdge(node1, node2, arrow, graph.numberOfEdges)
+    edge = new tfEdge(node1, node2, arrow, globaljs.graph.numberOfEdges)
 
     layertoadd.add(arrow)
     layertoadd.draw();
     return edge;
 }
-
-$("#draw-canvas").droppable({
-    drop: function (event, ui) {
-        var relativeXPosition = (event.pageX - this.offsetLeft);
-        var relativeYPosition = (event.pageY - this.offsetTop);
-        output = createLabel(relativeXPosition, relativeYPosition, ui.helper.text().trim(), layer)
-        graph.addNode(output);
-    }
-});
-
-
-$(document).keyup(function (e) {
-    if (e.key === "Escape") {
-        if (isSelected) {
-            firstblock.label.getTag().stroke("#111");
-            if (temparrow)
-                temparrow.arrow.remove()
-            temparrow = undefined;
-            firstblock = undefined;
-            isSelected = false;
-            layer.draw();
-            $("#draw-sidebar-right").hide();
-        }
-    } else if (e.key === "Delete") {
-        if (isSelected && !temparrow) {
-            if (firstblock) {
-                if (firstblock.type == "input") {
-                    graph.inputs = graph.inputs.filter(a => a != firstblock);
-                    print(graph.inputs);
-                } else if (firstblock.type == "output") {
-                    graph.outputs = graph.outputs.filter(a => a != firstblock);
-                }
-
-                graph.removeNode(firstblock);
-
-                firstblock.label.remove()
-                for (let i in firstblock.outEdges) {
-                    graph.removeEdge(firstblock.outEdges[i]);
-                    firstblock.outEdges[i].arrow.remove()
-                }
-                for (let i in firstblock.inEdges) {
-                    graph.removeEdge(firstblock.inEdges[i]);
-                    firstblock.inEdges[i].arrow.remove()
-                }
-                firstblock = undefined;
-                $("#draw-sidebar-right").hide();
-            }
-            isSelected = false;
-            layer.draw();
-        }
-    }
-});
-
 
 // add scaling
 // var scaleBy = 1.01;
@@ -348,85 +456,13 @@ $(document).keyup(function (e) {
 //     stage.batchDraw();
 // });
 
-$('#right-sidebar-form').on('keyup change paste', 'input, select, textarea', function () {
-    if (isSelected && firstblock) {
-        let fields = {}
-        $("#right-sidebar-form").find(":input").each(function () {
-            fields[this.id] = $(this).val();
-        });
-        firstblock.parameters = fields;
-    }
-});
-
-$('#right-sidebar-form2').on('keyup change paste', 'input, select, textarea', function () {
-    if (isSelected && firstblock) {
-        let fields = {}
-        $("#right-sidebar-form2").find(":input").each(function () {
-            fields[this.id] = $(this).val();
-        });
-        firstblock.outputParameters = fields;
-    }
-});
-
-function loadPage(page_path) {
-    global.isLoaded.nodeeditor = false;
-    $("#main-content").html('');
-    $("#main-content").load(page_path);
-}
-
-$("#goNext").click(function () {
-    let tuple = graph.traverse();
-
-    if (tuple == null) {
-        swal("Oops!", "Error in generating the code!", "error");
-        return;
-    }
-
-    let modelgencode = tuple[0];
-    let calledList = tuple[1];
-    let usedFunctions = tuple[2];
-
-    global.modelText = "\n# Called Functions\n"
-    global.modelText += calledList + "\n"
-
-    global.modelText += "\n# Generated Model\n";
-    global.modelText += modelgencode;
-    global.modelText += `\n`
-
-    if (firstblock)
-        firstblock.label.getTag().stroke("#111");
-    if (temparrow)
-        temparrow.arrow.remove();
-    isSelected = false;
-    firstblock = undefined;
-    temparrow = undefined;
-
-    for (var q = 0; q < usedFunctions.length; q++) {
-        global.functionsText += pythonFunction[usedFunctions[q]];
-    }
-
-    global.extraText += `
-tensorboard = TensorBoard(log_dir="../testing/Projects/${global.projectDetails.name}/logs/{}".format(asctime()).replace(":","-"), histogram_freq=0,write_graph=True,write_grads=True,write_images=True)
-
-`
-
-    fs.writeFile(path.join(basepath, dir, "editor.py"), global.extraText + global.functionsText + global.modelText, 'utf-8', err => {
-        if (err) {
-            swal("Saving Project", "Failed to save project.", "error");
-            print("Error writing file", err);
-        } else {
-            loadPage("codeeditor/codeeditor.html");
-        }
-    });
-});
-
 function saveProject() {
     let data = {
         nodes: [],
         edges: []
     };
 
-    graph.nodes.forEach(element => {
+    globaljs.graph.nodes.forEach(element => {
         data.nodes.push({
             id: element.id,
             x: element.label.attrs.x,
@@ -436,14 +472,14 @@ function saveProject() {
             outputParameters: element.outputParameters
         });
     });
-    graph.edges.forEach(element => {
+    globaljs.graph.edges.forEach(element => {
         data.edges.push({
             from: element.fromNode.id,
             to: element.toNode.id
         });
     });
 
-    fs.writeFile(path.join(basepath, dir, "graph.json"), JSON.stringify(data), 'utf-8', err => {
+    fs.writeFile(path.join(projects_path, dir, "graph.json"), JSON.stringify(data), 'utf-8', err => {
         if (err) {
             swal("Saving Project", "Failed to save project.", "error");
             print("Error writing file", err);
@@ -453,58 +489,8 @@ function saveProject() {
     });
 }
 
-
-$("#saveProject").click(function () {
-    saveProject();
-});
-
-$("#new-codenode-btn").click(function () {
-    $("#codenode-desc").show();
-    $("#new-codenode-btn").hide();
-});
-
-$("#codenode-cancel-btn").click(function () {
-    $("#codenode-desc").hide();
-    $("#new-codenode-btn").show();
-
-    $("#codenode-name").val('');
-    $("#codenode-code").val('');
-    $("#codenode-parameters").val('');
-    $("#codenode-returns").val('');
-});
-
-$("#codenode-create-btn").click(function () {
-    let name = $("#codenode-name").val();
-    let code = $("#codenode-code").val();
-    let parameters = $("#codenode-parameters").val();
-    let returns = $("#codenode-returns").val();
-
-    let temp = code.split(/\n/);
-    for (var i = 0; i < temp.length; i++) {
-        temp[i] = "    " + temp[i];
-    }
-    temp = temp.join("\n");
-
-    pythonFunction[name] = `
-def ${name}(${parameters}):
-${temp}
-    return ${returns}
-`
-
-    temp = {};
-    parameters.split(",").forEach((par) => {
-        temp[par] = "";
-    });
-    global.layerParameters[name] = temp;
-
-    temp = {};
-    returns.split(",").forEach((par) => {
-        temp[par] = "";
-    });
-    if(temp != {}){
-        global.outputParameters[name] = temp;
-    }
-
-    temp = createLabel(400, 400, name, layer);
-    graph.addNode(temp);
-});
+module.exports = {
+    saveProject: saveProject,
+    init: init,
+    generateCode: generateCode
+}

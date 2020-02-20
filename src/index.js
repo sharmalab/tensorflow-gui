@@ -14,12 +14,10 @@ function createWindow() {
         height: 720,
         darkTheme: true,
         webPreferences: { nodeIntegration: true},
+        show: false
     });
     win.loadFile('modules/index.html')
-    win.on('closed', () => {
-        win = null
-    });
-
+    
     var menu = Menu.buildFromTemplate([{
         label: 'File',
         submenu: [
@@ -40,12 +38,17 @@ function createWindow() {
         ]
     }]);
     Menu.setApplicationMenu(menu);
+    
+    win.once('ready-to-show', ()=>{
+        win.show();
+    });
 
+    win.on('closed', () => {
+        win = null
+    });
 }
 
-// on ready, create the new browser window
 app.on('ready', createWindow);
-
 app.on('window-all-closed', () => {
     let killtensorboard;
     if (process.platform == 'win32') {
@@ -60,7 +63,6 @@ app.on('window-all-closed', () => {
         });
     }
 });
-
 app.on('activate', () => {
     if (win === null) {
         createWindow()

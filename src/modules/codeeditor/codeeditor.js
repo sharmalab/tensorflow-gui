@@ -1,21 +1,9 @@
-const print = console.log;
-const swal = require('sweetalert');
-const global = require("../../lib/global.js")
-const childprocess = require('child_process');
-var fs = require('fs');
 const pythonFunction = require("../../lib/datafunctions");
-const path = require('path');
 const amdLoader = require('monaco-editor/min/vs/loader.js');
 const amdRequire = amdLoader.require;
 const amdDefine = amdLoader.require.define;
 
-
-$("#project-name").text(global.projectDetails.name);
-$("#project-details").text(global.projectDetails.details.substr(0, 20) + "...");
-
-let dir = global.projectDetails.name;
-let basepath = path.join(process.cwd(), "/../testing/Projects/");
-global.editorText = fs.readFileSync(path.join(basepath, dir, "editor.py"), "utf8");
+var codeeditor;
 
 function uriFromPath(_path) {
     var pathName = path.resolve(_path).replace(/\\/g, '/');
@@ -25,72 +13,40 @@ function uriFromPath(_path) {
     return encodeURI('file://' + pathName);
 }
 
-amdRequire.config({
-    baseUrl: uriFromPath(path.join(__dirname, '../../node_modules/monaco-editor/min'))
-});
-
-
-amdRequire(['vs/editor/editor.main'], () => {
-    var codeeditor = monaco.editor.create(document.getElementById('code-editor'), {
-        value: global.editorText,
-        language: 'python',
-        autoIndent: true
-    });
-
-    function loadPage(page_path) {
-        $("#main-content").html('');
-        $("#main-content").load(page_path);
-    }
-
-    function testPython() {
-        let codepath = path.join(basepath, dir, "editor.py");
-        try {
-            fs.writeFileSync(codepath, codeeditor.getValue(), 'utf-8');
-        } catch (e) {
-            console.log('Failed to save the file !');
+function saveProject(isShow) {
+    let dir = globaljs.projectDetails.name;
+    globaljs.editorText = codeeditor.getValue();
+    fs.writeFile(path.join(projects_path, dir, "editor.py"), globaljs.editorText, 'utf-8', err => {
+        if (err) {
+            swal("Saving Project", "Failed to save project.", "error");
+            print("Error writing file", err);
+        } else {
+            if (isShow)
+                swal("Saving Project", "Project saved successfully.", "success");
         }
-
-        var env = Object.create(process.env);
-        console.log(env);
-        var pythoncmd = process.platform == "win32"? path.join(env['CONDA_PREFIX'],'python.exe'): 'python3';
-        var pythonprocess = childprocess.spawn(pythoncmd, ['-m', 'py_compile', codepath], {
-            env: env
-        });
-
-        pythonprocess.on('close', (code) => {
-            if (code != 0) {
-                swal("Oops!", "Error in code! Please correct the code and try again!", "error");
-            } else {
-                global.editorText = codeeditor.getValue();
-                loadPage("training/training.html");
-            }
-            console.log(`child process exited with code ${code}`);
-        });
-    }
-
-
-    function saveProject(isShow) {
-        global.editorText = codeeditor.getValue();
-        fs.writeFile(path.join(basepath, dir, "editor.py"), global.editorText, 'utf-8', err => {
-            if (err) {
-                swal("Saving Project", "Failed to save project.", "error");
-                print("Error writing file", err);
-            } else {
-                if (isShow)
-                    swal("Saving Project", "Project saved successfully.", "success");
-            }
-        });
-    }
-
-    $("#trainbutton").click(function () {
-        testPython();
     });
+}
 
-    $("#saveProject").click(function () {
-        saveProject(true);
+function init(){
+    codeeditor = undefined;
+    $("#project-name").text(globaljs.projectDetails.name);
+    $("#project-details").text(globaljs.projectDetails.details.substr(0, 20) + "...");
+    let dir = globaljs.projectDetails.name;
+    globaljs.editorText = fs.readFileSync(path.join(projects_path, dir, "editor.py"), "utf8");
+    amdRequire.config({
+        baseUrl: uriFromPath(path.join(__dirname, '../../node_modules/monaco-editor/min'))
     });
+    
+    amdRequire(['vs/editor/editor.main'], () => {
+        codeeditor = monaco.editor.create(document.getElementById('code-editor'), {
+            value: globaljs.editorText,
+            language: 'python',
+            autoIndent: true
+        });
+    });
+}
 
-    $("#backButton").click(function () {
-        loadPage("user/user.html");
-    });
-});
+module.exports = {
+    init: init,
+    saveProject: saveProject
+}

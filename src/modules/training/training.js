@@ -1,42 +1,12 @@
-const Chart = require('chart.js');
-const global = require("../../lib/global.js");
-const childprocess = require('child_process');
-const print = console.log;
-var fs = require('fs');
-const swal = require('sweetalert');
-const path = require('path');
-
+let pythonclosed;
 let intervalid;
 let pythonprocess;
-let pythonclosed = false;
-
-function loadPage(page_path) {
-    $("#main-content").html('');
-    $("#main-content").load(page_path);
-}
-
-$("#backPage").click(function () {
-    if (!pythonclosed) {
-        swal("Info", "Model training is in progress. Stop the training or let it finish to go back!", "info");
-    } else {
-        loadPage("codeeditor/codeeditor.html")
-    }
-});
-
-$("#stop-button").click(() => {
-    clearInterval(intervalid);
-    pythonprocess.kill('SIGINT');
-});
-
-$("#control-bar").draggable({
-    axis: "y"
-});
 
 function runPython() {
-    let codepath = `../testing/Projects/${global.projectDetails.name}/editor.py`;
+    let codepath = `../testing/Projects/${globaljs.projectDetails.name}/editor.py`;
     let processError = "";
     try {
-        fs.writeFileSync(codepath, global.editorText, 'utf-8');
+        fs.writeFileSync(codepath, globaljs.editorText, 'utf-8');
     } catch (e) {
         console.log('Failed to save the file !');
     }
@@ -76,10 +46,28 @@ function runPython() {
     });
 }
 
-$(document).ready(function () {
+function init() {
+    pythonclosed = false;
+
+    $("#control-bar").draggable({
+        axis: "y"
+    });
+
     $("#training-status").text("Starting Training...");
     runPython();
     intervalid = setInterval(() => {
         $('#tensorboard').contents().find('#reload-button').trigger("click");
     }, 8000);
-});
+
+    $("#stop-button").click(() => {
+        clearInterval(intervalid);
+        pythonclosed = true;
+        pythonprocess.kill('SIGINT');
+    });
+
+}
+
+module.exports = {
+    init: init,
+    pythonclosed: pythonclosed
+}

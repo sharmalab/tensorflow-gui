@@ -1,6 +1,6 @@
 {
   "name": "tensorflow-gui",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "gui for tensorflow",
   "main": "index.js",
   "scripts": {
@@ -8,19 +8,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vikasgola/tensorflow-gui.git"
+    "url": "git+https://github.com/sharmalab/tensorflow-gui.git"
   },
   "author": "Vikas Gola",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/vikasgola/tensorflow-gui/issues"
+    "url": "https://github.com/sharmalab/tensorflow-gui/issues"
   },
-  "homepage": "https://github.com/vikasgola/tensorflow-gui#readme",
+  "homepage": "https://github.com/sharmalab/tensorflow-gui#readme",
   "devDependencies": {
     "electron": "^4.2.3"
   },
   "dependencies": {
-    "chart.js": "^2.8.0",
     "jquery": "^3.4.1",
     "jquery-ui-dist": "^1.12.1",
     "monaco-editor": "^0.19.2",

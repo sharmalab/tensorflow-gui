@@ -59,7 +59,20 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <script>
-        // include a initial js file
+        const path = require('path');
+        const print = console.log;
+        const swal = require('sweetalert');
+        const fs = require('fs');
+        const globaljs = require('../lib/global');
+        const childprocess = require('child_process');
+
+        let projects_path = path.join(process.cwd(), "/../testing/Projects/");
+
+        function loadPage(page_path, onComplete) {
+            $("#main-content").html('');
+            $("#main-content").load(page_path, onComplete);
+        }
+
         require("./index.js");
     </script>
 </body>
