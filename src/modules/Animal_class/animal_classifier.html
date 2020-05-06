@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Only some animal classifier App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    
+    <link rel="shortcut icon" type="image/x-icon" href="favicon1.ico" />
+
+</head>
+
+<body>
+    <script
+      type="text/javascript"
+      src="http://code.jquery.com/jquery-1.7.1.min.js"
+    ></script>
+    <main>
+        <div class="jumbotron text-center">
+            <h1>Few and Not all Animal Classfier App</h1>
+        </div>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <div class="progress progress-bar progress-bar-striped progress-bar-animated mb-2" 
+                    style="display:none">
+                        Loading Model
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <select id="model-selector" class="custom-select">
+                        <option selected disabled>Select Model</option>
+                        <option>animal_classes</option>
+                        
+                    </select>
+                </div>
+                <div class="col-8">
+                    <input id="image-selector" class="form-control border-0" type="file">
+                </div>
+                <div class="col-1">
+                    <button id="predict-button" class="btn btn-primary float-right">Predict</button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-6">
+                    <h2 class="ml-3">Predictions</h2>
+                    <ol id="prediction-list"></ol>
+                </div>
+                <div class="col-6">
+                    <h2 class="ml-3">Image</h2>
+                    <img id="selected-image" class="ml-3" src="" />
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <h2></h2>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    
+                    <h2 class="ml-3">Sample Images</h2>
+                    <p>
+                        <a class="list-group-item" download="image1.jpg" href="images/sample/image1.jpg">Image 1</a></br>
+                        <a class="list-group-item" download="image2.jpg" href="images/sample/image2.jpg">Image 2</a></br>
+                        <a class="list-group-item" download="image3.jpg" href="images/sample/image3.jpg">Image 3</a></br>
+                        <a class="list-group-item" download="image5.jpg" href="images/sample/image5.jpg">Image 4</a></br>
+                        <a class="list-group-item" download="image6.jpg" href="images/sample/image6.jpg">Image 5</a></br>
+                        <a class="list-group-item" download="image7.jpg" href="images/sample/image7.jpg">Image 6</a></br>
+                        <a class="list-group-item" download="image8.jpg" href="images/sample/image8.jpg">Image 7</a></br>
+                    <p>
+                </div>
+              
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js"></script>
+    <script src="animal_classes.js"></script>
+    <script src="predict.js"></script>
+
+</body>
+
+</html>
