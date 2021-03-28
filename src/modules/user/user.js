@@ -141,6 +141,12 @@ function setProject(value) {
     globaljs.projectDetails.details = pdosi[1].innerText;
 }
 
+function updateProject(value) {
+    let pdosi = $(value.target).parent()[0].children;
+    globaljs.projectDetails.name = pdosi[0].innerText;
+    globaljs.projectDetails.details = pdosi[1].innerText;
+}
+
 function loadProjects() {
     let dirlist = getDirectories(projects_path)
     if (dirlist.length != 0) {
@@ -186,7 +192,8 @@ module.exports = {
     init: init,
     killTensorboard: killTensorboard,
     startTensorboard: startTensorboard,
-    setProject: setProject
+    setProject: setProject,
+    updateProject: updateProject
 }
 
 // $(document).ready(() => {
