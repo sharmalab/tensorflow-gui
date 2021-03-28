@@ -54,7 +54,7 @@ function projectDeleteButtons(){
 
 function userProjectButtons(){
     $(".settingsbuttons").click((value) => {
-        userjs.setProject(value);
+        userjs.updateProject(value);
         loadPage("project/project.html", ()=>{
             projectjs.init();
             projectDeleteButtons();

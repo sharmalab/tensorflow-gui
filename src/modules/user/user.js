@@ -136,6 +136,12 @@ function killTensorboard(){
 }
 
 function setProject(value) {
+    let pdosi = $(value.target).parent().parent().parent()[0].children;
+    globaljs.projectDetails.name = pdosi[0].innerText;
+    globaljs.projectDetails.details = pdosi[1].innerText;
+}
+
+function updateProject(value) {
     let pdosi = $(value.target).parent()[0].children;
     globaljs.projectDetails.name = pdosi[0].innerText;
     globaljs.projectDetails.details = pdosi[1].innerText;
@@ -186,7 +192,8 @@ module.exports = {
     init: init,
     killTensorboard: killTensorboard,
     startTensorboard: startTensorboard,
-    setProject: setProject
+    setProject: setProject,
+    updateProject: updateProject
 }
 
 // $(document).ready(() => {

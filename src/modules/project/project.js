@@ -64,7 +64,7 @@ function init(){
         //         }
         //     }
         // });
-        swal("Info","This feature is currently in development. Stay tune for updates.","info");
+        // swal("Info","This feature is currently in development. Stay tune for updates.","info");
     });
 
     $(".savebuttons").click((value) => {
