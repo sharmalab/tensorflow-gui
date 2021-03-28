@@ -136,7 +136,7 @@ function killTensorboard(){
 }
 
 function setProject(value) {
-    let pdosi = $(value.target).parent().parent().parent()[0].children;
+    let pdosi = $(value.target).parent()[0].children;
     globaljs.projectDetails.name = pdosi[0].innerText;
     globaljs.projectDetails.details = pdosi[1].innerText;
 }
