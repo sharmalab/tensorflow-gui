@@ -2,7 +2,7 @@
 function init(){
     $("#project-name").val(globaljs.projectDetails.name);
     $("#project-description").val(globaljs.projectDetails.details);
-    
+
     $(".updatebuttons").click((value) => {
         // swal({
         //     text: "Project Name",

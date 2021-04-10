@@ -61,7 +61,7 @@ function userProjectButtons(){
             projectBackButton();
         });
     });
-    
+
     $(".opencodeeditor").click((value) => {
         userjs.setProject(value);
         userjs.startTensorboard(globaljs.projectDetails.name);
@@ -72,7 +72,7 @@ function userProjectButtons(){
             codeeditorSaveButton();
         });
     });
-    
+
     $(".opennodeeditor").click((value) => {
         userjs.setProject(value);
         loadPage("nodeeditor/nodeeditor.html", ()=>{
