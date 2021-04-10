@@ -16,7 +16,7 @@ function init(){
                 if (!fs.existsSync(projects_path)) {
                     fs.mkdirSync(projects_path);
                 }
-    
+
                 if (!fs.existsSync(projects_path + dir)) {
                     swal({
                         text: "Project Details",
@@ -80,7 +80,7 @@ def train():
     X, Y = getTrainingData()
     model.fit(x = X,y = Y,batch_size = None,epochs = 10,verbose = 0,callbacks = [tensorboard],validation_split = 0,validation_data = None,shuffle = True)
 
-train()    
+train()
 `
                             fs.writeFileSync(path.join(projects_path, dir, "graph.json"), JSON.stringify(initgraph));
                             fs.writeFileSync(path.join(projects_path, dir, "editor.py"), initeditor);
@@ -136,7 +136,7 @@ function killTensorboard(){
 }
 
 function setProject(value) {
-    let pdosi = $(value.target).parent().parent().parent()[0].children;
+    let pdosi = $(value.target).parent().parent().parent().parent()[0].children;
     globaljs.projectDetails.name = pdosi[0].innerText;
     globaljs.projectDetails.details = pdosi[1].innerText;
 }
@@ -165,11 +165,19 @@ function loadProjects() {
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                     <a class="dropdown-item opencodeeditor">Code editor</a>
                                     <a class="dropdown-item opennodeeditor">Node editor</a>
+
+                                </div>
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                More </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+
+                                    <a class="dropdown-item settingsbuttons">
+                                Settings
+                                    </a>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-secondary m-1 settingsbuttons">
-                                Settings
-                            </button>
+
                             </div>
                         </div>
                     </div>
