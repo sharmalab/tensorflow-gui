@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/sharmalab/tensorflow-gui#readme",
   "devDependencies": {
-    "electron": "^4.2.3"
+    "electron": "^11.5.0"
   },
   "dependencies": {
     "jquery": "^3.5.0",
